@@ -4,11 +4,10 @@ import Container from '../components/container'
 export default function Resume() {
   return (
     <>
-      <Layout>
+      <Layout current="resume">
         <Container>
-      <h2 className="mb-8 text-6xl font-light leading-tight tracking-tighter md:text-7xl">
-        Resume
-
+      <h2 className="mb-8 text-5xl font-light leading-tight tracking-tighter">
+        my resume
       </h2>
           <p>Some things I've worked on before...</p>
           <ul>

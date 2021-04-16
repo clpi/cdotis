@@ -1,13 +1,14 @@
 import Link from 'next/link';
+import { Router } from 'next/router';
 import Alert from '../components/alert'
 import Footer from '../components/footer'
 import Meta from '../components/meta'
 
 export default function Layout(props) {
   return (
-    <div class="bg-gray-50 min-h-screen min-h-full h-full overflow-y-visible block">
+    <div class=" overflow-x-hidden bg-gradient-to-br from-gray-100 pt-8 to-gray-50 min-h-screen min-h-full h-full overflow-y-visible block pb-24">
       <Meta />
-    <section className="items-center w-2/3 pt-8 mx-auto mb-2 md:flex-row md:justify-between bg-gray-50">
+    <section className="items-center w-2/3 mx-auto mb-2 md:flex-row md:justify-between bg-gray-50">
     <div class="rounded-lg shadow">
       <div className="px-4 py-1 border-t border-green-500 rounded-t-lg bg-gradient-to-b from-green-400 to-green-300 opacity-90">
       <h1 className="pt-16 pb-0 text-2xl leading-tight tracking-tighter text-gray-800 font-extralight md:text-7xl md:pr-8">
