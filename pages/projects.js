@@ -13,7 +13,7 @@ export default function Projects() {
       <h2 className="mb-8 text-5xl font-light leading-tight tracking-tighter">
         my projects
       </h2>
-      <div class="ml-4 mt-4 border-l-4 border-green-300 pl-4">
+          <div class="border-l-4 border-green-300 pl-8">
       <h2 className="mb-8 text-lg font-light leading-tight tracking-tighter md:text-4xl">
         <span class="text-green-500 font-semibold">1. </span>Devisa
       </h2><b>Life data automation</b> and centralization dashboard of the future. <a class="text-green-500 font-bold" href="https://devisa.io">Lookie here.</a> This is what I'm spending most of my time on these days (as of April 2021). I'm intending to go all the way with what I consider to be one of my more cohesive visions for a project generally, and a piece of software in particular. It's ambitious -- not in the manner in which I might come across as tooting my own horn, but rather, it's ambitious and a little bit frightening to think of myself seeing a full multi-tiered project out to completion on my own, but so far it's showing quite a bit of promise.

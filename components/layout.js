@@ -6,12 +6,12 @@ import Meta from '../components/meta'
 
 export default function Layout(props) {
   return (
-    <div class=" overflow-x-hidden bg-gradient-to-br from-gray-100 pt-8 to-gray-50 min-h-screen min-h-full h-full overflow-y-visible block pb-24">
+    <div class=" overflow-x-hidden bg-gradient-to-br from-gray-100 pt-8 to-gray-50 min-h-screen min-h-full h-full overflow-y-visible block pb-16">
       <Meta />
-    <section className="items-center w-2/3 mx-auto mb-2 md:flex-row md:justify-between bg-gray-50">
+    <section className="items-center w-2/3 mx-auto mb-0 md:flex-row md:justify-between bg-gray-50">
     <div class="rounded-lg shadow">
       <div className="px-4 py-1 border-t border-green-500 rounded-t-lg bg-gradient-to-b from-green-400 to-green-300 opacity-90">
-      <h1 className="pt-16 pb-0 text-2xl leading-tight tracking-tighter text-gray-800 font-extralight md:text-7xl md:pr-8">
+      <h1 className="pt-20 pb-0 text-2xl leading-tight tracking-tighter text-gray-800 font-extralight md:text-7xl md:pr-8">
         <Link href="/">
           <span class="ml-4 text-white opacity-70">chris</span>
         </Link>
@@ -43,12 +43,13 @@ export default function Layout(props) {
         <li className="float-left px-10 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
           <Link href="/resume">resume</Link>
         </li>
-        <li className="float-left px-10 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
-          <Link href="/resources">resources</Link>
-        </li>
+        {/* <li className="float-left px-10 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100"> */}
+        {/*   <Link href="/resources">resources</Link> */}
+        {/* </li> */}
       </ul>
           <div class="float-right">
             <input placeholder="Search..." class=" border-b-2 rounded-md shadow-xs border-gray-200 mt-3 mx-4 py-1 px-3 mr-4"/>
+          <a href="#"><button class="px-3 border-b-2 border-green-500 py-1 text-white rounded-lg shadow bg-green-400 text-black mr-2">Go</button></a>
           </div>
 
         </div>

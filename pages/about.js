@@ -15,7 +15,8 @@ export default function About() {
       <h2 className="mb-8 text-5xl font-light leading-tight tracking-tighter">
         about me
       </h2>
-          <div class="">
+          <div class="border-l-4 border-green-300 pl-8">
+            <div>
             <Image src="/assets/face.jpg" width="300" height="300"
               className="float-left px-10 mx-10 mr-20 rounded-full"/>
             <Image src="/assets/boeing.JPG" width="400" height="300"
@@ -31,6 +32,7 @@ export default function About() {
 
 
           <p>Please <Link href="/contact">reach out to me</Link> if you'd like to talk!</p>
+          </div>
         </Container>
       </Layout>
 
