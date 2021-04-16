@@ -5,9 +5,9 @@ import Head from 'next/head'
 export default function Index() {
   return (
       <Layout>
-        <Head>
-          <title>Welcome to clp.is</title>
-        </Head>
+      <Head>
+        <title>home - clp.is chris pecunies</title>
+      </Head>
         <Container>
       <h2 className="mb-8 text-5xl font-light leading-tight tracking-tighter">
         welcome to clp.is

@@ -1,9 +1,13 @@
 import Layout from '../components/layout'
+import Head from 'next/head';
 import Image from 'next/image'
 import Container from '../components/container'
 export default function Projects() {
   return (
     <>
+      <Head>
+        <title>projects - clp.is chris pecunies</title>
+      </Head>
       <Layout current="projects">
         <Container>
       <h2 className="mb-8 text-5xl font-light leading-tight tracking-tighter">

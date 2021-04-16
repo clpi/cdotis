@@ -1,11 +1,15 @@
 import Link from 'next/link'
 import Layout from '../components/layout'
+import Head from 'next/head';
 import Container from '../components/container'
 import Image from 'next/image'
 
 export default function About() {
   return (
     <>
+      <Head>
+        <title>about - clp.is chris pecunies</title>
+      </Head>
       <Layout current="about">
         <Container>
       <h2 className="mb-8 text-5xl font-light leading-tight tracking-tighter">

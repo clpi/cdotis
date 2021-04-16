@@ -1,9 +1,13 @@
 import Layout from '../components/layout'
 import Image from 'next/image'
 import Container from '../components/container'
+import Head from 'next/head'
 export default function Resume() {
   return (
     <>
+      <Head>
+        <title>resume - clp.is chris pecunies</title>
+      </Head>
       <Layout current="resume">
         <Container>
       <h2 className="mb-8 text-5xl font-light leading-tight tracking-tighter">

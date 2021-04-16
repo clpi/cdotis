@@ -43,6 +43,9 @@ export default function Layout(props) {
         <li className="float-left px-10 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
           <Link href="/resume">resume</Link>
         </li>
+        <li className="float-left px-10 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
+          <Link href="/resources">resources</Link>
+        </li>
       </ul>
           <div class="float-right">
             <input placeholder="Search..." class=" border-b-2 rounded-md shadow-xs border-gray-200 mt-3 mx-4 py-1 px-3 mr-4"/>
