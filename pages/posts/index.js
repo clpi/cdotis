@@ -12,7 +12,7 @@ export default function Posts({ allPosts }) {
     <>
       <Layout>
         <Container>
-          {morePosts.length > 0 && <MoreStories posts={morePosts} />}
+          {morePosts.length >= 0 && <MoreStories posts={allPosts} />}
         </Container>
       </Layout>
 

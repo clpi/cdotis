@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
+import Link from 'next/link';
 import ErrorPage from 'next/error'
 import Container from '../../components/container'
 import PostBody from '../../components/post-body'
-import Header from '../../components/header'
 import PostHeader from '../../components/post-header'
 import Layout from '../../components/layout'
 import { getPostBySlug, getAllPosts } from '../../lib/api'
@@ -18,8 +18,11 @@ export default function Post({ post, morePosts, preview }) {
   }
   return (
     <Layout preview={preview}>
+      <Link href="/posts/">
+        <span class="text-green-500">&lt; Back to posts</span>
+      </Link>
+      <br/><br/>
       <Container>
-        <Header />
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
         ) : (

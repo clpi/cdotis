@@ -5,11 +5,11 @@ import Meta from '../components/meta'
 
 export default function Layout(props) {
   return (
-    <div class="bg-gray-50 min-h-screen min-h-full max-h-screen block">
+    <div class="bg-gray-50 min-h-screen min-h-full h-full overflow-y-visible block">
       <Meta />
-    <section className="items-center w-2/3 pt-8 mx-auto mb-2 md:flex-row md:justify-between">
+    <section className="items-center w-2/3 pt-8 mx-auto mb-2 md:flex-row md:justify-between bg-gray-50">
     <div class="rounded-lg shadow">
-      <div className="px-4 py-1 border-t border-indigo-500 rounded-t-lg bg-gradient-to-b from-indigo-400 to-blue-300 opacity-90">
+      <div className="px-4 py-1 border-t border-green-500 rounded-t-lg bg-gradient-to-b from-green-400 to-green-300 opacity-90">
       <h1 className="pt-16 pb-0 text-2xl leading-tight tracking-tighter text-gray-800 font-extralight md:text-7xl md:pr-8">
         <Link href="/">
           <span class="ml-4 text-white opacity-70">chris</span>
