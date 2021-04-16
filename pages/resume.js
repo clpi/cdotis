@@ -1,4 +1,3 @@
-import Intro from '../components/intro'
 import Layout from '../components/layout'
 import Image from 'next/image'
 import Container from '../components/container'
@@ -7,8 +6,10 @@ export default function Resume() {
     <>
       <Layout>
         <Container>
-          <Intro current="projects"/>
-          <h1 class="text-4xl font-light">Resume</h1>
+      <h2 className="mb-8 text-6xl font-light leading-tight tracking-tighter md:text-7xl">
+        Resume
+
+      </h2>
           <p>Some things I've worked on before...</p>
           <ul>
 

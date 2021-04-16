@@ -1,4 +1,3 @@
-import Intro from '../components/intro'
 import Link from 'next/link'
 import Layout from '../components/layout'
 import Container from '../components/container'
@@ -9,8 +8,9 @@ export default function About() {
     <>
       <Layout>
         <Container>
-          <Intro current="about" />
-          <h1 class="text-4xl mb-8">About me</h1>
+      <h2 className="mb-8 text-6xl font-light leading-tight tracking-tighter md:text-7xl">
+        About me
+      </h2>
           <div class="space-x-7">
             <Image src="/assets/face.jpg" width="300" height="300"
               className="float-left px-10 mx-10 mr-20 rounded-full"/>

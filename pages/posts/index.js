@@ -1,4 +1,3 @@
-import Intro from '../../components/intro'
 import Layout from '../../components/layout'
 import Container from '../../components/container'
 import MoreStories from '../../components/more-stories'
@@ -13,7 +12,6 @@ export default function Posts({ allPosts }) {
     <>
       <Layout>
         <Container>
-          <Intro current="posts" />
           {morePosts.length > 0 && <MoreStories posts={morePosts} />}
         </Container>
       </Layout>

@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function Intro( props ) {
   return (
-    <section className="items-center mt-16 mb-16 md:flex-row md:justify-between md:mb-12">
+    <section className="items-center max-h-screen min-h-screen pt-8 mb-16 md:flex-row md:justify-between md:mb-12">
     <div class="rounded-lg shadow">
       <div className="px-4 py-1 border-t border-indigo-500 rounded-t-lg bg-gradient-to-b from-indigo-400 to-blue-300 opacity-90">
       <h1 className="pt-16 pb-0 text-2xl leading-tight tracking-tighter text-gray-800 font-extralight md:text-7xl md:pr-8">
