@@ -22,12 +22,12 @@ export default function PostPreview({
       </div>
       <h3 className="mb-3 text-3xl leading-snug">
         <Link as={`/posts/${slug}`} href="/posts/[slug]">
-          <a className="hover:underline">{title}</a>
+          <a className="hover:underline" class="font-light">{title}</a>
         </Link>
       </h3>
       <div className="mb-4 text-lg">
       </div>
-      <p className="mb-4 text-lg leading-relaxed">{excerpt}</p>
+      <p className="mb-4 text-lg leading-relaxed" class="font-light text-gray-700">{excerpt}</p>
     </div>
   )
 }

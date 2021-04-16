@@ -21,9 +21,11 @@ export default function About() {
               className="float-left px-10 mx-10 mr-20 rounded-full"/>
             <Image src="/assets/boeing.JPG" width="400" height="300"
               className="float-left ml-20 rounded-full"/>
+              <br/><br/>
             <div className="float-right align-middle">
               <p>I'm a Seattle-area native and University of Washington recent-graduate with a Bachelor's Materials Science & Engineering degree.</p>
               <p>Currently, I'm working primarily on work related to Cloud infrastructure services such as AWS, Microsoft Azure, etc. and on <a href="https://devisa.io">Devisa</a> (a LLC startup in very early stages!)</p>.
+              <br/><br/>
           <p>Although my attention is currently taken with tech/cloud projects, still a significant part of myself will always lie with the physical sciences in general and materials science in particular -- and to that respect, I have several hobby projects I am currently working on in my free time, and other aspirations which will see fruition down the road.</p>
               <br/>
             </div>

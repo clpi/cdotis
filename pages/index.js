@@ -34,8 +34,26 @@ export default function Index() {
         who am i?
       </h2>
       <p>Nobody important, right now. That said, if you're interested in Devisa or are looking for software development work on either end of the stack (or both!) I can make myself available for the time being, depending on the type of work involved. I have extensive experience using and building software with Python, Java/Kotlin, Flutter, HTML/CSS/JavaScript, Node.js, Rust, Scala, and other languages, and I have extensive experience working with all cloud providers to set up and maintain various cloud architecture solutions (with a strong emphasis on AWS-based services).</p>
+            <br/><br/>
+
+      <h2 className="mb-8 text-3xl font-light leading-tight tracking-tighter">
+        where can you find me?
+      </h2>
+          <ul class=" border-l-4 border-yellow-200 pl-8 list-outside ml-0">
+            <li>1. <a class="text-green-500" href="http://last.fm/user/ooohm">My last.fm profile</a></li>
+            <li>2. <a class="text-green-500" href="http://linkedin.com/in/chrispecunies">My LinkedIn profile</a></li>
+            <li>3. <a class="text-green-500" href="http://github.com/clpi">My GitHub</a></li>
+            <li>4. <a class="text-green-500" href="http://gitlab.com/clpi">My GitLab</a></li>
+            <li>5. <a class="text-green-500" href="https://open.spotify.com/user/12180738991">My Spotify</a></li>
+            <li>6. <a class="text-green-500" href="http://facebook.com/chrispecunies">My Facebook</a></li>
+            <li>7. <a class="text-green-500" href="https://devisa.io/chris">My Devisa profile</a></li>
+          </ul>
+          <p>...among other places, as well.</p>
+            <br/><br/>
+            <p>Please feel free to say hi!</p>
           {/* {morePosts.length > 0 && <MoreStories posts={morePosts} />} */}
           </div>
+            <br/><br/>
         </Container>
       </Layout>
   )

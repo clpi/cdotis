@@ -21,6 +21,18 @@ export default function Projects() {
       <br/><br/>
         <p>In the process of developing Devisa over the last month or two (again, as of April 2021) I have learned much more than I ever would have thought possible in so short a time about systems architecture, engineering, and all that more abstract jazz, but I've also come to appreciate the zen-like machinery of working away at Flutter layouts and various JavaScript frontend peculariarities that I am inevitably exposed to working on all levels of such a large and unwieldy project. </p>
                 <Image src="/assets/logo_icon_transparent.png" width="300" height="300" class = "float-left"/>
+      <br/><br/>
+      <p>Resources related to Devisa:</p>
+      <ul class="ml-0 border-l-4 border-yellow-200 pl-8">
+        <li>1. <a class="text-green-500" href="https://docs.devisa.io">Devisa documentation</a></li>
+        <li>2. <a class="text-green-500" href="https://book.devisa.io">Devisa book</a></li>
+        <li>3. <a class="text-green-500" href="https://dlog.div.is">Dlog</a></li>
+        <li>4. <a class="text-green-500" href="https://blog.devisa.io">Devisa promo blog</a></li>
+        <li>5. <a class="text-green-500" href="https://devisa.io/blog">Devisa dev blog</a></li>
+        <li>6. <a class="text-green-500" href="https://devisa.io/shop">Devisa shop</a></li>
+        <li>7. <a class="text-green-500" href="https://dvsa.io">Devisa tech home</a></li>
+        <li>8. <a class="text-green-500" href="https://github.com/devisa">GitHub Devisa Organization</a></li>
+      </ul>
               </div>
         </Container>
       </Layout>
