@@ -9,9 +9,18 @@ export default function Index() {
         <title>home - clp.is chris pecunies</title>
       </Head>
         <Container>
-      <h2 className="mb-8 text-5xl font-light leading-tight tracking-tighter">
+          <div class="inline-block mb-0 mt-5 grid grid-cols-2">
+            <div class="float-left mr-8">
+      <h2 className="mb-8 text-6xl font-light leading-tight tracking-tighter">
         welcome to clp.is
       </h2>
+            </div>
+            <div class="ml-24 float-right text-sm">
+          <a href="mailto:clp@clp.is"><button class="px-5 py-3 rounded-lg shadow bg-green-500 text-white mr-4">Contact me</button></a>
+
+          <a href="mailto:chris@devisa.io"><button class="px-5 py-3 rounded-lg shadow bg-white-500 text-black">Schedule me</button></a>
+            </div>
+          </div>
           <div class="border-l-4 border-green-300 pl-8">
           <p>I'm Chris. This is my personal webpage(s). Welcome! I will, in theory, be using this website to keep track of my endeavors for the sake of others, but it is still to be seen whether I will be posting on here and keeping these collection of pages updated, so if you're trying to get ahold of me/keep up to date with what I'm doing, better off just shooting me a message directly! If you have a business or service related inquiry, please do the same!</p>
             <br/><br/>
