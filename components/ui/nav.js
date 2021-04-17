@@ -23,28 +23,28 @@ export default function Nav(props) {
       </div>
         <div class="bg-gray-50 border-b-2 border-gray-200    rounded-b-lg min-w-full  md:flex-row   float-left mr-8">
       <ul className="text-sm">
-        <li className="float-left px-8 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
+        <li className="float-left px-6 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
           <Link href="/">home</Link>
         </li>
-        <li className="float-left px-8 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
+        <li className="float-left px-6 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
           <Link href="/about">about</Link>
         </li>
-        <li className="float-left px-8 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
+        <li className="float-left px-6 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
           <Link href="/posts">posts</Link>
         </li>
-        <li className="float-left px-8 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
+        <li className="float-left px-6 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
           <Link href="/contact">contact</Link>
         </li>
-        <li className="float-left px-8 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
+        <li className="float-left px-6 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
           <Link href="/projects">projects</Link>
         </li>
-        <li className="float-left px-8 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
+        <li className="float-left px-6 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
           <Link href="/resume">resume</Link>
         </li>
-        <li className="float-left px-8 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
+        <li className="float-left px-6 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100">
           <Link href="/resources">links</Link>
         </li>
-        {/* <li className="float-left px-8 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100"> */}
+        {/* <li className="float-left px-6 py-4 hover:bg-gray-200 hover:border-black hover:border-b-2transition-all duration-100"> */}
         {/*   <Link href="/resources">resources</Link> */}
         {/* </li> */}
       </ul>
