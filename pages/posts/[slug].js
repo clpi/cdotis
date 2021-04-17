@@ -1,12 +1,11 @@
+import markdownStyles from '../../components/markdown-styles.module.css'
 import { useRouter } from 'next/router'
 import Link from 'next/link';
 import ErrorPage from 'next/error'
 import Container from '../../components/container'
-import PostBody from '../../components/post-body'
 import PostHeader from '../../components/post-header'
 import Layout from '../../components/layout'
 import { getPostBySlug, getAllPosts } from '../../lib/api'
-import PostTitle from '../../components/post-title'
 import Head from 'next/head'
 import { CMS_NAME } from '../../lib/constants'
 import markdownToHtml from '../../lib/markdownToHtml'
@@ -18,8 +17,11 @@ export default function Post({ post, morePosts, preview }) {
   }
   return (
     <Layout preview={preview}>
+      <Head>
+        <title>{ post.title } - clp.is chris pecunies</title>
+      </Head>
       <Link href="/posts/">
-        <span class="text-green-500">&lt; Back to posts</span>
+        <span class="mt-8 mb-4 text-green-500">&lt; Back to posts</span>
       </Link>
       <br/><br/>
       <Container>
@@ -39,8 +41,15 @@ export default function Post({ post, morePosts, preview }) {
                 coverImage={post.coverImage}
                 date={post.date}
                 author={post.author}
-              />
-              <PostBody content={post.content} />
+              >
+              {post.title}
+            </PostHeader>
+              <div className="max-w-2xl mx-auto">
+                <div
+                  className={markdownStyles['markdown']}
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+              </div>
             </article>
           </>
         )}

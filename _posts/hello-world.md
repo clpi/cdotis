@@ -1,6 +1,6 @@
 ---
-title: 'Hello, blog!'
-excerpt: 'First blog post to be posted to my personal blog'
+title: 'Hello, blog! And an introduction.'
+excerpt: 'Half a test of the blogging system for my website, half an informational introduction to the projects I am working on and my current pursuits and enterprises, for those who for whatever reason find themselves curious.'
 coverImage: '/assets/blog/hello-world/cover.jpg'
 date: '2020-04-15T05:35:07.322Z'
 author:
@@ -10,10 +10,11 @@ ogImage:
   url: '/assets/blog/hello-world/cover.jpg'
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus. Praesent elementum facilisis leo vel fringilla. Congue mauris rhoncus aenean vel. Egestas sed tempus urna et pharetra pharetra massa massa ultricies.
+# Welcome - I'm Chris!
 
-Venenatis cras sed felis eget velit. Consectetur libero id faucibus nisl tincidunt. Gravida in fermentum et sollicitudin ac orci phasellus egestas tellus. Volutpat consequat mauris nunc congue nisi vitae. Id aliquet risus feugiat in ante metus dictum at tempor. Sed blandit libero volutpat sed cras. Sed odio morbi quis commodo odio aenean sed adipiscing. Velit euismod in pellentesque massa placerat. Mi bibendum neque egestas congue quisque egestas diam in arcu. Nisi lacus sed viverra tellus in. Nibh cras pulvinar mattis nunc sed. Luctus accumsan tortor posuere ac ut consequat semper viverra. Fringilla ut morbi tincidunt augue interdum velit euismod.
+## A little bit about myself
+I don't like tooting my own horn, so I'll try to keep this brief and to the point. I like to think of myself as an engineer, recently graduated from the University of Washington Seattle's Materials Science & Engineering Bachelors program (in 2019). Despite my training being firmly rooted in the physical sciences, I have always been a computer geek, which is why my current repertoire of in-development projects are strictly software-focused. With that said, I've always found it to be a bit incongruous at the best and confused at worst to have a reigning interest in "software engineering" as such -- software, at least how I perceive it, is only useful insofar the software establishes a full solution or makes the problem-solving process easier in some fashion for some difficult problem residing in some other domain, say, materials science. With that in mind, my overriding interest in all things computers, software, and algorithms has always been directed, at least to some extent, towards solving real engineering problems, or real human problems. I respect those who confine themselves to the cultivation of incredible expertise with respect to software and computers, without ever transgressing any domain boundaries to leverage their virtuosity in real engineering problems, but to put it bluntly, that's not me.
 
-## Lorem Ipsum
+Now, having put those unsolicited thoughts in the open, a more brief and perhaps relevant overview of my background: As mentioned, I received an education in Materials science & Engineering, but my current work on the various projects I have in stow has had the auxillary effect of making me progressively more competent as a software engineer, which in terms of my career, is the position I see myself assuming in the near future in solving difficult engineering problems, wherever it might be.
 
-Tristique senectus et netus et malesuada fames ac turpis. Ridiculous mus mauris vitae ultricies leo integer malesuada nunc vel. In mollis nunc sed id semper. Egestas tellus rutrum tellus pellentesque. Phasellus vestibulum lorem sed risus ultricies tristique nulla. Quis blandit turpis cursus in hac habitasse platea dictumst quisque. Eros donec ac odio tempor orci dapibus ultrices. Aliquam sem et tortor consequat id porta nibh. Adipiscing elit duis tristique sollicitudin nibh sit amet commodo nulla. Diam vulputate ut pharetra sit amet. Ut tellus elementum sagittis vitae et leo. Arcu non odio euismod lacinia at quis risus sed vulputate.
+## What am I working on?

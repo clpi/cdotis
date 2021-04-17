@@ -1,19 +1,18 @@
-import Layout from '../components/layout'
-import Image from 'next/image'
-import Container from '../components/container'
-import Head from 'next/head'
-export default function Resume() {
+import Head from 'next/head';
+import Layout from '../../components/layout'
+import Container from '../../components/container'
+export default function Search(props) {
   return (
     <>
       <Head>
-        <title>resume - clp.is chris pecunies</title>
+        <title>search - clp.is chris pecunies</title>
       </Head>
-      <Layout current="resume">
+      <Layout current="resources">
         <Container>
           <div class="inline-block mb-0 mt-5 grid grid-cols-2">
             <div class="float-left mr-8">
       <h2 className="mb-8 text-6xl font-light leading-tight tracking-tighter">
-        my resume
+        resources
       </h2>
             </div>
             <div class="ml-24 float-right text-sm">
@@ -23,7 +22,16 @@ export default function Resume() {
             </div>
           </div>
           <div class="border-l-4 border-green-300 pl-8">
-          <p>Some things I've worked on before will be posted here.</p>
+      <h2 className="mb-8 text-3xl font-light leading-tight tracking-tighter">
+        files
+      </h2>
+          <div class="border-l-4 border-green-300 pl-8">
+          <p>one day files will be here...</p>
+          </div>
+      <h2 className="mb-8 text-3xl font-light leading-tight tracking-tighter">
+        links
+      </h2>
+          <p>one day links will be here...</p>
           </div>
         </Container>
       </Layout>
