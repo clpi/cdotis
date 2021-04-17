@@ -34,6 +34,16 @@ export default function Projects() {
         <li>8. <a class="text-green-500" href="https://github.com/devisa">GitHub Devisa Organization</a></li>
       </ul>
               </div>
+          <div class="border-l-4 border-blue-300 pl-8 mt-8">
+      <h2 className="mb-8 text-lg font-light leading-tight tracking-tighter md:text-4xl">
+        <span class="text-blue-500 font-semibold">2. </span>Idlets Inc.
+      </h2><b>More info forthcoming...</b> check back later!
+  </div>
+          <div class="border-l-4 border-red-300 pl-8 mt-8">
+      <h2 className="mb-8 text-lg font-light leading-tight tracking-tighter md:text-4xl">
+        <span class="text-red-500 font-semibold">3. </span>Iridel / VTRL.
+      </h2><b>More info forthcoming...</b> check back later!
+  </div>
         </Container>
       </Layout>
 
