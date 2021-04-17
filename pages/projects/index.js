@@ -52,6 +52,11 @@ export default function Projects() {
       <h2 className="mb-8 text-lg font-light leading-tight tracking-tighter md:text-4xl">
         <span class="text-red-500 font-semibold">3. </span>Iridel / VTRL.
       </h2><b>More info forthcoming...</b> check back later!
+            <ul>
+              <li><a class="text-indigo-500" href="https://vtrl.us">vtrl</a></li>
+              <li><a class="text-purple-500" href="https://mtrl.us">vtrl</a></li>
+              <li><a class="text-blue-500" href="https://iridel.us">iridel</a></li>
+            </ul>
   </div>
         </Container>
       </Layout>
