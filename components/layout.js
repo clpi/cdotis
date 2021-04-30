@@ -7,7 +7,7 @@ import Meta from '../components/meta'
 
 export default function Layout(props) {
   return (
-    <div class=" overflow-x-hidden bg-gradient-to-br from-gray-100 pt-8 to-gray-50 min-h-screen min-h-full h-full overflow-y-visible block pb-16">
+    <div class=" w-full overflow-x-hidden bg-gradient-to-br from-gray-100 to-gray-50 min-h-screen min-h-full h-full overflow-y-visible block pb-16">
       <Meta />
       <Nav/>
       <br/>

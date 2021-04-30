@@ -4,6 +4,15 @@ import Image from 'next/image'
 
 export default function CoverImage({ title, src, slug, height, width }) {
   const image = (
+    <img
+      src = {src}
+      alt={`Cover Image for ${title}`}
+      className={cn('shadow-sm', {
+        'rounded-md hover:shadow-md transition-shadow duration-200': slug,
+      })}
+    />
+  )
+  const nimage = (
     <Image
       src={src}
       alt={`Cover Image for ${title}`}
