@@ -13,7 +13,7 @@
 <h1 id="head">etc</h1>
 <p><span class="date">07/18/21</span> Any other links or resources</p>
 <ul>
-	<li><a href="/wasm">wasm</a>:  &nbsp;&nbsp;Web assembly experiments</li>
-	<li><a href="/wasm">svelte</a>:  &nbsp;&nbsp;Svelte/svelte kit experiments</li>
+	<li><a href="#">wasm</a>:  &nbsp;&nbsp;Web assembly experiments</li>
+	<li><a href="#">svelte</a>:  &nbsp;&nbsp;Svelte/svelte kit experiments</li>
 </ul>
 

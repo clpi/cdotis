@@ -10,16 +10,15 @@
     "lint": "eslint --ignore-path .gitignore ."
   },
   "devDependencies": {
+    "@sveltejs/adapter-static": "next",
+    "@sveltejs/adapter-vercel": "next",
+    "@sveltejs/app-utils": "next",
     "@sveltejs/kit": "next",
-    "@typescript-eslint/eslint-plugin": "^4.19.0",
-    "@typescript-eslint/parser": "^4.19.0",
     "eslint": "^7.22.0",
     "eslint-plugin-svelte3": "^3.2.0",
-    "svelte": "^3.34.0",
-    "svelte-check": "^2.0.0",
-    "svelte-preprocess": "^4.0.0",
-    "tslib": "^2.0.0",
-    "typescript": "^4.0.0"
+    "svelte": "next",
+    "svelte-preprocess": "next",
+    "typescript": "^4.3.5"
   },
   "type": "module"
 }
