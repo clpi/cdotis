@@ -8,11 +8,12 @@
 </script>
 <script>
     import Date from '$lib/date.svelte'
+    export let title = "projets"
 </script>
 <style>
-.p {
-	color: rgba(0,0,0,0.55);
-
+.p { 
+    color: rgba(0,0,0,0.55);  
+    font-size: 1.9rem;
     }
     .p:hover{
 	    color: rgba(0,0,0,0.8);
@@ -27,9 +28,9 @@
 <p>...</p>
 <h3>further info</h3>
 <ul>
-<li><a href="https://crates.io/crate/recollection">crates.io</a></li>
-<li><a href="https://lib.rs/crate/recollection">lib.rs</a></li>
-<li><a href="https://github.com/clpi/recollection">github</a></li>
-<li><a href="https://docs.rs/recollection">docs.rs</a> for documentation</li>
+<li><a class="link" href="https://crates.io/crate/recollection">crates.io</a></li>
+<li><a class="link" href="https://lib.rs/crate/recollection">lib.rs</a></li>
+<li><a class="link" href="https://github.com/clpi/recollection">github</a></li>
+<li><a class="link" href="https://docs.rs/recollection">docs.rs</a> for documentation</li>
 </ul>
 

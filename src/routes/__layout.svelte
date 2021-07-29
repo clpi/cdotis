@@ -26,11 +26,8 @@
     border: 1px solid rgba(0,0,0,0.25);
 }
 :global(li:not(.nav)) {
-	margin-top: 4px;
 	margin-bottom: 4px;
     }
-:global(li:not(.nav):hover) {
-}
     :global(li:not(.nav)) {
 	padding-left: 1%;
 
@@ -92,7 +89,7 @@
 		transition: all 0.2s ease-in-out;
 
 	}
-	:global(a:not(.nav):hover) {
+	:global(a.link:not(.nav):hover) {
 		transition: all 0.2s;
 		background-color: rgba(0,0,0,0.8);
 		font-weight: 500;

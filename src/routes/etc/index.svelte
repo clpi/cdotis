@@ -4,6 +4,7 @@
 	<title>etc • clp.is</title>
 </svelte:head>
 <script context="module">
+import  Date  from '$lib/date.svelte'
 	export const hydrate = false;
 	export const prerender = true;
 </script>
@@ -11,9 +12,10 @@
 </style>
 
 <h1 id="head">etc</h1>
-<p><span class="date">07/18/21</span> Any other links or resources</p>
+<p><Date date="07/14/21"/>Any other links or resources</p>
 <ul>
-	<li><a href="#">wasm</a>:  &nbsp;&nbsp;Web assembly experiments</li>
-	<li><a href="#">svelte</a>:  &nbsp;&nbsp;Svelte/svelte kit experiments</li>
+	<li><a class="link" href="#">wasm</a>:  &nbsp;&nbsp;Web assembly experiments</li>
+	<li><a class="link" href="#">svelte</a>:  &nbsp;&nbsp;Svelte/svelte kit experiments</li>
+	<li><a class="link" href="/uses">uses</a>:  &nbsp;&nbsp;Svelte/svelte kit experiments</li>
 </ul>
 

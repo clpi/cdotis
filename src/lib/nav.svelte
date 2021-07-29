@@ -1,5 +1,6 @@
 <script>
 	export let section = "Home";
+	import { page} from '$app/stores'
 </script>
 
 <style>
@@ -62,12 +63,23 @@
 		text-decoration: none;
 		padding: 7px 4px;
 		border: 2px solid transparent;
-		border-bottom-color: rgba(0,0,0,0.4);
+		/* border-bottom-color: rgba(0,0,0,0.4); */
 		border-radius: 0px;
 		letter-spacing: -0px;
 		display:inline-flex;
 
 	}
+	.active {
+		transform: scale(1.2);
+		transition: all 0.2s ease-in-out;
+		text-shadow: 0px 0px 8px rgba(0,0,0,0.05);
+		color: rgba(0,0,0,0.85);
+	    }
+	    a.active::before {
+		    content: "> ";
+		    padding-right: 5px;
+		    color: rgba(0,0,0,0.44);
+		}
 	nav ul li a {
 		font-size: 1.0rem;
 		margin-right: 1.5vw;
@@ -166,16 +178,16 @@
 			 <div class="tabl">
 		<ul class="navbar">
 
-			<li><a class="nav" sveltekit:prefetch href="/">home</a></li>
-			<li><a class="nav" sveltekit:prefetch href="/about">about</a></li>
-			<li><a class="nav" sveltekit:prefetch href="/posts">posts</a></li>
-			<li><a class="nav" sveltekit:prefetch href="/projects">projects</a></li>
-			<li><a class="nav" sveltekit:prefetch href="/etc">etc</a></li>
+			<li><a class:active={ $page.path == "/" } class="nav" sveltekit:prefetch href="/">home</a></li>
+			<li><a class:active={ $page.path == "/about" } class="nav" sveltekit:prefetch href="/about">about</a></li>
+			<li><a class:active={ $page.path == "/posts" } class="nav" sveltekit:prefetch href="/posts">posts</a></li>
+			<li><a class:active={ $page.path == "/projects" } class="nav" sveltekit:prefetch href="/projects">projects</a></li>
+			<li><a class:active={ $page.path == "/etc" } class="nav" sveltekit:prefetch href="/etc">etc</a></li>
 
 		</ul>
 			 </div>
 		<div class="right">
-			<a class="nav" id="etc" href="/lab">...</a>
+			<a class:active={ $page.path == "" } class="nav" id="etc" href="/lab">...</a>
 
 		</div>
 </nav>
