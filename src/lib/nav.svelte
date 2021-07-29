@@ -164,11 +164,12 @@
 <nav>
 	<a href="/"><div id="title">clp</div></a>
 			 <div class="tabl">
-		<ul>
+		<ul class="navbar">
 
 			<li><a class="nav" sveltekit:prefetch href="/">home</a></li>
 			<li><a class="nav" sveltekit:prefetch href="/about">about</a></li>
 			<li><a class="nav" sveltekit:prefetch href="/posts">posts</a></li>
+			<li><a class="nav" sveltekit:prefetch href="/projects">projects</a></li>
 			<li><a class="nav" sveltekit:prefetch href="/etc">etc</a></li>
 
 		</ul>

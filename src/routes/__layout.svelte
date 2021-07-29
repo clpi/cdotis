@@ -2,12 +2,39 @@
 	import Nav from '../lib/nav.svelte';
 	import Footer from '../lib/footer.svelte';
 	import { page, navigating } from '$app/stores';
+	import GoogleAnalytics from '$lib/google.svelte';
 
 
 	$: section = $page.path.split('/')[1];
 </script>
 
 <style>
+:global(ul:not(.navbar)) {
+	margin-left: 3.5%;
+	list-style:square;
+	padding-top: 2.5%;
+	border-top: 1px solid rgba(0,0,0,0.03);
+	border-radius: 7px;
+	padding-bottom: 2.5%;
+	background-color: rgba(0,0,0,0.01);
+	border:1px solid rgba(0,0,0,0.1);
+	margin-top: 25px;
+    }
+:global(ul:not(.navbar):hover) {
+    background-color: rgba(0,0,0,0.025);
+    transition: all 0.2s ease-in-out;
+    border: 1px solid rgba(0,0,0,0.25);
+}
+:global(li:not(.nav)) {
+	margin-top: 4px;
+	margin-bottom: 4px;
+    }
+:global(li:not(.nav):hover) {
+}
+    :global(li:not(.nav)) {
+	padding-left: 1%;
+
+	}
 	:global(body) {
 		border: 2px ridge transparent;
 		background-color: #fffefd;
@@ -19,15 +46,6 @@
 		padding: 2% 8% 2% 8%;
 		font-weight: 300;
 	}
-	:global(.date) {
-		color: rgba(0,0,0,0.3);
-		font-family:monospace;
-		font-size: 1rem;
-		letter-spacing:-1px;
-		padding-right: 4px;
-	}
-	:global(.date::before) { content: "["; }
-	:global(.date::after) { content: "]"; }
 	:global(h1),:global(h2),:global(h3),:global(h4) {
 
 		font-weight: 300;
@@ -70,14 +88,18 @@
 	:global(#head:hover) {
 		color: rgba(0,0,0,0.95);
 		border-left: 2px solid rgba(0,0,0,0.15);
-		padding-left: 34px;
+		padding-left: 37px;
 		transition: all 0.2s ease-in-out;
 
 	}
 	:global(a:not(.nav):hover) {
-		color: rgba(130,100,70,0.9);
-		font-weight: 700;
 		transition: all 0.2s;
+		background-color: rgba(0,0,0,0.8);
+		font-weight: 500;
+		color: rgba(255,255,255,0.95);
+		border-radius: 4px;
+		text-decoration: underline;
+		text-underline-offset: 6px;
 	}
 	:global(a:not(.nav)) {
 		color: rgba(130,100,70,0.7);
@@ -126,6 +148,7 @@
 }
 </style>
 
+<GoogleAnalytics/>
 <div>
 	<Nav/>
 	<div class="content">
