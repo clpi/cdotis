@@ -21,13 +21,13 @@
 		border-radius: 4px;
 		font-family: monospace;
 		padding: 18px 17px 18px 17px;
-		font-size: 1.4rem;
+		font-size: 1.7rem;
 		margin-right: 2%;
 		color: black;
 		background-color: #fffdfc;
 		margin-left:2%;
 		transform: scale(1.1);
-		border: 2px solid rgba(0,0,0,0.6);
+		/* border: 2px solid rgba(0,0,0,0.6); */
 		transition: all 0.05s;
 		color: rgba(0,0,0,1);
 		/* font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
@@ -53,7 +53,7 @@
 
 
 		border-radius: 5px;
-		border: 2px solid black;
+		/* border: 2px solid black; */
 		/* box-shadow: 0px 2px 8px rgba(0,0,0,0.15); */
 		transition: all 0.05s;
 		opacity: 0.8;
@@ -70,10 +70,10 @@
 
 	}
 	.active {
-		transform: scale(1.3);
+		transform: scale(1.25);
 		transition: all 0.2s ease-in-out;
-		text-shadow: 0px 0px 8px rgba(0,0,0,0.05);
-		color: rgba(0,0,0,0.85);
+		text-shadow: 0px 0px 8px rgba(0,0,0,0.08);
+		color: rgba(0,0,0,0.95);
 	    }
 	    a.active::before {
 		    content: "> ";
@@ -114,10 +114,11 @@
 	.right a {
 		/* color: #fffdfc; */
 		padding: 3px 5px;
-		border: 2px solid rgba(0,0,0,0.2);
+		/* border: 2px solid rgba(0,0,0,0.2); */
 		color: rgba(0,0,0,0.2);
 		border-radius: 2px;
-		font-size: 0.8rem;
+		transition:all 0.2s linear;
+		font-size: 0.9rem;
 	}
 	#etc{
 		padding: 3px;
@@ -129,10 +130,11 @@
 	}
 	.right a:hover{
 		color: rgba(0,0,0,0.4);
-		border: 2px solid rgba(0,0,0,0.4);
+		/* border: 2px solid rgba(0,0,0,0.4); */
 		background: #fffdfc;
 		transition: all 0.05s;
-		box-shadow: 0px 0px 4px rgba(0,0,0,0.15);
+		box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
+		transform:scale(1.1);
 
 	}
 	.right *:hover {

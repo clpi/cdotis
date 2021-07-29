@@ -13,11 +13,11 @@
 	margin-left: 3.5%;
 	list-style:square;
 	padding-top: 2.5%;
-	border-top: 1px solid rgba(0,0,0,0.03);
+	border-top: 1px solid rgba(0,0,0,0.02);
 	border-radius: 7px;
 	padding-bottom: 2.5%;
-	background-color: rgba(0,0,0,0.01);
-	border:1px solid rgba(0,0,0,0.1);
+	background-color: rgba(0,0,0,0.005);
+	border:1px solid rgba(0,0,0,0.09);
 	margin-top: 25px;
     }
 :global(ul:not(.navbar):hover) {
@@ -139,8 +139,9 @@
 	background-color: rgba(0,0,0,0.01);
 	border-left: 4px dashed rgba(0,0,0,0.02);
 	border-right: 4px dashed rgba(0,0,0,0.02);
-		border-top: 4px dotted rgba(0,0,0,0.08);
-		border-bottom: 4px dotted rgba(0,0,0,0.08);
+		border-top: 1px solid rgba(0,0,0,0.08);
+		border-bottom: 1px solid rgba(0,0,0,0.08);
+		box-shadow: 0px 0px 2px rgba(0,0,0,0.05);
 	display:block;
 }
 </style>

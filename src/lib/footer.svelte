@@ -1,6 +1,6 @@
 <footer>
 	<div class="left">
-	<p class="foot">Last updated 2021</p>
+	<p class="foot">Last updated July 29, 2021</p>
 	<p class="foot"><a href="mailto:clp@clp.is">Email</a> me</p>
 	</div>
 		<div class="right">
@@ -38,16 +38,17 @@
 	}
 	.right a:hover{
 		color: rgba(0,0,0,0.4);
-		border: 2px solid rgba(0,0,0,0.4);
+		/* border: 2px solid rgba(0,0,0,0.4); */
 		background: #fffdfc;
 		transition: all 0.05s;
+		transition:scale(1.2);
 		box-shadow: 0px 0px 4px rgba(0,0,0,0.15);
 
 	}
 	.right a {
 		/* color: #fffdfc; */
 		padding: 3px 5px;
-		border: 2px solid rgba(0,0,0,0.2);
+		/* border: 2px solid rgba(0,0,0,0.2); */
 		color: rgba(0,0,0,0.2);
 		border-radius: 2px;
 		font-size: 0.8rem;
