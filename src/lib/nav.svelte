@@ -59,9 +59,9 @@
 		opacity: 0.8;
 	}
 	li a {
-		color:rgba(0,0,0,0.8);
+		color:rgba(0,0,0,0.64);
 		text-decoration: none;
-		padding: 7px 4px;
+		padding: 7px 7px;
 		border: 2px solid transparent;
 		/* border-bottom-color: rgba(0,0,0,0.4); */
 		border-radius: 0px;
@@ -70,7 +70,7 @@
 
 	}
 	.active {
-		transform: scale(1.2);
+		transform: scale(1.3);
 		transition: all 0.2s ease-in-out;
 		text-shadow: 0px 0px 8px rgba(0,0,0,0.05);
 		color: rgba(0,0,0,0.85);
@@ -135,6 +135,10 @@
 		box-shadow: 0px 0px 4px rgba(0,0,0,0.15);
 
 	}
+	.right *:hover {
+		transform: scale(1.2);
+		transition: all 0.05s;
+	    }
 	.tabl {
 		clear: both;
 		padding:0px;
@@ -151,8 +155,8 @@
 	li:hover a {
 		color: black;
 		border-radius: 0px;
-		background-color: #fffdfc;
-		border-bottom: 2px ridge black;
+		/* background-color: #fffdfc; */
+		/* border-bottom: 2px ridge black; */
 		/* transition: all 0.05s ease-in-out; */
 		/* padding: 4px 4px; */
 		/* box-shadow: 0px 1px 9px rgba(0,0,0,0.25); */
