@@ -7,7 +7,7 @@
 import  Date  from '$lib/date.svelte'
 </script>
 <style>
-    :global(.ext::after) {
+    /* :global(.ext::after) {
 	content: " [->]";
 	font-size: 0.6rem;
 	transition: all 0.15s ease-in-out;
@@ -16,7 +16,7 @@ import  Date  from '$lib/date.svelte'
     :global(.ext:hover::after) {
 	content: " [->]";
 	transition: all 0.15s ease-in-out;
-    }
+    } */
     .lite { color: rgba(0,0,0,0.5);}
 </style>
 <h1 id="head">projects</h1>

@@ -40,7 +40,7 @@
 		    border-bottom: 4px dotted rgba(0,0,0,0.1)
 
 		    }
-    :global(.ext::after) {
+    /* :global(.ext::after) {
 	content: " [->]";
 	font-size: 0.6rem;
 	padding-left:0px;
@@ -50,7 +50,7 @@
     :global(.ext:hover::after) {
 	content: " [->]";
 	transition: all 0.15s ease-in-out;
-    }
+    } */
 </style>
 
 

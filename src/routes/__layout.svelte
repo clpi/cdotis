@@ -161,15 +161,6 @@
     :global( .link.ext ):not(.nav) {
 	    color: rgba(0,0,0,0.5);
 	}
-    :global(.link .ext::after ):not(.nav) {
-	content: " [->]";
-	font-size: 0.5rem;
-	transition: all 0.15s ease-in-out;
-    }
-    :global( a .link .ext:hover::after):not(.nav) {
-	content: " [->]";
-	transition: all 0.15s ease-in-out;
-    }
 	:global(li a:active):not(.nav) {
 		transform: scale(1.3);
 	}
