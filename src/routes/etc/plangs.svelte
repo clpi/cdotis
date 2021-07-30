@@ -51,3 +51,21 @@ font-size: 1.9rem;
 ...to write.
  <Date date="07/29/21"/>
  </p>
+
+<h3>rustlang</h3>
+<p>rust.</p>
+
+<h3>ziglang</h3>
+<p>zig.</p>
+
+<h3>nim</h3>
+<p>nim.</p>
+
+<h3>golang</h3>
+<p>go.</p>
+
+<h3>python</h3>
+<p>py.</p>
+
+
+
