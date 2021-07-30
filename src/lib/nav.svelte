@@ -21,12 +21,10 @@
 		border-radius: 4px;
 		font-family: monospace;
 		padding: 18px 17px 18px 17px;
-		font-size: 1.7rem;
-		margin-right: 2%;
-		color: black;
-		background-color: #fffdfc;
+		font-size: 1.9rem;
+		margin-right: 2.5%;
+		color: rgba(0,0,0,0.99);
 		margin-left:2%;
-		transform: scale(1.1);
 		/* border: 2px solid rgba(0,0,0,0.6); */
 		transition: all 0.05s;
 		color: rgba(0,0,0,1);
@@ -35,34 +33,34 @@
 		letter-spacing: -1px;
 		position: relative;
 		display:inline-flex;
+		text-shadow: 0px 0px 8px rgba(0,0,0,0.10);
 	}
 	#title::after {
 		content: ".is ";
 		color: rgba(0,0,0,0.25);
+		text-shadow: 0px 0px 8px rgba(0,0,0,0.10);
 	}
 	span {
 		display:inline-flex;
 	}
 	li a::before {
 		content: "/";
-		color: rgba(0,0,0,0.25);
+		color: rgba(0,0,0,0.17);
 
 	}
 	#title:hover {
-		transform: scale(1.2);
+		transform: scale(1.15);
 
 
-		border-radius: 5px;
 		/* border: 2px solid black; */
 		/* box-shadow: 0px 2px 8px rgba(0,0,0,0.15); */
 		transition: all 0.05s;
 		opacity: 0.8;
 	}
 	li a {
-		color:rgba(0,0,0,0.64);
+		color:rgba(0,0,0,0.42);
 		text-decoration: none;
-		padding: 7px 7px;
-		border: 2px solid transparent;
+		padding: 7px 8px;
 		/* border-bottom-color: rgba(0,0,0,0.4); */
 		border-radius: 0px;
 		letter-spacing: -0px;
@@ -70,7 +68,7 @@
 
 	}
 	.active {
-		transform: scale(1.25);
+		transform: scale(1.35);
 		transition: all 0.2s ease-in-out;
 		text-shadow: 0px 0px 8px rgba(0,0,0,0.08);
 		color: rgba(0,0,0,0.95);
@@ -78,10 +76,10 @@
 	    a.active::before {
 		    content: "> ";
 		    padding-right: 5px;
-		    color: rgba(0,0,0,0.44);
+		    color: rgba(0,0,0,0.30);
 		}
 	nav ul li a {
-		font-size: 1.0rem;
+		font-size: 0.95rem;
 		margin-right: 1.5vw;
 	}
 	nav {
@@ -122,7 +120,7 @@
 	}
 	#etc{
 		padding: 3px;
-		letter-spacing: -2px;
+		letter-spacing: -1px;
 		padding-right: 5px;
 	}
 	#lititle {
@@ -133,14 +131,17 @@
 		/* border: 2px solid rgba(0,0,0,0.4); */
 		background: #fffdfc;
 		transition: all 0.05s;
-		box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
-		transform:scale(1.1);
+		/* box-shadow: 0px 0px 4px rgba(0,0,0,0.1); */
+		/* transform:scale(1.1); */
 
 	}
-	.right *:hover {
-		transform: scale(1.2);
-		transition: all 0.05s;
+	.right .active {
+	    color: rgba(0,0,0,0.85);
 	    }
+	    .right .active::before {
+		content: "!";
+
+		}
 	.tabl {
 		clear: both;
 		padding:0px;
@@ -193,7 +194,8 @@
 		</ul>
 			 </div>
 		<div class="right">
-			<a class:active={ $page.path == "" } class="nav" id="etc" href="/lab">...</a>
+			<a class:active={ $page.path == "/lab" } class="nav" id="etc" href="/lab">/lab</a>
+			<a class:active={ $page.path == "/auth" } class="nav" id="etc" href="/auth">/auth</a>
 
 		</div>
 </nav>
