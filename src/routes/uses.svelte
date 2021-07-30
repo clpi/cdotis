@@ -74,8 +74,8 @@ font-size: 1.9rem;
 
 <br/>
 <h2>Images</h2>
-<img src="./static/swappy-20210729_135416.png" width=90% alt="sway screenshot"/>
+<!--<img src="./static/swappy-20210729_135416.png" width=90% alt="sway screenshot"/>-->
 <br/><i class="cap">A pic of Sway WM setup running alongside waybar & a few alacritty instances w/ ranger and neovim. excuse the old oofy owwy code I pulled up quickly for the screenshot. tmux also running w/ old config (all dotfiles can be found <a href="https://github.com/clpi/dotfiles" class="link ext">here</a>)</i>
 <br/><br/>
-<img src="./static/swappy-20210729_134838.png" width=90% alt="sway screenshot"/>
+<!--<img src="./static/swappy-20210729_134838.png" width=90% alt="sway screenshot"/>-->
 <br/><i class="cap">Sway WM running with waybar, neovim running in tmux running in alacritty. and way in the distance you can catch me still running late for ENGR 231.</i>

@@ -32,12 +32,17 @@ import  Date  from '$lib/date.svelte'
     .lite { color: rgba(0,0,0,0.5);}
 </style>
 <h1 id="head">projects</h1>
+
 <p>Last updated <Date date = "07/29/21"/>. Not a comprehensive list</p>
+<br/>
+<h2 id="head">current projects</h2>
 <ul>
 
 <li><a class="link" href="/projects/recollection">recollection</a>  <a class="link ext lite" href="https://github.com/clpi/recollection"> (github)</a>:&nbsp;&nbsp; implementations and reimplementations of common data structures & algorithms, both in and out of the rust std library. a work in progress in its very infant stage. mostly meant for future project utility.<span class='tag'>#rust</span><Date date="07-29/21"/></li>
 
 </ul>
 <p></p>
+<br/>
+<h2 id="head">past projects</h2>
 
 
