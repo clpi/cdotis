@@ -188,7 +188,7 @@
 			<li><a class:active={ $page.path == "/" } class="nav" sveltekit:prefetch href="/">home</a></li>
 			<li><a class:active={ $page.path == "/about" } class="nav" sveltekit:prefetch href="/about">about</a></li>
 			<li><a class:active={ $page.path == "/posts" } class="nav" sveltekit:prefetch href="/posts">posts</a></li>
-			<li><a class:active={ $page.path == "/projects" } class="nav" sveltekit:prefetch href="/projects">projects</a></li>
+			<li><a class:active={ $page.path == "/p" } class="nav" sveltekit:prefetch href="/p">projects</a></li>
 			<li><a class:active={ $page.path == "/etc" } class="nav" sveltekit:prefetch href="/etc">etc</a></li>
 
 		</ul>

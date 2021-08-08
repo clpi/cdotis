@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>p/recollection • clp.is</title>
+	<title>iz docs • clp.is</title>
 </svelte:head>
 
 <script context="module">
@@ -54,14 +54,5 @@
 </style>
 
 
-<h1 id="head"><a href="/projects" class="crumb">projects</a><small class="p"> &nbsp;• recollections </small></h1>
-<p><Date date="07/29/21"/> implementations of common data structures & algorithms in rust. mostly for practice and learning, but will be implemented in other projects down the road. constantly updated.</p>
-<p>...</p>
-<h2>further info</h2>
-<ul>
-<li><a class="link ext" href="https://crates.io/crate/recollection">crates.io</a></li>
-<li><a class="link ext" href="https://lib.rs/crate/recollection">lib.rs</a></li>
-<li><a class="link ext" href="https://github.com/clpi/recollection">github</a></li>
-<li><a class="link ext" href="https://docs.rs/recollection">docs.rs</a> for documentation</li>
-</ul>
-
+<h1 id="head"><a href="/p" class="crumb">projects</a><small class="p"> &nbsp;• iz documentation</small></h1>
+<p>(Nothing here yet!)</p>
