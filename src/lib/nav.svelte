@@ -48,6 +48,10 @@
 		color: rgba(0,0,0,0.17);
 
 	}
+#title:active {
+	transform:scale(0.75);
+	transition:0.15s all ease-in-out;
+	}
 	#title:hover {
 		transform: scale(1.15);
 
@@ -66,11 +70,12 @@
 		letter-spacing: -0px;
 		display:inline-flex;
 
+		text-shadow: 0px 0px 7px rgba(0,0,0,0.04);
 	}
 	.active {
 		transform: scale(1.35);
 		transition: all 0.2s ease-in-out;
-		text-shadow: 0px 0px 8px rgba(0,0,0,0.08);
+		text-shadow: 0px 0px 8px rgba(0,0,0,0.09);
 		color: rgba(0,0,0,0.95);
 	    }
 	    a.active::before {

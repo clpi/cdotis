@@ -123,19 +123,16 @@
 			    color: rgba(0,0,0,0.5);
 			}
 
-.walloftext { width: 80%; margin: auto; display:block; }
+/* .walloftext { width: 80%; margin: auto; display:block; } */
 </style>
 
 <h1 id="head">about</h1>
 <h3>about a dude...</h3>
-<p class="walloftext">Hi there! <i>And welcome</i> to Chris P's internet property. I tend towards introducing myself as a budding engineer, a few years out of the University of Washington Materials science & engineering program in Seattle where I lived almost all my life -- although currently calling Boulder, Colorado home.</p>
-<br/>
-<p class="walloftext">In a nutshell, I'm currenlty most practiced in backend software + cloud architecture & engineering, and I feel I have a lot I could one day contribute to these areas. coming from a physical engineering background, i've had to learn quite a lot, and exercise no small amount of patience whilst growing as a professional and engineer (and I am so eternally grateful to those who were and continue to be patient with me!), but from my years on the outside looking in on software engineering, i know that even my marginally distinct background will help me bring something novel to the table. </p>
+<p class="walloftext">Hi there! And <i>welcome</i> to Chris P's internet property. I'm a budding engineer, a few years out of the University of Washington Materials science & engineering program in Seattle.</p>
+<p class="walloftext">I'm currenlty most practiced in backend software development + cloud infrastructure architecture & engineering. Coming from a physical engineering background, I've had to learn quite a lot in my IT endeavours, both on my own and from the gracious assistance of others, whose patience I am grateful for eternally. I envision that with my multifaceted background and cross-disciplinary engineering cultivation, I can really bring a new perspective to the table in backend development and architecture.</p>
 
-<br/>
-<p class="walloftext">In any case, I know how to keep myself busy putting that hypothesis to the test. I'm also working to build <a class="link" href="https://devisa.io">devisa</a> and <a class="link" href="https://idlets.com">idlets</a>. Hopefully this website will serve to document the non-failure of my endeavors in the years to come! Realistically, not much of the blogging type, so keep in touch with me through real means or quietly stalk my activity feeds if you're into that. If you wanna talk, email me at <a href="mailto:clp@clp.is" class="link">clp@clp.is</a> or message me on LinkedIn. Thank you sincerely, again!</p>
+<p class="walloftext">I'm also working to build <a class="link" href="https://devisa.io">devisa</a> and <a class="link" href="https://idlets.com">idlets</a>. Keep in touch with me through real means or quietly stalk my <a class="link" href="/etc/updates">activity</a> <a class="link" href="/posts">feeds</a> if you're into that. If you wanna talk, email me at <a href="mailto:clp@clp.is" class="link">clp@clp.is</a> or message me on LinkedIn. Thank you, sincerely!</p>
 
-<br/>
 <p class="walloftext">- Chris P<Date date="07-29-21"/> </p>
 <br/><br/>
 <h3>show yourself!</h3>

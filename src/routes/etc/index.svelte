@@ -24,13 +24,15 @@ import  Date  from '$lib/date.svelte'
 </style>
 
 <h1 id="head">etc</h1>
-<p><Date date="07/14/21"/>welcome to the attic of my site weirdo</p>
+<p><Date date="07/14/21"/>welcome to the attic of my site</p>
 <h3>cool and great info</h3>
 <ul>
-	<li><a class="link" href="/uses">me dev setup</a>:  &nbsp;&nbsp;the broken pos i use for fun without pay <Date date="07-29-21"/></li>
+	<li><a class="link" href="/etc/updates">updates</a>:  &nbsp;&nbsp;updates<Date date="08-10-21"/></li>
+	<li><a class="link" href="/etc/frontend">frontend thoughts</a>:  &nbsp;&nbsp;web dev and frontend musings<Date date="08-10-21"/></li>
+	<li><a class="link" href="/uses">dev setup</a>:  &nbsp;&nbsp;dev setup<Date date="07-29-21"/></li>
 	<li><a class="link" href="/etc/laptops">'tops ive used and loved</a>:  &nbsp;&nbsp;thinkpad pokedex<Date date="07-29-21"/></li>
 	<li><a class="link" href="/etc/plangs">programming langs that make me sang</a>:  &nbsp;&nbsp;plangs<Date date="07-29-21"/></li>
-	<li><a class="link ext" href="https://github.com/clpi/dotfiles">dotfiles</a>:  &nbsp;&nbsp;it's all here folks<Date date="07-29-21"/></li>
+	<li><a class="link ext" href="https://github.com/clpi/dotfiles">dotfiles</a>:  &nbsp;&nbsp;dotfiles<Date date="07-29-21"/></li>
 </ul>
 
 

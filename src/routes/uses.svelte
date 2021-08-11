@@ -67,6 +67,7 @@ font-size: 1.9rem;
  <h3>operating system</h3>
 
  <h3>personal planning</h3>
+ <p><Date date="08-10-21"/>I nearly exclusively use stream-of-thought note-taking in <a href="https://github.com/vimwiki/vimwiki" class="link">vimwiki</a> to keep track of my thoughts. When potentially useful or otherwise significant thoughts pop into your head, the right tool for the job of recording them should be whatever is the most accessible and comfortable for you in the Eureka moment. In real life, this might be a sticky note which perpetually lives on your working desk. For someone who does just about everything else in their text editing software of choice (Neovim for me), it's a new Vimwiki diary note. Over time, I've developed my Vimwiki "sticky note" system into a complex and hierarchical knowledge base that I refer to all the time for any piece of pertinent info. </p>
 
  <h3>email/calendar</h3>
 
