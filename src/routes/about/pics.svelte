@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>about • clp.is</title>
+	<title>about/pics • clp.is</title>
 </svelte:head>
 <style>
     :global(form) {
@@ -126,33 +126,4 @@
 /* .walloftext { width: 80%; margin: auto; display:block; } */
 </style>
 
-<h1 id="head">about</h1>
-<p class="walloftext">Hi there! And <i>welcome</i> to Chris P's internet property. I'm a budding engineer, a few years out of the University of Washington Materials science & engineering program in Seattle.</p>
-<p class="walloftext">I'm currenlty most practiced in backend software development + cloud infrastructure architecture & engineering. Coming from a physical engineering background, I've had to learn quite a lot in my IT endeavours, both on my own and from the gracious assistance of others, whose patience I am grateful for eternally. I envision that with my multifaceted background and cross-disciplinary engineering cultivation, I can really bring a new perspective to the table in backend development and architecture.</p>
-
-<p class="walloftext">I'm also working to build <a class="link" href="https://devisa.io">devisa</a> and <a class="link" href="https://idlets.com">idlets</a>. Keep in touch with me through real means or quietly stalk my <a class="link" href="/etc/updates">activity</a> <a class="link" href="/posts">feeds</a> if you're into that. If you wanna talk, email me at <a href="mailto:clp@clp.is" class="link">clp@clp.is</a> or message me on LinkedIn. Thank you, sincerely!</p>
-
-<p class="walloftext">- Chris P<Date date="07-29-21"/> </p>
-<br/>
-<h3>show yourself!</h3>
-<div class="form">
-<form class="login">
-    <span class="formtitle">contact <span class="gray">me</span></span>
-
-    <label for="msg">message</label><br/>
-    <textarea name="msg" rows=8/>
-
-
-    <br/><br/>
-    <label for="email">email</label><br/>
-    <input name="email" type="email"/>
-
-<br/>
-<br/>
-    <button label="login" type="submit">login</button>
-</form>
-<h3>pics</h3>
-<img src="../../../static/me/closed.jpeg" height="375" width="375"/>
-<img src="../../../static/me/stare.jpeg" height="375" width="375"/>
-<img src="../../../static/me/cout.jpeg" height="375" width="375"/>
-</div>
+<h1 id="head">about / pics</h1>
