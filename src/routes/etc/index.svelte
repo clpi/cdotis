@@ -23,7 +23,7 @@ import  Date  from '$lib/date.svelte'
     } */
 </style>
 
-<h1 id="head">etc</h1>
+<h1 id="head">Etc.</h1>
 <p><Date date="07/14/21"/>welcome to the attic of my site</p>
 <h3>cool and great info</h3>
 <ul>

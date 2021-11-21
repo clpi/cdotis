@@ -7,7 +7,7 @@
 	export const prerender = true;
 </script>
 
-<h1 id="head">posts</h1>
+<h1 id="head">Posts</h1>
 <p>this is where posts will be</p>
 
 <h2>list</h2>

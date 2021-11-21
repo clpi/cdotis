@@ -34,7 +34,7 @@ import  Date  from '$lib/date.svelte'
 	    }
     .lite { color: rgba(0,0,0,0.5);}
 </style>
-<h1 id="head">projects</h1>
+<h1 id="head">Projects</h1>
 <ul>
 <li><a class="link" href="/p/recollection">recollection</a>  <a class="link ext lite" href="https://github.com/clpi/recollection"> (github)</a>:&nbsp;&nbsp; implementations and reimplementations of common data structures & algorithms, both in and out of the rust std library. a work in progress in its very infant stage. mostly meant for future project utility.<span class='tag'>#lib</span><span class='tag'>#rust</span><Date date="07-29-21"/></li>
 <li><a class="link" href="/p/iz">iz</a>  <a class="link ext lite" href="https://github.com/clpi/iz"> (github)</a>:&nbsp;&nbsp; Zig implementation of CLI utility to automate and motivate daily data tasks esp. regarding health, like logging blood glucose levels for type 1 diabetics and performing elementary data analaysis and management. Also using to learn zig and generally become more experienced, as well as  uprototyping certain ideas for down the road. <span class='tag'>#zig</span><span class="tag">#nim</span><span class="tag">#cli</span><Date date="08-07-21"/></li>

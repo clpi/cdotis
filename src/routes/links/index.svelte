@@ -5,4 +5,4 @@
 <svelte:head>
 	<title>links • clp.is</title>
 </svelte:head>
-<h1 id="head">links</h1>
+<h1 id="head">Links</h1>

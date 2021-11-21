@@ -126,7 +126,7 @@
 /* .walloftext { width: 80%; margin: auto; display:block; } */
 </style>
 
-<h1 id="head">about</h1>
+<h1 id="head">About</h1>
 <p class="walloftext">Hi there! And <i>welcome</i> to Chris P's internet property. I'm a budding engineer, a few years out of the University of Washington Materials science & engineering program in Seattle.</p>
 <p class="walloftext">I'm currenlty most practiced in backend software development + cloud infrastructure architecture & engineering. Coming from a physical engineering background, I've had to learn quite a lot in my IT endeavours, both on my own and from the gracious assistance of others, whose patience I am grateful for eternally. I envision that with my multifaceted background and cross-disciplinary engineering cultivation, I can really bring a new perspective to the table in backend development and architecture.</p>
 
@@ -137,7 +137,7 @@
 <h3>show yourself!</h3>
 <div class="form">
 <form class="login">
-    <span class="formtitle">contact <span class="gray">me</span></span>
+    <span class="formtitle">Contact <span class="gray">me</span></span>
 
     <label for="msg">message</label><br/>
     <textarea name="msg" rows=8/>
@@ -151,7 +151,7 @@
 <br/>
     <button label="login" type="submit">login</button>
 </form>
-<h3>pics</h3>
+<h3>Pics</h3>
 <img src="me/closed.jpeg" height="375" width="375"/>
 <img src="me/stare.jpeg" height="375" width="375"/>
 <img src="me/cout.jpeg" height="375" width="375"/>
