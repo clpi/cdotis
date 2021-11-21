@@ -190,17 +190,18 @@
 			 <div class="tabl">
 		<ul class="navbar">
 
-			<li><a class:active={ $page.path == "/" } class="nav" sveltekit:prefetch href="/">home</a></li>
-			<li><a class:active={ $page.path == "/about" } class="nav" sveltekit:prefetch href="/about">about</a></li>
-			<li><a class:active={ $page.path == "/posts" } class="nav" sveltekit:prefetch href="/posts">posts</a></li>
-			<li><a class:active={ $page.path == "/p" } class="nav" sveltekit:prefetch href="/p">projects</a></li>
-			<li><a class:active={ $page.path == "/etc" } class="nav" sveltekit:prefetch href="/etc">etc</a></li>
+			<li><a class:active={ $page.path == "/" } class="nav" sveltekit:prefetch href="/">Home</a></li>
+			<li><a class:active={ $page.path == "/about" } class="nav" sveltekit:prefetch href="/about">About</a></li>
+			<li><a class:active={ $page.path == "/posts" } class="nav" sveltekit:prefetch href="/posts">Posts</a></li>
+			<li><a class:active={ $page.path == "/p" } class="nav" sveltekit:prefetch href="/p">Projects</a></li>
+			<li><a class:active={ $page.path == "/etc" } class="nav" sveltekit:prefetch href="/etc">Etc</a></li>
 
 		</ul>
 			 </div>
 		<div class="right">
-			<a class:active={ $page.path == "/lab" } class="nav" id="etc" href="/lab">/lab</a>
-			<a class:active={ $page.path == "/auth" } class="nav" id="etc" href="/auth">/auth</a>
+			<a class:active={ $page.path == "/lab" } class="nav" id="etc" href="/lab">lab</a>
+			<a class:active={ $page.path == "/auth" } class="nav" id="etc" href="/auth">auth</a>
+			<a class:active={ $page.path == "/auth" } class="nav" id="etc" href="https://api.clp.is/">api</a>
 
 		</div>
 </nav>
