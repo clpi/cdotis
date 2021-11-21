@@ -152,7 +152,7 @@
     <button label="login" type="submit">login</button>
 </form>
 <h3>pics</h3>
-<img src="../../../static/me/closed.jpeg" height="375" width="375"/>
-<img src="../../../static/me/stare.jpeg" height="375" width="375"/>
-<img src="../../../static/me/cout.jpeg" height="375" width="375"/>
+<img src="me/closed.jpeg" height="375" width="375"/>
+<img src="me/stare.jpeg" height="375" width="375"/>
+<img src="me/cout.jpeg" height="375" width="375"/>
 </div>

@@ -190,7 +190,8 @@
 			 <div class="tabl">
 		<ul class="navbar">
 
-			<li><a class:active={ $page.path == "/" } class="nav" sveltekit:prefetch href="/">Home</a></li>
+			<li><a class:active={ $page.path == "/" } class="nav" sveltekit:prefetch href="/">
+			Home</a></li>
 			<li><a class:active={ $page.path == "/about" } class="nav" sveltekit:prefetch href="/about">About</a></li>
 			<li><a class:active={ $page.path == "/posts" } class="nav" sveltekit:prefetch href="/posts">Posts</a></li>
 			<li><a class:active={ $page.path == "/p" } class="nav" sveltekit:prefetch href="/p">Projects</a></li>
