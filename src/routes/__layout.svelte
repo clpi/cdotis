@@ -186,7 +186,7 @@ import Footer from '../lib/footer.svelte';
 		transform: scale(1.1);
 
 		}
-    :global(form) {
+    /* :global(form) {
 	padding-left: 3%;
 	padding-right: 1%;
 	padding-top: 2%;
@@ -221,6 +221,86 @@ import Footer from '../lib/footer.svelte';
 		    }
 		    .gray {
 			    color: rgba(0,0,0,0.5);
+			} */
+    :global(form) {
+	padding: 3% 5% 3% 5%;
+	margin-top: 10px;
+	/* background-color: rgba(255,255,255,0.01); */
+	box-shadow: 0px 0px 50px rgba(0,0,0,0.03);
+	border-top: 1px solid rgba(0,0,0,0.035);
+	border-left: 1px solid rgba(0,0,0,0.045);
+	border-right: 1px solid rgba(0,0,0,0.045);
+	border-bottom: 2px solid rgba(0,0,0,0.12);
+	display: inline-flexbox;
+	transition: all 0.15s ease-in-out;
+	border-radius: 5px;
+	min-width:40%;
+	margin: 7px;
+    }
+    :global(input) { 
+	padding: 15px 30px; 
+	margin-top: 2px;
+	border-radius:5px; 
+	display:inline;
+	width: 80%;
+	border: 1px transparent; 
+	border-top: 1px solid rgba(0,0,0,0.1);
+	border-bottom: 1px solid rgba(255,255,255,1);
+	background: rgba(0,0,0,0.025);
+	}
+	:global(label) {
+		font-size: 0.9rem;
+		padding-left: 02px;
+		color: rgba(0,0,0,0.6);
+		text-shadow: 0px 0px 4px rgba(0,0,0,0.05);
+	    }
+	:global(.form) {
+	    display:inline-flex;
+	    width: 100%;
+	    margin:auto;
+		}
+    :global(button) {
+	border: 2px solid transparent;
+	border-bottom: 2px solid rgba(0,0,0,0.1);
+	border-top: 1px solid rgba(0,0,0,0.025);
+	border-left: 1px solid rgba(0,0,0,0.025);
+	border-right: 1px solid rgba(0,0,0,0.025);
+	color: rgba(0,0,0,0.6);
+	background-color: rgba(150,220,170,1);
+	color: rgba(255,255,255,1);
+	text-shadow: 0px 1px 0px rgba(0,0,0,0.15);
+	padding: 8px 10px;
+	border-radius: 4px;
+	transition: all 0.15s ease-in-out;
+
+	}
+	:global(input:active) {
+		/* background-color: rgba(255,255,255,0.05); */
+	    }
+	:global(input:focus) {
+		/* background-color: rgba(255,255,255,0.05); */
+		border-top: 1px solid rgba(0,0,0,0.2);
+		border-bottom: 1px solid rgba(150,220,170,0.8);
+		color: rgba(110,210,140,0.9);
+		outline:none;
+		transform:scale(1.05);
+		transition: all 0.1s ease-in-out;
+	    }
+	:global(form button:hover) {
+	    background-color: rbga(0,0,0,0.25);
+	    border-bottom: 2px solid rgba(0,0,0,0.25);
+	    border-radius: 5px;
+	    transform:scale(1.1);
+	    transition:all 0.1s ease-in-out;
+	}
+		:global(.formtitle) {
+		    font-family:Helvetica;
+		    padding-bottom: 12px;
+			display:block;
+		    }
+		    :global(.gray) {
+			    color: rgba(0,0,0,0.5);
+			    font-weight: 500;
 			}
 </style>
 

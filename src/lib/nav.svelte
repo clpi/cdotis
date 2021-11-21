@@ -158,10 +158,6 @@
 	.right .active {
 	    color: rgba(0,0,0,0.85);
 	    }
-	    .right .active::before {
-		content: "!";
-
-		}
 	.tabl {
 		clear: both;
 		padding:0px;

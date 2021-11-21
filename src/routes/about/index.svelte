@@ -8,39 +8,6 @@
 	<title>About • clp.is</title>
 </svelte:head>
 <style>
-    :global(form) {
-	padding-left: 3%;
-	padding-right: 1%;
-	padding-top: 2%;
-	padding-bottom: 2%;
-	background-color: rgba(0,0,0,0.02);
-	box-shadow: 0px 0px 7px rgba(0,0,0,0.00);
-	width: 50%;
-	display: block;
-	position:relative;
-	align-content: center;
-	justify-content:center;
-	align-items: center;
-	box-shadow: 0px 0px 5px rgba(0,0,0,0.03);
-	border: 1px solid rgba(0,0,0,0.02);
-	border-radius: 6px;
-	border-bottom: 3px solid rgba(0,0,0,0.09);
-	margin: auto;
-    }
-    label::before {
-	    content: "$   ";
-	    font-size: 0.8rem;
-	    color: rgba(0,0,0,0.2);
-	}
-    input { 
-	padding: 10px; 
-	margin-top: 4px;
-	width: 80%;
-	border-radius:5px; 
-	border: 1px transparent; 
-	border-top: 1px solid rgba(0,0,0,0.1);
-	background: rgba(0,0,0,0.05);
-	}
     textarea { 
 	padding: 10px; 
 	margin-top: 4px;
@@ -133,7 +100,7 @@
 <p class="walloftext">I'm also working to build <a class="link" href="https://devisa.io">devisa</a> and <a class="link" href="https://idlets.com">idlets</a>. Keep in touch with me through real means or quietly stalk my <a class="link" href="/etc/updates">activity</a> <a class="link" href="/posts">feeds</a> if you're into that. If you wanna talk, email me at <a href="mailto:clp@clp.is" class="link">clp@clp.is</a> or message me on LinkedIn. Thank you, sincerely!</p>
 
 <p class="walloftext">- Chris P<Date date="07-29-21"/> </p>
-<br/>
+<br/><br/>
 <h3>show yourself!</h3>
 <div class="form">
 <form class="login">
@@ -151,8 +118,10 @@
 <br/>
     <button label="login" type="submit">login</button>
 </form>
-<h3>Pics</h3>
-<img src="me/closed.jpeg" height="375" width="375"/>
-<img src="me/stare.jpeg" height="375" width="375"/>
-<img src="me/cout.jpeg" height="375" width="375"/>
 </div>
+<br/>
+<br/>
+<h3>Pics</h3>
+<img src="me/closed.jpeg" height="275" width="275"/>
+<img src="me/stare.jpeg" height="275" width="275"/>
+<img src="me/cout.jpeg" height="275" width="275"/>
