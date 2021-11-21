@@ -1,0 +1,1 @@
+import{S as s,i as t,s as e,L as a,d as c,G as o}from"../../chunks/vendor-33ac96d6.js";function r(s){return{c(){this.h()},l(s){a('[data-svelte="svelte-98x504"]',document.head).forEach(c),this.h()},h(){document.title="Resources • clp.is"},m:o,p:o,i:o,o:o,d:o}}class d extends s{constructor(s){super(),t(this,s,null,r,e,{})}}export{d as default};

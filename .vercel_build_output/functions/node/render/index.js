@@ -283,8 +283,8 @@ var Body = class {
     this.size = size;
     if (body instanceof import_stream.default) {
       body.on("error", (err) => {
-        const error3 = err instanceof FetchBaseError ? err : new FetchError(`Invalid response body while trying to fetch ${this.url}: ${err.message}`, "system", err);
-        this[INTERNALS$2].error = error3;
+        const error2 = err instanceof FetchBaseError ? err : new FetchError(`Invalid response body while trying to fetch ${this.url}: ${err.message}`, "system", err);
+        this[INTERNALS$2].error = error2;
       });
     }
   }
@@ -358,11 +358,11 @@ async function consumeBody(data) {
       accumBytes += chunk.length;
       accum.push(chunk);
     }
-  } catch (error3) {
-    if (error3 instanceof FetchBaseError) {
-      throw error3;
+  } catch (error2) {
+    if (error2 instanceof FetchBaseError) {
+      throw error2;
     } else {
-      throw new FetchError(`Invalid response body while trying to fetch ${data.url}: ${error3.message}`, "system", error3);
+      throw new FetchError(`Invalid response body while trying to fetch ${data.url}: ${error2.message}`, "system", error2);
     }
   }
   if (body.readableEnded === true || body._readableState.ended === true) {
@@ -371,8 +371,8 @@ async function consumeBody(data) {
         return Buffer.from(accum.join(""));
       }
       return Buffer.concat(accum, accumBytes);
-    } catch (error3) {
-      throw new FetchError(`Could not create Buffer from response body for ${data.url}: ${error3.message}`, "system", error3);
+    } catch (error2) {
+      throw new FetchError(`Could not create Buffer from response body for ${data.url}: ${error2.message}`, "system", error2);
     }
   } else {
     throw new FetchError(`Premature close of server response while trying to fetch ${data.url}`);
@@ -849,15 +849,15 @@ async function fetch(url, options_) {
     const { signal } = request;
     let response = null;
     const abort = () => {
-      const error3 = new AbortError("The operation was aborted.");
-      reject(error3);
+      const error2 = new AbortError("The operation was aborted.");
+      reject(error2);
       if (request.body && request.body instanceof import_stream.default.Readable) {
-        request.body.destroy(error3);
+        request.body.destroy(error2);
       }
       if (!response || !response.body) {
         return;
       }
-      response.body.emit("error", error3);
+      response.body.emit("error", error2);
     };
     if (signal && signal.aborted) {
       abort();
@@ -896,8 +896,8 @@ async function fetch(url, options_) {
             if (locationURL !== null) {
               try {
                 headers.set("Location", locationURL);
-              } catch (error3) {
-                reject(error3);
+              } catch (error2) {
+                reject(error2);
               }
             }
             break;
@@ -942,8 +942,8 @@ async function fetch(url, options_) {
           signal.removeEventListener("abort", abortAndFinalize);
         }
       });
-      let body = (0, import_stream.pipeline)(response_, new import_stream.PassThrough(), (error3) => {
-        reject(error3);
+      let body = (0, import_stream.pipeline)(response_, new import_stream.PassThrough(), (error2) => {
+        reject(error2);
       });
       if (process.version < "v12.10") {
         response_.on("aborted", abortAndFinalize);
@@ -968,25 +968,25 @@ async function fetch(url, options_) {
         finishFlush: import_zlib.default.Z_SYNC_FLUSH
       };
       if (codings === "gzip" || codings === "x-gzip") {
-        body = (0, import_stream.pipeline)(body, import_zlib.default.createGunzip(zlibOptions), (error3) => {
-          reject(error3);
+        body = (0, import_stream.pipeline)(body, import_zlib.default.createGunzip(zlibOptions), (error2) => {
+          reject(error2);
         });
         response = new Response(body, responseOptions);
         resolve2(response);
         return;
       }
       if (codings === "deflate" || codings === "x-deflate") {
-        const raw = (0, import_stream.pipeline)(response_, new import_stream.PassThrough(), (error3) => {
-          reject(error3);
+        const raw = (0, import_stream.pipeline)(response_, new import_stream.PassThrough(), (error2) => {
+          reject(error2);
         });
         raw.once("data", (chunk) => {
           if ((chunk[0] & 15) === 8) {
-            body = (0, import_stream.pipeline)(body, import_zlib.default.createInflate(), (error3) => {
-              reject(error3);
+            body = (0, import_stream.pipeline)(body, import_zlib.default.createInflate(), (error2) => {
+              reject(error2);
             });
           } else {
-            body = (0, import_stream.pipeline)(body, import_zlib.default.createInflateRaw(), (error3) => {
-              reject(error3);
+            body = (0, import_stream.pipeline)(body, import_zlib.default.createInflateRaw(), (error2) => {
+              reject(error2);
             });
           }
           response = new Response(body, responseOptions);
@@ -995,8 +995,8 @@ async function fetch(url, options_) {
         return;
       }
       if (codings === "br") {
-        body = (0, import_stream.pipeline)(body, import_zlib.default.createBrotliDecompress(), (error3) => {
-          reject(error3);
+        body = (0, import_stream.pipeline)(body, import_zlib.default.createBrotliDecompress(), (error2) => {
+          reject(error2);
         });
         response = new Response(body, responseOptions);
         resolve2(response);
@@ -1408,7 +1408,7 @@ async function render_response({
   $session,
   page_config,
   status,
-  error: error3,
+  error: error2,
   page: page2
 }) {
   const css2 = new Set(options2.entry.css);
@@ -1418,8 +1418,8 @@ async function render_response({
   let rendered;
   let is_private = false;
   let maxage;
-  if (error3) {
-    error3.stack = options2.get_stack(error3);
+  if (error2) {
+    error2.stack = options2.get_stack(error2);
   }
   if (page_config.ssr) {
     branch.forEach(({ node, loaded, fetched, uses_credentials }) => {
@@ -1481,8 +1481,8 @@ async function render_response({
 			start({
 				target: ${options2.target ? `document.querySelector(${s$1(options2.target)})` : "document.body"},
 				paths: ${s$1(options2.paths)},
-				session: ${try_serialize($session, (error4) => {
-      throw new Error(`Failed to serialize session data: ${error4.message}`);
+				session: ${try_serialize($session, (error3) => {
+      throw new Error(`Failed to serialize session data: ${error3.message}`);
     })},
 				host: ${page2 && page2.host ? s$1(page2.host) : "location.host"},
 				route: ${!!page_config.router},
@@ -1490,7 +1490,7 @@ async function render_response({
 				trailing_slash: ${s$1(options2.trailing_slash)},
 				hydrate: ${page_config.ssr && page_config.hydrate ? `{
 					status: ${status},
-					error: ${serialize_error(error3)},
+					error: ${serialize_error(error2)},
 					nodes: [
 						${(branch || []).map(({ node }) => `import(${s$1(node.entry)})`).join(",\n						")}
 					],
@@ -1550,13 +1550,13 @@ function try_serialize(data, fail) {
     return null;
   }
 }
-function serialize_error(error3) {
-  if (!error3)
+function serialize_error(error2) {
+  if (!error2)
     return null;
-  let serialized = try_serialize(error3);
+  let serialized = try_serialize(error2);
   if (!serialized) {
-    const { name, message, stack } = error3;
-    serialized = try_serialize({ ...error3, name, message, stack });
+    const { name, message, stack } = error2;
+    serialized = try_serialize({ ...error2, name, message, stack });
   }
   if (!serialized) {
     serialized = "{}";
@@ -1573,18 +1573,18 @@ function normalize(loaded) {
         error: new Error()
       };
     }
-    const error3 = typeof loaded.error === "string" ? new Error(loaded.error) : loaded.error;
-    if (!(error3 instanceof Error)) {
+    const error2 = typeof loaded.error === "string" ? new Error(loaded.error) : loaded.error;
+    if (!(error2 instanceof Error)) {
       return {
         status: 500,
-        error: new Error(`"error" property returned from load() must be a string or instance of Error, received type "${typeof error3}"`)
+        error: new Error(`"error" property returned from load() must be a string or instance of Error, received type "${typeof error2}"`)
       };
     }
     if (!status || status < 400 || status > 599) {
       console.warn('"error" returned from load() without a valid status code \u2014 defaulting to 500');
-      return { status: 500, error: error3 };
+      return { status: 500, error: error2 };
     }
-    return { status, error: error3 };
+    return { status, error: error2 };
   }
   if (loaded.redirect) {
     if (!loaded.status || Math.floor(loaded.status / 100) !== 3) {
@@ -1616,7 +1616,7 @@ async function load_node({
   is_leaf,
   is_error,
   status,
-  error: error3
+  error: error2
 }) {
   const { module: module2 } = node;
   let uses_credentials = false;
@@ -1759,7 +1759,7 @@ async function load_node({
     };
     if (is_error) {
       load_input.status = status;
-      load_input.error = error3;
+      load_input.error = error2;
     }
     loaded = await module2.load.call(null, load_input);
   } else {
@@ -1840,7 +1840,7 @@ function resolve(base, path) {
 function coalesce_to_error(err) {
   return err instanceof Error ? err : new Error(JSON.stringify(err));
 }
-async function respond_with_error({ request, options: options2, state, $session, status, error: error3 }) {
+async function respond_with_error({ request, options: options2, state, $session, status, error: error2 }) {
   const default_layout = await options2.load_component(options2.manifest.layout);
   const default_error = await options2.load_component(options2.manifest.error);
   const page2 = {
@@ -1877,7 +1877,7 @@ async function respond_with_error({ request, options: options2, state, $session,
       is_leaf: false,
       is_error: true,
       status,
-      error: error3
+      error: error2
     })
   ];
   try {
@@ -1890,17 +1890,17 @@ async function respond_with_error({ request, options: options2, state, $session,
         ssr: options2.ssr
       },
       status,
-      error: error3,
+      error: error2,
       branch,
       page: page2
     });
   } catch (err) {
-    const error4 = coalesce_to_error(err);
-    options2.handle_error(error4);
+    const error3 = coalesce_to_error(err);
+    options2.handle_error(error3);
     return {
       status: 500,
       headers: {},
-      body: error4.stack
+      body: error3.stack
     };
   }
 }
@@ -1913,15 +1913,15 @@ async function respond$1(opts) {
   try {
     nodes = await Promise.all(route.a.map((id) => id ? options2.load_component(id) : void 0));
   } catch (err) {
-    const error4 = coalesce_to_error(err);
-    options2.handle_error(error4);
+    const error3 = coalesce_to_error(err);
+    options2.handle_error(error3);
     return await respond_with_error({
       request,
       options: options2,
       state,
       $session,
       status: 500,
-      error: error4
+      error: error3
     });
   }
   const leaf = nodes[nodes.length - 1].module;
@@ -1935,7 +1935,7 @@ async function respond$1(opts) {
   }
   let branch = [];
   let status = 200;
-  let error3;
+  let error2;
   ssr:
     if (page_config.ssr) {
       let context = {};
@@ -1963,18 +1963,18 @@ async function respond$1(opts) {
               };
             }
             if (loaded.loaded.error) {
-              ({ status, error: error3 } = loaded.loaded);
+              ({ status, error: error2 } = loaded.loaded);
             }
           } catch (err) {
             const e = coalesce_to_error(err);
             options2.handle_error(e);
             status = 500;
-            error3 = e;
+            error2 = e;
           }
-          if (loaded && !error3) {
+          if (loaded && !error2) {
             branch.push(loaded);
           }
-          if (error3) {
+          if (error2) {
             while (i--) {
               if (route.b[i]) {
                 const error_node = await options2.load_component(route.b[i]);
@@ -1992,7 +1992,7 @@ async function respond$1(opts) {
                     is_leaf: false,
                     is_error: true,
                     status,
-                    error: error3
+                    error: error2
                   });
                   if (error_loaded.loaded.error) {
                     continue;
@@ -2013,7 +2013,7 @@ async function respond$1(opts) {
               state,
               $session,
               status,
-              error: error3
+              error: error2
             });
           }
         }
@@ -2030,16 +2030,16 @@ async function respond$1(opts) {
       ...opts,
       page_config,
       status,
-      error: error3,
+      error: error2,
       branch: branch.filter(Boolean)
     });
   } catch (err) {
-    const error4 = coalesce_to_error(err);
-    options2.handle_error(error4);
+    const error3 = coalesce_to_error(err);
+    options2.handle_error(error3);
     return await respond_with_error({
       ...opts,
       status: 500,
-      error: error4
+      error: error3
     });
   }
 }
@@ -2385,7 +2385,7 @@ function create_ssr_component(fn) {
     $$render
   };
 }
-var css$h = {
+var css$g = {
   code: "#svelte-announcer.svelte-10znh1w{position:absolute;left:0;top:0;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap;width:1px;height:1px}",
   map: `{"version":3,"file":"root.svelte","sources":["root.svelte"],"sourcesContent":["<!-- This file is generated by @sveltejs/kit \u2014 do not edit it! -->\\n<script>\\nimport { setContext, afterUpdate, onMount } from 'svelte';\\n\\n// stores\\nexport let stores;\\nexport let page;\\n\\nexport let components;\\nexport let props_0 = null;\\nexport let props_1 = null;\\nexport let props_2 = null;\\n\\nsetContext('__svelte__', stores);\\n\\n$: stores.page.set(page);\\nafterUpdate(stores.page.notify);\\n\\nlet mounted = false;\\nlet navigated = false;\\nlet title = null;\\n\\nonMount(() => {\\n\\tconst unsubscribe = stores.page.subscribe(() => {\\n\\t\\tif (mounted) {\\n\\t\\t\\tnavigated = true;\\n\\t\\t\\ttitle = document.title || 'untitled page';\\n\\t\\t}\\n\\t});\\n\\n\\tmounted = true;\\n\\treturn unsubscribe;\\n});\\n<\/script>\\n\\n<svelte:component this={components[0]} {...(props_0 || {})}>\\n\\t{#if components[1]}\\n\\t\\t<svelte:component this={components[1]} {...(props_1 || {})}>\\n\\t\\t\\t{#if components[2]}\\n\\t\\t\\t\\t<svelte:component this={components[2]} {...(props_2 || {})}/>\\n\\t\\t\\t{/if}\\n\\t\\t</svelte:component>\\n\\t{/if}\\n</svelte:component>\\n\\n{#if mounted}\\n\\t<div id=\\"svelte-announcer\\" aria-live=\\"assertive\\" aria-atomic=\\"true\\">\\n\\t\\t{#if navigated}\\n\\t\\t\\t{title}\\n\\t\\t{/if}\\n\\t</div>\\n{/if}\\n\\n<style>\\n#svelte-announcer {\\n\\tposition: absolute;\\n\\tleft: 0;\\n\\ttop: 0;\\n\\tclip: rect(0 0 0 0);\\n\\tclip-path: inset(50%);\\n\\toverflow: hidden;\\n\\twhite-space: nowrap;\\n\\twidth: 1px;\\n\\theight: 1px;\\n}\\n</style>"],"names":[],"mappings":"AAsDA,iBAAiB,eAAC,CAAC,AAClB,QAAQ,CAAE,QAAQ,CAClB,IAAI,CAAE,CAAC,CACP,GAAG,CAAE,CAAC,CACN,IAAI,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CACnB,SAAS,CAAE,MAAM,GAAG,CAAC,CACrB,QAAQ,CAAE,MAAM,CAChB,WAAW,CAAE,MAAM,CACnB,KAAK,CAAE,GAAG,CACV,MAAM,CAAE,GAAG,AACZ,CAAC"}`
 };
@@ -2423,7 +2423,7 @@ var Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.props_1(props_1);
   if ($$props.props_2 === void 0 && $$bindings.props_2 && props_2 !== void 0)
     $$bindings.props_2(props_2);
-  $$result.css.add(css$h);
+  $$result.css.add(css$g);
   {
     stores.page.set(page2);
   }
@@ -2442,9 +2442,13 @@ function set_paths(paths) {
 }
 function set_prerendering(value) {
 }
+var Hooks = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  return ``;
+});
 var user_hooks = /* @__PURE__ */ Object.freeze({
   __proto__: null,
-  [Symbol.toStringTag]: "Module"
+  [Symbol.toStringTag]: "Module",
+  "default": Hooks
 });
 var template = ({ head, body }) => `<!DOCTYPE html>
 <html lang="en">
@@ -2471,20 +2475,20 @@ function init(settings = default_settings) {
     amp: false,
     dev: false,
     entry: {
-      file: "/./_app/start-ffaa7b98.js",
+      file: "/./_app/start-ac9f699c.js",
       css: ["/./_app/assets/start-c550a47d.css"],
-      js: ["/./_app/start-ffaa7b98.js", "/./_app/chunks/vendor-0540047a.js"]
+      js: ["/./_app/start-ac9f699c.js", "/./_app/chunks/vendor-33ac96d6.js"]
     },
     fetched: void 0,
     floc: false,
     get_component_path: (id) => "/./_app/" + entry_lookup[id],
-    get_stack: (error22) => String(error22),
-    handle_error: (error22) => {
-      if (error22.frame) {
-        console.error(error22.frame);
+    get_stack: (error2) => String(error2),
+    handle_error: (error2) => {
+      if (error2.frame) {
+        console.error(error2.frame);
       }
-      console.error(error22.stack);
-      error22.stack = options.get_stack(error22);
+      console.error(error2.stack);
+      error2.stack = options.get_stack(error2);
     },
     hooks: get_hooks(user_hooks),
     hydrate: true,
@@ -2508,154 +2512,154 @@ var empty = () => ({});
 var manifest = {
   assets: [{ "file": ".DS_Store", "size": 6148, "type": null }, { "file": "favicon.png", "size": 1571, "type": "image/png" }, { "file": "me/closed.jpeg", "size": 1620728, "type": "image/jpeg" }, { "file": "me/cout.jpeg", "size": 2039614, "type": "image/jpeg" }, { "file": "me/stare.jpeg", "size": 3015008, "type": "image/jpeg" }, { "file": "me/zoomedcout.jpeg", "size": 456628, "type": "image/jpeg" }, { "file": "swappy-20210729_134838.png", "size": 488459, "type": "image/png" }, { "file": "swappy-20210729_135416.png", "size": 556530, "type": "image/png" }],
   layout: "src/routes/__layout.svelte",
-  error: ".svelte-kit/build/components/error.svelte",
+  error: "src/routes/__error.svelte",
   routes: [
     {
       type: "page",
       pattern: /^\/$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/resources\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/resources/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/about\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/about/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/about\/pics\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/about/pics.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/links\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/links/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/posts\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/posts/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/posts\/tag\/([^/]+?)\/?$/,
       params: (m) => ({ tag: d(m[1]) }),
       a: ["src/routes/__layout.svelte", "src/routes/posts/tag/[tag].svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/posts\/([^/]+?)\/?$/,
       params: (m) => ({ slug: d(m[1]) }),
       a: ["src/routes/__layout.svelte", "src/routes/posts/[slug].svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/auth\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/auth/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/auth\/login\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/auth/login.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/uses\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/uses.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/etc\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/etc/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/etc\/frontend\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/etc/frontend/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/etc\/laptops\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/etc/laptops.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/etc\/updates\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/etc/updates.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/etc\/plangs\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/etc/plangs.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/lab\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/lab/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/p\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/p/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/p\/recollection\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/p/recollection/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/p\/iz\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/p/iz/index.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/p\/iz\/docs\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/p/iz/docs.svelte"],
-      b: [".svelte-kit/build/components/error.svelte"]
+      b: ["src/routes/__error.svelte"]
     }
   ]
 };
@@ -2668,8 +2672,8 @@ var module_lookup = {
   "src/routes/__layout.svelte": () => Promise.resolve().then(function() {
     return __layout;
   }),
-  ".svelte-kit/build/components/error.svelte": () => Promise.resolve().then(function() {
-    return error2;
+  "src/routes/__error.svelte": () => Promise.resolve().then(function() {
+    return __error;
   }),
   "src/routes/index.svelte": () => Promise.resolve().then(function() {
     return index$b;
@@ -2735,7 +2739,7 @@ var module_lookup = {
     return docs;
   })
 };
-var metadata_lookup = { "src/routes/__layout.svelte": { "entry": "/./_app/pages/__layout.svelte-53e47665.js", "css": ["/./_app/assets/pages/__layout.svelte-250fb46f.css"], "js": ["/./_app/pages/__layout.svelte-53e47665.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, ".svelte-kit/build/components/error.svelte": { "entry": "/./_app/error.svelte-498a627c.js", "css": [], "js": ["/./_app/error.svelte-498a627c.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/index.svelte": { "entry": "/./_app/pages/index.svelte-226788b4.js", "css": ["/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/index.svelte-226788b4.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/resources/index.svelte": { "entry": "/./_app/pages/resources/index.svelte-ff8a283a.js", "css": [], "js": ["/./_app/pages/resources/index.svelte-ff8a283a.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/about/index.svelte": { "entry": "/./_app/pages/about/index.svelte-43e9c399.js", "css": ["/./_app/assets/pages/about/index.svelte-851b180a.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/about/index.svelte-43e9c399.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/about/pics.svelte": { "entry": "/./_app/pages/about/pics.svelte-0e4457a7.js", "css": ["/./_app/assets/pages/about/pics.svelte-2fa41759.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/about/pics.svelte-0e4457a7.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/links/index.svelte": { "entry": "/./_app/pages/links/index.svelte-8eca67a3.js", "css": [], "js": ["/./_app/pages/links/index.svelte-8eca67a3.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/posts/index.svelte": { "entry": "/./_app/pages/posts/index.svelte-3db33c1c.js", "css": [], "js": ["/./_app/pages/posts/index.svelte-3db33c1c.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/posts/tag/[tag].svelte": { "entry": "/./_app/pages/posts/tag/[tag].svelte-5c0a95cc.js", "css": [], "js": ["/./_app/pages/posts/tag/[tag].svelte-5c0a95cc.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/posts/[slug].svelte": { "entry": "/./_app/pages/posts/[slug].svelte-d08320fe.js", "css": [], "js": ["/./_app/pages/posts/[slug].svelte-d08320fe.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/auth/index.svelte": { "entry": "/./_app/pages/auth/index.svelte-4795e83d.js", "css": ["/./_app/assets/pages/auth/index.svelte-70e10166.css"], "js": ["/./_app/pages/auth/index.svelte-4795e83d.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/auth/login.svelte": { "entry": "/./_app/pages/auth/login.svelte-3b86fcf8.js", "css": [], "js": ["/./_app/pages/auth/login.svelte-3b86fcf8.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/uses.svelte": { "entry": "/./_app/pages/uses.svelte-114777c6.js", "css": ["/./_app/assets/pages/uses.svelte-09104085.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/uses.svelte-114777c6.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/etc/index.svelte": { "entry": "/./_app/pages/etc/index.svelte-f8586fcd.js", "css": ["/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/etc/index.svelte-f8586fcd.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/etc/frontend/index.svelte": { "entry": "/./_app/pages/etc/frontend/index.svelte-ad1e36af.js", "css": ["/./_app/assets/pages/etc/frontend/index.svelte-1716761b.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/etc/frontend/index.svelte-ad1e36af.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/etc/laptops.svelte": { "entry": "/./_app/pages/etc/laptops.svelte-11712c0f.js", "css": ["/./_app/assets/pages/etc/laptops.svelte-d46d2292.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/etc/laptops.svelte-11712c0f.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/etc/updates.svelte": { "entry": "/./_app/pages/etc/updates.svelte-ecffe26c.js", "css": ["/./_app/assets/pages/etc/frontend/index.svelte-1716761b.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/etc/updates.svelte-ecffe26c.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/etc/plangs.svelte": { "entry": "/./_app/pages/etc/plangs.svelte-7c9f9d16.js", "css": ["/./_app/assets/pages/etc/laptops.svelte-d46d2292.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/etc/plangs.svelte-7c9f9d16.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/lab/index.svelte": { "entry": "/./_app/pages/lab/index.svelte-c5020887.js", "css": ["/./_app/assets/pages/lab/index.svelte-c2f25261.css"], "js": ["/./_app/pages/lab/index.svelte-c5020887.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] }, "src/routes/p/index.svelte": { "entry": "/./_app/pages/p/index.svelte-ce96dcb5.js", "css": ["/./_app/assets/pages/p/index.svelte-ccb2e8be.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/p/index.svelte-ce96dcb5.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/p/recollection/index.svelte": { "entry": "/./_app/pages/p/recollection/index.svelte-aea3dba9.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/p/recollection/index.svelte-aea3dba9.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/p/iz/index.svelte": { "entry": "/./_app/pages/p/iz/index.svelte-4de6deeb.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/p/iz/index.svelte-4de6deeb.js", "/./_app/chunks/vendor-0540047a.js", "/./_app/chunks/date-b6038655.js"], "styles": [] }, "src/routes/p/iz/docs.svelte": { "entry": "/./_app/pages/p/iz/docs.svelte-9b4906d0.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-0c391dfb.css"], "js": ["/./_app/pages/p/iz/docs.svelte-9b4906d0.js", "/./_app/chunks/vendor-0540047a.js"], "styles": [] } };
+var metadata_lookup = { "src/routes/__layout.svelte": { "entry": "/./_app/pages/__layout.svelte-e7134831.js", "css": ["/./_app/assets/pages/__layout.svelte-ddb50406.css"], "js": ["/./_app/pages/__layout.svelte-e7134831.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/__error.svelte": { "entry": "/./_app/pages/__error.svelte-e7adea32.js", "css": [], "js": ["/./_app/pages/__error.svelte-e7adea32.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/index.svelte": { "entry": "/./_app/pages/index.svelte-f51c5733.js", "css": ["/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/index.svelte-f51c5733.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/resources/index.svelte": { "entry": "/./_app/pages/resources/index.svelte-ba449a9d.js", "css": [], "js": ["/./_app/pages/resources/index.svelte-ba449a9d.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/about/index.svelte": { "entry": "/./_app/pages/about/index.svelte-33416151.js", "css": ["/./_app/assets/pages/about/index.svelte-974ba8cd.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/about/index.svelte-33416151.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/about/pics.svelte": { "entry": "/./_app/pages/about/pics.svelte-a5ab6fd8.js", "css": ["/./_app/assets/pages/about/pics.svelte-2fa41759.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/about/pics.svelte-a5ab6fd8.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/links/index.svelte": { "entry": "/./_app/pages/links/index.svelte-7c2d5d45.js", "css": [], "js": ["/./_app/pages/links/index.svelte-7c2d5d45.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/posts/index.svelte": { "entry": "/./_app/pages/posts/index.svelte-b5ac7d7f.js", "css": [], "js": ["/./_app/pages/posts/index.svelte-b5ac7d7f.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/posts/tag/[tag].svelte": { "entry": "/./_app/pages/posts/tag/[tag].svelte-42d4df28.js", "css": [], "js": ["/./_app/pages/posts/tag/[tag].svelte-42d4df28.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/posts/[slug].svelte": { "entry": "/./_app/pages/posts/[slug].svelte-6f4a0a18.js", "css": [], "js": ["/./_app/pages/posts/[slug].svelte-6f4a0a18.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/auth/index.svelte": { "entry": "/./_app/pages/auth/index.svelte-e4b03b7a.js", "css": [], "js": ["/./_app/pages/auth/index.svelte-e4b03b7a.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/auth/login.svelte": { "entry": "/./_app/pages/auth/login.svelte-60c17d49.js", "css": [], "js": ["/./_app/pages/auth/login.svelte-60c17d49.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/uses.svelte": { "entry": "/./_app/pages/uses.svelte-5e2656f3.js", "css": ["/./_app/assets/pages/uses.svelte-09104085.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/uses.svelte-5e2656f3.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/index.svelte": { "entry": "/./_app/pages/etc/index.svelte-a9dd2aec.js", "css": ["/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/index.svelte-a9dd2aec.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/frontend/index.svelte": { "entry": "/./_app/pages/etc/frontend/index.svelte-67dacb26.js", "css": ["/./_app/assets/pages/etc/frontend/index.svelte-1716761b.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/frontend/index.svelte-67dacb26.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/laptops.svelte": { "entry": "/./_app/pages/etc/laptops.svelte-6e9bec83.js", "css": ["/./_app/assets/pages/etc/laptops.svelte-d46d2292.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/laptops.svelte-6e9bec83.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/updates.svelte": { "entry": "/./_app/pages/etc/updates.svelte-fe29e024.js", "css": ["/./_app/assets/pages/etc/frontend/index.svelte-1716761b.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/updates.svelte-fe29e024.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/plangs.svelte": { "entry": "/./_app/pages/etc/plangs.svelte-cbd39d36.js", "css": ["/./_app/assets/pages/etc/laptops.svelte-d46d2292.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/plangs.svelte-cbd39d36.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/lab/index.svelte": { "entry": "/./_app/pages/lab/index.svelte-57182496.js", "css": ["/./_app/assets/pages/lab/index.svelte-c2f25261.css"], "js": ["/./_app/pages/lab/index.svelte-57182496.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/p/index.svelte": { "entry": "/./_app/pages/p/index.svelte-8f997f1c.js", "css": ["/./_app/assets/pages/p/index.svelte-ccb2e8be.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/index.svelte-8f997f1c.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/p/recollection/index.svelte": { "entry": "/./_app/pages/p/recollection/index.svelte-423dd2d8.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/recollection/index.svelte-423dd2d8.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/p/iz/index.svelte": { "entry": "/./_app/pages/p/iz/index.svelte-c24fee4b.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/iz/index.svelte-c24fee4b.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/p/iz/docs.svelte": { "entry": "/./_app/pages/p/iz/docs.svelte-a7075189.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/iz/docs.svelte-a7075189.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] } };
 async function load_component(file) {
   return {
     module: await module_lookup[file](),
@@ -2772,9 +2776,9 @@ var page = {
     return store.subscribe(fn);
   }
 };
-var css$g = {
-  code: 'body{border:5px solid black;height:100vh;min-height:100vh;margin:0;max-width:100%;overflow-x:hidden;padding:2% 4% 2% 4%;font-weight:300;font-family:monospace}a.svelte-58y1mf.svelte-58y1mf{text-decoration:none}#title.svelte-58y1mf.svelte-58y1mf{border-radius:4px;font-family:monospace;padding:18px 17px 18px 17px;font-size:1.9rem;margin-right:2.5%;color:rgba(0,0,0,0.99);margin-left:2%;transition:all 0.05s;color:rgba(0,0,0,1);font-weight:400;letter-spacing:-1px;position:relative;display:inline-flex;text-shadow:0px 0px 8px rgba(0,0,0,0.10)}#title.svelte-58y1mf.svelte-58y1mf::after{content:".is ";color:rgba(0,0,0,0.25);text-shadow:0px 0px 8px rgba(0,0,0,0.10)}li.svelte-58y1mf a.svelte-58y1mf::before{content:"/";color:rgba(0,0,0,0.17)}#title.svelte-58y1mf.svelte-58y1mf:active{transform:scale(0.75);transition:0.15s all ease-in-out}#title.svelte-58y1mf.svelte-58y1mf:hover{transform:scale(1.15);transition:all 0.05s;opacity:0.8}li.svelte-58y1mf a.svelte-58y1mf{color:rgba(0,0,0,0.42);text-decoration:none;padding:7px 8px;border-radius:0px;letter-spacing:-0px;display:inline-flex;text-shadow:0px 0px 7px rgba(0,0,0,0.04)}.active.svelte-58y1mf.svelte-58y1mf{transform:scale(1.35);transition:all 0.2s ease-in-out;text-shadow:0px 0px 8px rgba(0,0,0,0.09);color:rgba(0,0,0,0.95)}a.active.svelte-58y1mf.svelte-58y1mf::before{content:"> ";padding-right:5px;color:rgba(0,0,0,0.30)}nav.svelte-58y1mf ul li a.svelte-58y1mf{font-size:0.95rem;margin-right:1.5vw}nav.svelte-58y1mf.svelte-58y1mf{color:var(--fg-light);margin-bottom:0%;padding:0% 0%;display:block;height:90px}ul.svelte-58y1mf.svelte-58y1mf{margin-top:0%;display:inline-flex}ul.svelte-58y1mf li.svelte-58y1mf{display:inline-block;position:relative}.right.svelte-58y1mf.svelte-58y1mf{position:relative;display:inline-block}.right.svelte-58y1mf.svelte-58y1mf{float:right;margin-top:1%}.right.svelte-58y1mf a.svelte-58y1mf{padding:3px 5px;color:rgba(0,0,0,0.2);border-radius:2px;transition:all 0.2s linear;font-size:0.9rem}#etc.svelte-58y1mf.svelte-58y1mf{padding:3px;letter-spacing:-1px;padding-right:5px}.right.svelte-58y1mf a.svelte-58y1mf:hover{color:rgba(0,0,0,0.4);background:#fffdfc;transition:all 0.05s}.right.svelte-58y1mf .active.svelte-58y1mf{color:rgba(0,0,0,0.85)}.right.svelte-58y1mf .active.svelte-58y1mf::before{content:"!"}.tabl.svelte-58y1mf.svelte-58y1mf{clear:both;padding:0px;margin:0px;display:inline-block}li.svelte-58y1mf.svelte-58y1mf{padding:0px}li.svelte-58y1mf.svelte-58y1mf:hover{transform:scale(1.15);transition:all 0.1s ease-in-out}li.svelte-58y1mf:hover a.svelte-58y1mf{color:black;border-radius:0px;transition:all 0.03s ease-in-out}li.svelte-58y1mf.svelte-58y1mf:active{transform:scale(0.95);transition:all 0.03s ease-in-out}li.svelte-58y1mf:active a.svelte-58y1mf{transition:all 0.03s ease-in-out}',
-  map: `{"version":3,"file":"nav.svelte","sources":["nav.svelte"],"sourcesContent":["<script>\\nexport let section = \\"Home\\";\\nimport { page} from '$app/stores'\\n<\/script>\\n\\n<style>\\n\\t:global(body) {\\n\\t\\tborder: 5px solid black;\\n\\t\\theight: 100vh;\\n\\t\\tmin-height: 100vh;\\n\\t\\tmargin: 0;\\n\\t\\tmax-width: 100%;\\n\\t\\toverflow-x: hidden;\\n\\t\\tpadding: 2% 4% 2% 4%;\\n\\t\\tfont-weight: 300;\\n\\t\\tfont-family:\\n\\t\\t\\tmonospace;\\n\\t}\\n\\ta { text-decoration:none; }\\n\\t#title {\\n\\t\\tborder-radius: 4px;\\n\\t\\tfont-family: monospace;\\n\\t\\tpadding: 18px 17px 18px 17px;\\n\\t\\tfont-size: 1.9rem;\\n\\t\\tmargin-right: 2.5%;\\n\\t\\tcolor: rgba(0,0,0,0.99);\\n\\t\\tmargin-left:2%;\\n\\t\\t/* border: 2px solid rgba(0,0,0,0.6); */\\n\\t\\ttransition: all 0.05s;\\n\\t\\tcolor: rgba(0,0,0,1);\\n\\t\\t/* font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */\\n\\t\\tfont-weight: 400;\\n\\t\\tletter-spacing: -1px;\\n\\t\\tposition: relative;\\n\\t\\tdisplay:inline-flex;\\n\\t\\ttext-shadow: 0px 0px 8px rgba(0,0,0,0.10);\\n\\t}\\n\\t#title::after {\\n\\t\\tcontent: \\".is \\";\\n\\t\\tcolor: rgba(0,0,0,0.25);\\n\\t\\ttext-shadow: 0px 0px 8px rgba(0,0,0,0.10);\\n\\t}\\n\\tspan {\\n\\t\\tdisplay:inline-flex;\\n\\t}\\n\\tli a::before {\\n\\t\\tcontent: \\"/\\";\\n\\t\\tcolor: rgba(0,0,0,0.17);\\n\\n\\t}\\n#title:active {\\n\\ttransform:scale(0.75);\\n\\ttransition:0.15s all ease-in-out;\\n\\t}\\n\\t#title:hover {\\n\\t\\ttransform: scale(1.15);\\n\\n\\n\\t\\t/* border: 2px solid black; */\\n\\t\\t/* box-shadow: 0px 2px 8px rgba(0,0,0,0.15); */\\n\\t\\ttransition: all 0.05s;\\n\\t\\topacity: 0.8;\\n\\t}\\n\\tli a {\\n\\t\\tcolor:rgba(0,0,0,0.42);\\n\\t\\ttext-decoration: none;\\n\\t\\tpadding: 7px 8px;\\n\\t\\t/* border-bottom-color: rgba(0,0,0,0.4); */\\n\\t\\tborder-radius: 0px;\\n\\t\\tletter-spacing: -0px;\\n\\t\\tdisplay:inline-flex;\\n\\n\\t\\ttext-shadow: 0px 0px 7px rgba(0,0,0,0.04);\\n\\t}\\n\\t.active {\\n\\t\\ttransform: scale(1.35);\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\t\\ttext-shadow: 0px 0px 8px rgba(0,0,0,0.09);\\n\\t\\tcolor: rgba(0,0,0,0.95);\\n\\t    }\\n\\t    a.active::before {\\n\\t\\t    content: \\"> \\";\\n\\t\\t    padding-right: 5px;\\n\\t\\t    color: rgba(0,0,0,0.30);\\n\\t\\t}\\n\\tnav ul li a {\\n\\t\\tfont-size: 0.95rem;\\n\\t\\tmargin-right: 1.5vw;\\n\\t}\\n\\tnav {\\n\\t\\tcolor: var(--fg-light);\\n\\t\\tmargin-bottom: 0%;\\n\\t\\tpadding: 0% 0%;\\n\\t\\tdisplay: block;\\n\\t\\theight: 90px;\\n\\t}\\n\\tul {\\n\\t\\tmargin-top: 0%;\\n\\t\\tdisplay: inline-flex;\\n\\t}\\n\\tul li {\\n\\t\\tdisplay: inline-block;\\n\\t\\tposition:relative;\\n\\t}\\n\\t.left, .right {\\n\\t\\tposition: relative;\\n\\t\\tdisplay: inline-block;\\n\\t}\\n\\t.right {\\n\\t\\tfloat:right;\\n\\t\\tmargin-top: 1%;\\n\\t}\\n\\t.left {\\n\\t\\tfloat: left;\\n\\t\\tdisplay: inline-flex;\\n\\t}\\n\\t.right a {\\n\\t\\t/* color: #fffdfc; */\\n\\t\\tpadding: 3px 5px;\\n\\t\\t/* border: 2px solid rgba(0,0,0,0.2); */\\n\\t\\tcolor: rgba(0,0,0,0.2);\\n\\t\\tborder-radius: 2px;\\n\\t\\ttransition:all 0.2s linear;\\n\\t\\tfont-size: 0.9rem;\\n\\t}\\n\\t#etc{\\n\\t\\tpadding: 3px;\\n\\t\\tletter-spacing: -1px;\\n\\t\\tpadding-right: 5px;\\n\\t}\\n\\t#lititle {\\n\\t\\tmargin-right: 10%;\\n\\t}\\n\\t.right a:hover{\\n\\t\\tcolor: rgba(0,0,0,0.4);\\n\\t\\t/* border: 2px solid rgba(0,0,0,0.4); */\\n\\t\\tbackground: #fffdfc;\\n\\t\\ttransition: all 0.05s;\\n\\t\\t/* box-shadow: 0px 0px 4px rgba(0,0,0,0.1); */\\n\\t\\t/* transform:scale(1.1); */\\n\\n\\t}\\n\\t.right .active {\\n\\t    color: rgba(0,0,0,0.85);\\n\\t    }\\n\\t    .right .active::before {\\n\\t\\tcontent: \\"!\\";\\n\\n\\t\\t}\\n\\t.tabl {\\n\\t\\tclear: both;\\n\\t\\tpadding:0px;\\n\\t\\tmargin:0px;\\n\\t\\tdisplay:inline-block;\\n\\t}\\n\\tli {\\n\\t\\tpadding: 0px;\\n\\t}\\n\\tli:hover {\\n\\t\\ttransform:scale(1.15);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t}\\n\\tli:hover a {\\n\\t\\tcolor: black;\\n\\t\\tborder-radius: 0px;\\n\\t\\t/* background-color: #fffdfc; */\\n\\t\\t/* border-bottom: 2px ridge black; */\\n\\t\\t/* transition: all 0.05s ease-in-out; */\\n\\t\\t/* padding: 4px 4px; */\\n\\t\\t/* box-shadow: 0px 1px 9px rgba(0,0,0,0.25); */\\n\\t\\ttransition: all 0.03s ease-in-out;\\n\\t}\\n\\t#sect {\\n\\t\\tfont-size: 1.0rem;\\n\\t\\tmargin-left: 4%;\\n\\t}\\n\\tli:active {\\n\\t\\ttransform: scale(0.95);\\n\\t\\ttransition: all 0.03s ease-in-out;\\n\\t}\\n\\tli:active a {\\n\\t\\ttransition: all 0.03s ease-in-out;\\n\\t}\\n\\n\\n</style>\\n\\n<nav>\\n\\t<a href=\\"/\\"><div id=\\"title\\">clp</div></a>\\n\\t\\t\\t <div class=\\"tabl\\">\\n\\t\\t<ul class=\\"navbar\\">\\n\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/\\">\\n\\t\\t\\tHome</a></li>\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/about\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/about\\">About</a></li>\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/posts\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/posts\\">Posts</a></li>\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/p\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/p\\">Projects</a></li>\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/etc\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/etc\\">Etc</a></li>\\n\\n\\t\\t</ul>\\n\\t\\t\\t </div>\\n\\t\\t<div class=\\"right\\">\\n\\t\\t\\t<a class:active={ $page.path == \\"/lab\\" } class=\\"nav\\" id=\\"etc\\" href=\\"/lab\\">lab</a>\\n\\t\\t\\t<a class:active={ $page.path == \\"/auth\\" } class=\\"nav\\" id=\\"etc\\" href=\\"/auth\\">auth</a>\\n\\t\\t\\t<a class:active={ $page.path == \\"/auth\\" } class=\\"nav\\" id=\\"etc\\" href=\\"https://api.clp.is/\\">api</a>\\n\\n\\t\\t</div>\\n</nav>\\n"],"names":[],"mappings":"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"}`
+var css$f = {
+  code: 'body{border:5px solid black;height:100vh;min-height:100vh;margin:0;max-width:100%;overflow-x:hidden;padding:0% 4% 2% 4%;font-weight:300;font-family:Helvetica}a.svelte-13331y7.svelte-13331y7{text-decoration:none}#title.svelte-13331y7.svelte-13331y7{border-radius:4px;font-family:Helvetica;padding:10px 0px 0px 10px;font-size:1.9rem;margin-right:1.5%;margin-left:1%;transition:all 0.1s;color:rgba(0,0,0,0.77);font-weight:300;letter-spacing:-2px;display:inline-flex;text-shadow:0px 0px 8px rgba(0,0,0,0.10)}#title.svelte-13331y7.svelte-13331y7::after{content:".is ";font-weight:100;color:rgba(0,0,0,0.20);color:rgba(130,210,150,0.6);letter-spacing:0px;text-shadow:0px 0px 15px rgba(0,0,0,0.06)}li.svelte-13331y7 a.svelte-13331y7::before{content:"*";padding-right:4px;transition:all 0.15s ease-in-out;color:rgba(130,220,150,0.0)}li.svelte-13331y7:hover a.active.svelte-13331y7::before{transform:scale(1.3)}li.svelte-13331y7:hover a.active.svelte-13331y7{transform:scale(1.3)}li.svelte-13331y7 a.active.svelte-13331y7::before{content:"\u2022";color:rgba(130,220,150,0.6);padding-right:07px;padding-left:07px;transition:all 0.15s ease-in-out;text-shadow:0px 0px 15px rgba(130,220,150,0.25)}#title.svelte-13331y7.svelte-13331y7:active{transform:scale(0.75);transition:0.15s all ease-in-out}#title.svelte-13331y7.svelte-13331y7:hover{transform:scale(1.15);transition:all 0.05s;opacity:0.9}li.svelte-13331y7 a.svelte-13331y7{color:rgba(0,0,0,0.32);text-decoration:none;padding:7px 8px;border-radius:0px;letter-spacing:-0px;display:inline;text-shadow:0px 0px 7px rgba(0,0,0,0.05)}.active.svelte-13331y7.svelte-13331y7{transform:scale(1.1);transition:all 0.2s ease-in-out;text-shadow:0px 0px 8px rgba(0,0,0,0.09);color:rgba(0,0,0,0.95)}nav.svelte-13331y7 ul li a.svelte-13331y7{font-size:0.95rem;margin-right:1.1vw;text-shadow:0px 1px 6px rgba(0,0,0,0.05);font-size:0.97rem}nav.svelte-13331y7 ul li a.active.svelte-13331y7{text-shadow:0px 1px 10px rgba(0,0,0,0.08)}nav.svelte-13331y7.svelte-13331y7{color:var(--fg-light);margin-bottom:0%;padding:0% 0%;display:block;height:90px}ul.svelte-13331y7.svelte-13331y7{margin-top:0%;display:inline-flex}ul.svelte-13331y7 li.svelte-13331y7{display:inline-block;position:relative}.right.svelte-13331y7.svelte-13331y7{position:relative;display:inline-block}.right.svelte-13331y7.svelte-13331y7{float:right;margin-right:2.5%;margin-top:1.6%}.right.svelte-13331y7 a.svelte-13331y7{color:rgba(0,0,0,0.10);transition:all 0.2s linear;font-size:0.84rem}#etc.svelte-13331y7.svelte-13331y7{padding:3px;letter-spacing:-0px;padding-right:5px;color:rgba(0,0,0,0.3);font-size:0.8rem}.right.svelte-13331y7 a.svelte-13331y7:hover{color:rgba(0,0,0,0.4);background:#fffdfc;transition:all 0.02s}.right.svelte-13331y7 .active.svelte-13331y7{color:rgba(0,0,0,0.85)}.tabl.svelte-13331y7.svelte-13331y7{clear:both;padding:0px;margin:0px;display:inline}li.svelte-13331y7.svelte-13331y7:hover{transform:scale(1.05);transition:all 0.25s ease-in-out}li.svelte-13331y7:hover a.svelte-13331y7{color:rgba(0,0,0,0.9);border-radius:0px;transition:all 0.025s ease-in-out}',
+  map: `{"version":3,"file":"nav.svelte","sources":["nav.svelte"],"sourcesContent":["<script>\\nexport let section = \\"Home\\";\\nimport { page} from '$app/stores'\\n<\/script>\\n\\n<style>\\n:global(body) {\\n\\tborder: 5px solid black;\\n\\theight: 100vh;\\n\\tmin-height: 100vh;\\n\\tmargin: 0;\\n\\tmax-width: 100%;\\n\\toverflow-x: hidden;\\n\\tpadding: 0% 4% 2% 4%;\\n\\tfont-weight: 300;\\n\\tfont-family:\\n\\t\\tHelvetica;\\n}\\na { text-decoration:none; }\\n#title {\\n\\tborder-radius: 4px;\\n\\tfont-family: Helvetica;\\n\\tpadding: 10px 0px 0px 10px;\\n\\tfont-size: 1.9rem;\\n\\tmargin-right: 1.5%;\\n\\tmargin-left:1%;\\n\\t/* border: 2px solid rgba(0,0,0,0.6); */\\n\\ttransition: all 0.1s;\\n\\tcolor: rgba(0,0,0,0.77);\\n\\t/* font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */\\n\\tfont-weight: 300;\\n\\tletter-spacing: -2px;\\n\\tdisplay:inline-flex;\\n\\ttext-shadow: 0px 0px 8px rgba(0,0,0,0.10);\\n}\\n#title::after {\\n\\tcontent: \\".is \\";\\n\\tfont-weight:100;\\n\\tcolor: rgba(0,0,0,0.20);\\n\\tcolor: rgba(130,210,150,0.6);\\n\\tletter-spacing:0px;\\n\\ttext-shadow: 0px 0px 15px rgba(0,0,0,0.06);\\n}\\nspan {\\n\\tdisplay:inline-flex;\\n}\\nli a::before {\\n\\tcontent: \\"*\\";\\n\\tpadding-right: 4px;\\n\\ttransition: all 0.15s ease-in-out;\\n\\tcolor: rgba(130,220,150,0.0);\\n\\n}\\nli:hover a.active::before {\\n    transform:scale(1.3);\\n    }\\n    li:hover a.active {\\n\\t    transform:scale(1.3);\\n\\t}\\nli a.active::before {\\n\\tcontent: \\"\u2022\\";\\n\\tcolor: rgba(130,220,150,0.6);\\n\\tpadding-right:07px;\\n\\tpadding-left: 07px;\\n\\ttransition: all 0.15s ease-in-out;\\n\\ttext-shadow: 0px 0px 15px rgba(130,220,150,0.25);\\n\\n}\\n#title:active {\\n    transform:scale(0.75);\\n    transition:0.15s all ease-in-out;\\n}\\n#title:hover {\\n\\ttransform: scale(1.15);\\n\\ttransition: all 0.05s;\\n\\topacity: 0.9;\\n}\\nli a {\\n\\tcolor:rgba(0,0,0,0.32);\\n\\ttext-decoration: none;\\n\\tpadding: 7px 8px;\\n\\t/* border-bottom-color: rgba(0,0,0,0.4); */\\n\\tborder-radius: 0px;\\n\\tletter-spacing: -0px;\\n\\tdisplay:inline;\\n\\n\\ttext-shadow: 0px 0px 7px rgba(0,0,0,0.05);\\n}\\n.active {\\n\\ttransform: scale(1.1);\\n\\ttransition: all 0.2s ease-in-out;\\n\\ttext-shadow: 0px 0px 8px rgba(0,0,0,0.09);\\n\\tcolor: rgba(0,0,0,0.95);\\n    }\\n    /* a.active::before {\\n\\t    content: \\">\\";\\n\\t    transition: all 0.05s ease-in-out;\\n\\t    color: rgba(0,0,0,0.15);\\n\\t    text-shadow: 0px 1px 8px rgba(0,0,0,0.1);\\n\\t    opacity: 100%;\\n\\t}N*/\\nnav ul li a {\\n\\tfont-size: 0.95rem;\\n\\tmargin-right: 1.1vw;\\n\\ttext-shadow: 0px 1px 6px rgba(0,0,0,0.05);\\n    font-size:0.97rem;\\n}\\nnav ul li a.active {\\n\\ttext-shadow: 0px 1px 10px rgba(0,0,0,0.08);\\n}\\nnav {\\n\\tcolor: var(--fg-light);\\n\\tmargin-bottom: 0%;\\n\\tpadding: 0% 0%;\\n\\tdisplay: block;\\n\\theight: 90px;\\n}\\nul {\\n\\tmargin-top: 0%;\\n\\tdisplay: inline-flex;\\n}\\nul li {\\n\\tdisplay: inline-block;\\n\\tposition:relative;\\n}\\n.left, .right {\\n\\tposition: relative;\\n\\tdisplay: inline-block;\\n}\\n.right {\\n\\tfloat:right;\\n\\tmargin-right: 2.5%;\\n\\tmargin-top: 1.6%;\\n}\\n.left {\\n\\tfloat: left;\\n\\tdisplay: inline-flex;\\n}\\n.right a {\\n\\tcolor: rgba(0,0,0,0.10);\\n\\ttransition:all 0.2s linear;\\n\\tfont-size: 0.84rem;\\n}\\n#etc{\\n\\tpadding: 3px;\\n\\tletter-spacing: -0px;\\n\\tpadding-right: 5px;\\n\\tcolor: rgba(0,0,0,0.3);\\n\\tfont-size:0.8rem;\\n}\\n.right a:hover{\\n\\tcolor: rgba(0,0,0,0.4);\\n\\tbackground: #fffdfc;\\n\\ttransition: all 0.02s;\\n\\t/* transform:scale(1.1); */\\n\\n}\\n.right .active {\\n    color: rgba(0,0,0,0.85);\\n    }\\n.tabl {\\n\\tclear: both;\\n\\tpadding:0px;\\n\\tmargin:0px;\\n\\tdisplay:inline;\\n}\\nli:hover {\\n\\ttransform:scale(1.05);\\n\\ttransition: all 0.25s ease-in-out;\\n}\\nli:hover a {\\n\\tcolor: rgba(0,0,0,0.9);\\n\\tborder-radius: 0px;\\n\\ttransition: all 0.025s ease-in-out;\\n}\\n#sect {\\n\\tfont-size: 1.0rem;\\n\\tmargin-left: 4%;\\n}\\n\\n\\n</style>\\n\\n<nav>\\n\\t<a href=\\"/\\"><div id=\\"title\\">clp</div></a>\\n\\t\\t\\t <div class=\\"tabl\\">\\n\\t\\t<ul class=\\"navbar\\">\\n\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/\\">\\n\\t\\t\\tHome</a></li>\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/about\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/about\\">About</a></li>\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/posts\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/posts\\">Posts</a></li>\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/p\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/p\\">Projects</a></li>\\n\\t\\t\\t<li><a class:active={ $page.path == \\"/etc\\" } class=\\"nav\\" sveltekit:prefetch href=\\"/etc\\">Etc</a></li>\\n\\n\\t\\t</ul>\\n\\t\\t\\t </div>\\n\\t\\t<div class=\\"right\\">\\n\\t\\t\\t<a class:active={ $page.path == \\"/lab\\" } class=\\"nav\\" id=\\"etc\\" href=\\"/lab\\">Lab</a>\\n\\t\\t\\t<a class:active={ $page.path == \\"/auth\\" } class=\\"nav\\" id=\\"etc\\" href=\\"/auth\\">Auth</a>\\n\\t\\t\\t<a class:active={ $page.path == \\"/auth\\" } class=\\"nav\\" id=\\"etc\\" href=\\"https://api.clp.is/\\">API</a>\\n\\n\\t\\t</div>\\n</nav>\\n"],"names":[],"mappings":"AAMQ,IAAI,AAAE,CAAC,AACd,MAAM,CAAE,GAAG,CAAC,KAAK,CAAC,KAAK,CACvB,MAAM,CAAE,KAAK,CACb,UAAU,CAAE,KAAK,CACjB,MAAM,CAAE,CAAC,CACT,SAAS,CAAE,IAAI,CACf,UAAU,CAAE,MAAM,CAClB,OAAO,CAAE,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,EAAE,CACpB,WAAW,CAAE,GAAG,CAChB,WAAW,CACV,SAAS,AACX,CAAC,AACD,CAAC,8BAAC,CAAC,AAAC,gBAAgB,IAAI,AAAE,CAAC,AAC3B,MAAM,8BAAC,CAAC,AACP,aAAa,CAAE,GAAG,CAClB,WAAW,CAAE,SAAS,CACtB,OAAO,CAAE,IAAI,CAAC,GAAG,CAAC,GAAG,CAAC,IAAI,CAC1B,SAAS,CAAE,MAAM,CACjB,YAAY,CAAE,IAAI,CAClB,YAAY,EAAE,CAEd,UAAU,CAAE,GAAG,CAAC,IAAI,CACpB,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAEvB,WAAW,CAAE,GAAG,CAChB,cAAc,CAAE,IAAI,CACpB,QAAQ,WAAW,CACnB,WAAW,CAAE,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAC1C,CAAC,AACD,oCAAM,OAAO,AAAC,CAAC,AACd,OAAO,CAAE,MAAM,CACf,YAAY,GAAG,CACf,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACvB,KAAK,CAAE,KAAK,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,CAC5B,eAAe,GAAG,CAClB,WAAW,CAAE,GAAG,CAAC,GAAG,CAAC,IAAI,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAC3C,CAAC,AAID,iBAAE,CAAC,gBAAC,QAAQ,AAAC,CAAC,AACb,OAAO,CAAE,GAAG,CACZ,aAAa,CAAE,GAAG,CAClB,UAAU,CAAE,GAAG,CAAC,KAAK,CAAC,WAAW,CACjC,KAAK,CAAE,KAAK,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,AAE7B,CAAC,AACD,iBAAE,MAAM,CAAC,CAAC,sBAAO,QAAQ,AAAC,CAAC,AACvB,UAAU,MAAM,GAAG,CAAC,AACpB,CAAC,AACD,iBAAE,MAAM,CAAC,CAAC,OAAO,eAAC,CAAC,AAClB,UAAU,MAAM,GAAG,CAAC,AACxB,CAAC,AACF,iBAAE,CAAC,CAAC,sBAAO,QAAQ,AAAC,CAAC,AACpB,OAAO,CAAE,GAAG,CACZ,KAAK,CAAE,KAAK,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,CAC5B,cAAc,IAAI,CAClB,YAAY,CAAE,IAAI,CAClB,UAAU,CAAE,GAAG,CAAC,KAAK,CAAC,WAAW,CACjC,WAAW,CAAE,GAAG,CAAC,GAAG,CAAC,IAAI,CAAC,KAAK,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,IAAI,CAAC,AAEjD,CAAC,AACD,oCAAM,OAAO,AAAC,CAAC,AACX,UAAU,MAAM,IAAI,CAAC,CACrB,WAAW,KAAK,CAAC,GAAG,CAAC,WAAW,AACpC,CAAC,AACD,oCAAM,MAAM,AAAC,CAAC,AACb,SAAS,CAAE,MAAM,IAAI,CAAC,CACtB,UAAU,CAAE,GAAG,CAAC,KAAK,CACrB,OAAO,CAAE,GAAG,AACb,CAAC,AACD,iBAAE,CAAC,CAAC,eAAC,CAAC,AACL,MAAM,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACtB,eAAe,CAAE,IAAI,CACrB,OAAO,CAAE,GAAG,CAAC,GAAG,CAEhB,aAAa,CAAE,GAAG,CAClB,cAAc,CAAE,IAAI,CACpB,QAAQ,MAAM,CAEd,WAAW,CAAE,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAC1C,CAAC,AACD,OAAO,8BAAC,CAAC,AACR,SAAS,CAAE,MAAM,GAAG,CAAC,CACrB,UAAU,CAAE,GAAG,CAAC,IAAI,CAAC,WAAW,CAChC,WAAW,CAAE,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACzC,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AACpB,CAAC,AAQL,kBAAG,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,eAAC,CAAC,AACZ,SAAS,CAAE,OAAO,CAClB,YAAY,CAAE,KAAK,CACnB,WAAW,CAAE,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACtC,UAAU,OAAO,AACrB,CAAC,AACD,kBAAG,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,OAAO,eAAC,CAAC,AACnB,WAAW,CAAE,GAAG,CAAC,GAAG,CAAC,IAAI,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAC3C,CAAC,AACD,GAAG,8BAAC,CAAC,AACJ,KAAK,CAAE,IAAI,UAAU,CAAC,CACtB,aAAa,CAAE,EAAE,CACjB,OAAO,CAAE,EAAE,CAAC,EAAE,CACd,OAAO,CAAE,KAAK,CACd,MAAM,CAAE,IAAI,AACb,CAAC,AACD,EAAE,8BAAC,CAAC,AACH,UAAU,CAAE,EAAE,CACd,OAAO,CAAE,WAAW,AACrB,CAAC,AACD,iBAAE,CAAC,EAAE,eAAC,CAAC,AACN,OAAO,CAAE,YAAY,CACrB,SAAS,QAAQ,AAClB,CAAC,AACM,MAAM,8BAAC,CAAC,AACd,QAAQ,CAAE,QAAQ,CAClB,OAAO,CAAE,YAAY,AACtB,CAAC,AACD,MAAM,8BAAC,CAAC,AACP,MAAM,KAAK,CACX,YAAY,CAAE,IAAI,CAClB,UAAU,CAAE,IAAI,AACjB,CAAC,AAKD,qBAAM,CAAC,CAAC,eAAC,CAAC,AACT,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACvB,WAAW,GAAG,CAAC,IAAI,CAAC,MAAM,CAC1B,SAAS,CAAE,OAAO,AACnB,CAAC,AACD,kCAAI,CAAC,AACJ,OAAO,CAAE,GAAG,CACZ,cAAc,CAAE,IAAI,CACpB,aAAa,CAAE,GAAG,CAClB,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CACtB,UAAU,MAAM,AACjB,CAAC,AACD,qBAAM,CAAC,gBAAC,MAAM,CAAC,AACd,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CACtB,UAAU,CAAE,OAAO,CACnB,UAAU,CAAE,GAAG,CAAC,KAAK,AAGtB,CAAC,AACD,qBAAM,CAAC,OAAO,eAAC,CAAC,AACZ,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AACvB,CAAC,AACL,KAAK,8BAAC,CAAC,AACN,KAAK,CAAE,IAAI,CACX,QAAQ,GAAG,CACX,OAAO,GAAG,CACV,QAAQ,MAAM,AACf,CAAC,AACD,gCAAE,MAAM,AAAC,CAAC,AACT,UAAU,MAAM,IAAI,CAAC,CACrB,UAAU,CAAE,GAAG,CAAC,KAAK,CAAC,WAAW,AAClC,CAAC,AACD,iBAAE,MAAM,CAAC,CAAC,eAAC,CAAC,AACX,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CACtB,aAAa,CAAE,GAAG,CAClB,UAAU,CAAE,GAAG,CAAC,MAAM,CAAC,WAAW,AACnC,CAAC"}`
 };
 var Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $page, $$unsubscribe_page;
@@ -2782,30 +2786,38 @@ var Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { section = "Home" } = $$props;
   if ($$props.section === void 0 && $$bindings.section && section !== void 0)
     $$bindings.section(section);
-  $$result.css.add(css$g);
+  $$result.css.add(css$f);
   $$unsubscribe_page();
-  return `<nav class="${"svelte-58y1mf"}"><a href="${"/"}" class="${"svelte-58y1mf"}"><div id="${"title"}" class="${"svelte-58y1mf"}">clp</div></a>
-			 <div class="${"tabl svelte-58y1mf"}"><ul class="${"navbar svelte-58y1mf"}"><li class="${"svelte-58y1mf"}"><a class="${["nav svelte-58y1mf", $page.path == "/" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/"}">Home</a></li>
-			<li class="${"svelte-58y1mf"}"><a class="${["nav svelte-58y1mf", $page.path == "/about" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/about"}">About</a></li>
-			<li class="${"svelte-58y1mf"}"><a class="${["nav svelte-58y1mf", $page.path == "/posts" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/posts"}">Posts</a></li>
-			<li class="${"svelte-58y1mf"}"><a class="${["nav svelte-58y1mf", $page.path == "/p" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/p"}">Projects</a></li>
-			<li class="${"svelte-58y1mf"}"><a class="${["nav svelte-58y1mf", $page.path == "/etc" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/etc"}">Etc</a></li></ul></div>
-		<div class="${"right svelte-58y1mf"}"><a class="${["nav svelte-58y1mf", $page.path == "/lab" ? "active" : ""].join(" ").trim()}" id="${"etc"}" href="${"/lab"}">lab</a>
-			<a class="${["nav svelte-58y1mf", $page.path == "/auth" ? "active" : ""].join(" ").trim()}" id="${"etc"}" href="${"/auth"}">auth</a>
-			<a class="${["nav svelte-58y1mf", $page.path == "/auth" ? "active" : ""].join(" ").trim()}" id="${"etc"}" href="${"https://api.clp.is/"}">api</a></div></nav>`;
+  return `<nav class="${"svelte-13331y7"}"><a href="${"/"}" class="${"svelte-13331y7"}"><div id="${"title"}" class="${"svelte-13331y7"}">clp</div></a>
+			 <div class="${"tabl svelte-13331y7"}"><ul class="${"navbar svelte-13331y7"}"><li class="${"svelte-13331y7"}"><a class="${["nav svelte-13331y7", $page.path == "/" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/"}">Home</a></li>
+			<li class="${"svelte-13331y7"}"><a class="${["nav svelte-13331y7", $page.path == "/about" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/about"}">About</a></li>
+			<li class="${"svelte-13331y7"}"><a class="${["nav svelte-13331y7", $page.path == "/posts" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/posts"}">Posts</a></li>
+			<li class="${"svelte-13331y7"}"><a class="${["nav svelte-13331y7", $page.path == "/p" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/p"}">Projects</a></li>
+			<li class="${"svelte-13331y7"}"><a class="${["nav svelte-13331y7", $page.path == "/etc" ? "active" : ""].join(" ").trim()}" sveltekit:prefetch href="${"/etc"}">Etc</a></li></ul></div>
+		<div class="${"right svelte-13331y7"}"><a class="${["nav svelte-13331y7", $page.path == "/lab" ? "active" : ""].join(" ").trim()}" id="${"etc"}" href="${"/lab"}">Lab</a>
+			<a class="${["nav svelte-13331y7", $page.path == "/auth" ? "active" : ""].join(" ").trim()}" id="${"etc"}" href="${"/auth"}">Auth</a>
+			<a class="${["nav svelte-13331y7", $page.path == "/auth" ? "active" : ""].join(" ").trim()}" id="${"etc"}" href="${"https://api.clp.is/"}">API</a></div></nav>`;
 });
-var css$f = {
-  code: "p.svelte-10omry2.svelte-10omry2{color:rgba(0,0,0,0.3);font-size:0.9rem}a.svelte-10omry2.svelte-10omry2{text-decoration:none;font-size:0.9rem;color:rgba(130,130,70,0.7)}.nav.svelte-10omry2.svelte-10omry2:hover{padding:8px 5px;transition:all 0.25s ease-in-out}footer.svelte-10omry2.svelte-10omry2{color:rgba(0,0,0,0.3);font-size:0.8rem;padding:24px;margin-top:0%;position:sticky;bottom:0;display:block}.right.svelte-10omry2 a.svelte-10omry2:hover{color:rgba(0,0,0,0.4);background:#fffdfc;transition:all 0.05s;transition:scale(1.2);box-shadow:0px 0px 4px rgba(0,0,0,0.15)}.right.svelte-10omry2 a.svelte-10omry2{padding:3px 5px;color:rgba(0,0,0,0.2);border-radius:2px;font-size:0.8rem}.left.svelte-10omry2.svelte-10omry2,.right.svelte-10omry2.svelte-10omry2{position:relative;display:inline-block}.right.svelte-10omry2.svelte-10omry2{float:right;margin-top:1%}.left.svelte-10omry2.svelte-10omry2{float:left;display:inline-flex}",
-  map: '{"version":3,"file":"footer.svelte","sources":["footer.svelte"],"sourcesContent":["<footer>\\n\\t<div class=\\"left\\">\\n\\t<p class=\\"foot\\">Last updated July 29, 2021</p>\\n\\t<p class=\\"foot\\"><a href=\\"mailto:clp@clp.is\\">Email</a> me</p>\\n\\t</div>\\n\\t\\t<div class=\\"right\\">\\n\\t\\t\\t<a class=\\"nav\\" id=\\"gl\\" href=\\"https://gitlab.com/clpi\\">gitlab</a>\\n\\t\\t\\t<a class=\\"nav\\" id=\\"gh\\" href=\\"https://github.com/clpi\\">github</a>\\n\\t\\t\\t<a class=\\"nav\\"  href=\\"https://github.com/clpi\\">twitter</a>\\n\\t\\t\\t<a class=\\"nav\\"  href=\\"https://github.com/clpi\\">linkedin</a>\\n\\n\\t\\t</div>\\n\\n</footer>\\n<style>\\np {\\n\\tcolor: rgba(0,0,0,0.3);\\n\\tfont-size: 0.9rem;\\n\\n}\\na {\\n\\ttext-decoration:none;\\n\\tfont-size: 0.9rem;\\n\\tcolor: rgba(130,130,70,0.7);\\n}\\n.nav:hover {\\n\\tpadding: 8px 5px;\\n\\ttransition: all 0.25s ease-in-out;\\n}\\nfooter {\\n\\tcolor: rgba(0,0,0,0.3);\\n\\tfont-size: 0.8rem;\\n\\tpadding: 24px;\\n\\tmargin-top: 0%;\\n\\tposition:sticky;\\n\\tbottom:0;\\n\\tdisplay: block;\\n}\\n.right a:hover{\\n\\tcolor: rgba(0,0,0,0.4);\\n\\t/* border: 2px solid rgba(0,0,0,0.4); */\\n\\tbackground: #fffdfc;\\n\\ttransition: all 0.05s;\\n\\ttransition:scale(1.2);\\n\\tbox-shadow: 0px 0px 4px rgba(0,0,0,0.15);\\n\\n}\\n.right a {\\n\\t/* color: #fffdfc; */\\n\\tpadding: 3px 5px;\\n\\t/* border: 2px solid rgba(0,0,0,0.2); */\\n\\tcolor: rgba(0,0,0,0.2);\\n\\tborder-radius: 2px;\\n\\tfont-size: 0.8rem;\\n}\\n.left, .right {\\n\\tposition: relative;\\n\\tdisplay: inline-block;\\n}\\n.right {\\n\\tfloat:right;\\n\\tmargin-top: 1%;\\n}\\n.left {\\n\\tfloat: left;\\n\\tdisplay: inline-flex;\\n}\\n</style>\\n"],"names":[],"mappings":"AAeA,CAAC,8BAAC,CAAC,AACF,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CACtB,SAAS,CAAE,MAAM,AAElB,CAAC,AACD,CAAC,8BAAC,CAAC,AACF,gBAAgB,IAAI,CACpB,SAAS,CAAE,MAAM,CACjB,KAAK,CAAE,KAAK,GAAG,CAAC,GAAG,CAAC,EAAE,CAAC,GAAG,CAAC,AAC5B,CAAC,AACD,kCAAI,MAAM,AAAC,CAAC,AACX,OAAO,CAAE,GAAG,CAAC,GAAG,CAChB,UAAU,CAAE,GAAG,CAAC,KAAK,CAAC,WAAW,AAClC,CAAC,AACD,MAAM,8BAAC,CAAC,AACP,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CACtB,SAAS,CAAE,MAAM,CACjB,OAAO,CAAE,IAAI,CACb,UAAU,CAAE,EAAE,CACd,SAAS,MAAM,CACf,OAAO,CAAC,CACR,OAAO,CAAE,KAAK,AACf,CAAC,AACD,qBAAM,CAAC,gBAAC,MAAM,CAAC,AACd,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CAEtB,UAAU,CAAE,OAAO,CACnB,UAAU,CAAE,GAAG,CAAC,KAAK,CACrB,WAAW,MAAM,GAAG,CAAC,CACrB,UAAU,CAAE,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAEzC,CAAC,AACD,qBAAM,CAAC,CAAC,eAAC,CAAC,AAET,OAAO,CAAE,GAAG,CAAC,GAAG,CAEhB,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CACtB,aAAa,CAAE,GAAG,CAClB,SAAS,CAAE,MAAM,AAClB,CAAC,AACD,mCAAK,CAAE,MAAM,8BAAC,CAAC,AACd,QAAQ,CAAE,QAAQ,CAClB,OAAO,CAAE,YAAY,AACtB,CAAC,AACD,MAAM,8BAAC,CAAC,AACP,MAAM,KAAK,CACX,UAAU,CAAE,EAAE,AACf,CAAC,AACD,KAAK,8BAAC,CAAC,AACN,KAAK,CAAE,IAAI,CACX,OAAO,CAAE,WAAW,AACrB,CAAC"}'
+var css$e = {
+  code: "p.svelte-x2mpcs.svelte-x2mpcs{color:rgba(0,0,0,0.3);font-size:0.75rem}a.svelte-x2mpcs.svelte-x2mpcs,#crea.svelte-x2mpcs.svelte-x2mpcs{text-decoration:none;font-size:0.75rem;color:rgba(140,220,160,0.8)}.nav.svelte-x2mpcs.svelte-x2mpcs:hover{transition:all 0.25s ease-in-out}footer.svelte-x2mpcs.svelte-x2mpcs{color:rgba(0,0,0,0.3);font-size:0.8rem;padding:4px;margin-top:3%;position:relative;bottom:0;display:block}svg.svelte-x2mpcs.svelte-x2mpcs,path.svelte-x2mpcs.svelte-x2mpcs{color:rgba(150,210,170,0.4);opacity:50%}.right.svelte-x2mpcs a.svelte-x2mpcs:hover{color:rgba(0,0,0,0.5);text-shadow:0px 0px 16px rgba(0,0,0,0.10);transition:all 0.15s ease-in-out}.right.svelte-x2mpcs a.svelte-x2mpcs{padding-left:3px;margin-left:5px;color:rgba(0,0,0,0.16);text-shadow:0px 0px 10px rgba(0,0,0,0.05);font-size:0.78rem}.left.svelte-x2mpcs.svelte-x2mpcs,.right.svelte-x2mpcs.svelte-x2mpcs{position:relative;display:inline-block}.right.svelte-x2mpcs.svelte-x2mpcs{float:right;margin-top:1%}.left.svelte-x2mpcs.svelte-x2mpcs{float:left;display:inline-flex}",
+  map: '{"version":3,"file":"footer.svelte","sources":["footer.svelte"],"sourcesContent":["<footer>\\n\\t<div class=\\"left\\">\\n\\t<p class=\\"foot\\">Last updated <span id=\\"crea\\">July 29, 2021</span></p>\\n\\t<p class=\\"foot\\"><a href=\\"mailto:clp@clp.is\\">Email</a> me</p>\\n\\t</div>\\n\\t\\t<div class=\\"right\\">\\n\\t\\t\\t<a class=\\"nav\\" id=\\"gl\\" href=\\"https://gitlab.com/clpi\\">\\n\\t\\t\\t<svg role=\\"img\\" viewBox=\\"0 0 24 24\\" width=12 height=12 xmlns=\\"http://www.w3.org/2000/svg\\"><title>GitLab</title><path d=\\"M4.845.904c-.435 0-.82.28-.955.692C2.639 5.449 1.246 9.728.07 13.335a1.437 1.437 0 00.522 1.607l11.071 8.045c.2.145.472.144.67-.004l11.073-8.04a1.436 1.436 0 00.522-1.61c-1.285-3.942-2.683-8.256-3.817-11.746a1.004 1.004 0 00-.957-.684.987.987 0 00-.949.69l-2.405 7.408H8.203l-2.41-7.408a.987.987 0 00-.942-.69h-.006zm-.006 1.42l2.173 6.678H2.675zm14.326 0l2.168 6.678h-4.341zm-10.593 7.81h6.862c-1.142 3.52-2.288 7.04-3.434 10.559L8.572 10.135zm-5.514.005h4.321l3.086 9.5zm13.567 0h4.325c-2.467 3.17-4.95 6.328-7.411 9.502 1.028-3.167 2.059-6.334 3.086-9.502zM2.1 10.762l6.977 8.947-7.817-5.682a.305.305 0 01-.112-.341zm19.798 0l.952 2.922a.305.305 0 01-.11.341v.002l-7.82 5.68.026-.035z\\"/></svg>\\n\\t\\t\\tGitLab</a>\\n\\t\\t\\t<a class=\\"nav\\" id=\\"gh\\" href=\\"https://github.com/clpi\\">\\n<svg role=\\"img\\" viewBox=\\"0 0 24 24\\" width=12 height=12 xmlns=\\"http://www.w3.org/2000/svg\\"><title>GitHub</title><path d=\\"M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12\\"/></svg>\\n\\t\\t\\tGitHub</a>\\n\\t\\t\\t<a class=\\"nav\\"  href=\\"https://twitter.com/clp_is\\">\\n\\t\\t\\t<svg role=\\"img\\" viewBox=\\"0 0 24 24\\" width=12 height=12 xmlns=\\"http://www.w3.org/2000/svg\\"><title>Twitter</title><path d=\\"M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z\\"/></svg>\\n\\t\\t\\tTwitter</a>\\n\\t\\t\\t<a class=\\"nav\\"  href=\\"https://linkedin.com/in/chrispecunies\\">\\n\\t\\t\\t<svg role=\\"img\\" viewBox=\\"0 0 24 24\\" width=12 height=12 xmlns=\\"http://www.w3.org/2000/svg\\"><title>LinkedIn</title><path d=\\"M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z\\"/></svg>\\n\\t\\t\\tLinkedIn</a>\\n\\t\\t\\t<a class=\\"nav\\"  href=\\"https://facebook.com/chrispecunies\\">\\n\\t\\t\\t<svg role=\\"img\\" viewBox=\\"0 0 24 24\\" width=12 height=12 xmlns=\\"http://www.w3.org/2000/svg\\"><title>Facebook</title><path d=\\"M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z\\"/></svg>\\n\\t\\t\\tFacebook</a>\\n\\t\\t\\t<a class=\\"nav\\"  href=\\"https://last.fm/user/ooohm\\">\\n\\t\\t<svg role=\\"img\\" viewBox=\\"0 0 24 24\\" height=12 width=12 xmlns=\\"http://www.w3.org/2000/svg\\"><title>Last.fm</title><path d=\\"M10.584 17.21l-.88-2.392s-1.43 1.594-3.573 1.594c-1.897 0-3.244-1.649-3.244-4.288 0-3.382 1.704-4.591 3.381-4.591 2.42 0 3.189 1.567 3.849 3.574l.88 2.749c.88 2.666 2.529 4.81 7.285 4.81 3.409 0 5.718-1.044 5.718-3.793 0-2.227-1.265-3.381-3.63-3.931l-1.758-.385c-1.21-.275-1.567-.77-1.567-1.595 0-.934.742-1.484 1.952-1.484 1.32 0 2.034.495 2.144 1.677l2.749-.33c-.22-2.474-1.924-3.492-4.729-3.492-2.474 0-4.893.935-4.893 3.932 0 1.87.907 3.051 3.189 3.601l1.87.44c1.402.33 1.869.907 1.869 1.704 0 1.017-.99 1.43-2.86 1.43-2.776 0-3.93-1.457-4.59-3.464l-.907-2.75c-1.155-3.573-2.997-4.893-6.653-4.893C2.144 5.333 0 7.89 0 12.233c0 4.18 2.144 6.434 5.993 6.434 3.106 0 4.591-1.457 4.591-1.457z\\"/></svg>\\n\\t\\t\\tLast.fm</a>\\n\\t\\t</div>\\n\\n</footer>\\n<style>\\np {\\n\\tcolor: rgba(0,0,0,0.3);\\n\\tfont-size: 0.75rem;\\n\\n}\\na,#crea {\\n\\ttext-decoration:none;\\n\\tfont-size: 0.75rem;\\n\\tcolor: rgba(140,220,160,0.8);\\n}\\n.nav:hover {\\n\\t/* padding: 8px 5px; */\\n\\ttransition: all 0.25s ease-in-out;\\n}\\nfooter {\\n\\tcolor: rgba(0,0,0,0.3);\\n\\tfont-size: 0.8rem;\\n\\tpadding: 4px;\\n\\tmargin-top: 3%;\\n\\tposition:relative;\\n\\tbottom:0;\\n\\tdisplay: block;\\n}\\nsvg,path {\\n\\tcolor: rgba(150,210,170,0.4);\\n\\topacity:50%;\\n    }\\n.right a:hover{\\n\\tcolor: rgba(0,0,0,0.5);\\n\\t/* border: 2px solid rgba(0,0,0,0.4); */\\n\\t/* background: #fffdfc; */\\n\\t/* border-radius: 4px; */\\n\\ttext-shadow:0px 0px 16px rgba(0,0,0,0.10);\\n\\t/* box-shadow: 0px 0px 6px rgba(0,0,0,0.07); */\\n\\ttransition:all 0.15s ease-in-out;\\n\\n}\\n.right a {\\n\\t/* color: #fffdfc; */\\n\\tpadding-left: 3px;\\n\\tmargin-left: 5px;\\n\\t/* border: 2px solid rgba(0,0,0,0.2); */\\n\\tcolor: rgba(0,0,0,0.16);\\n\\ttext-shadow:0px 0px 10px rgba(0,0,0,0.05);\\n\\tfont-size:0.78rem;\\n}\\n.left, .right {\\n\\tposition: relative;\\n\\tdisplay: inline-block;\\n}\\n.right {\\n\\tfloat:right;\\n\\tmargin-top: 1%;\\n}\\n.left {\\n\\tfloat: left;\\n\\tdisplay: inline-flex;\\n}\\n</style>\\n"],"names":[],"mappings":"AA4BA,CAAC,4BAAC,CAAC,AACF,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CACtB,SAAS,CAAE,OAAO,AAEnB,CAAC,AACD,6BAAC,CAAC,KAAK,4BAAC,CAAC,AACR,gBAAgB,IAAI,CACpB,SAAS,CAAE,OAAO,CAClB,KAAK,CAAE,KAAK,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,AAC7B,CAAC,AACD,gCAAI,MAAM,AAAC,CAAC,AAEX,UAAU,CAAE,GAAG,CAAC,KAAK,CAAC,WAAW,AAClC,CAAC,AACD,MAAM,4BAAC,CAAC,AACP,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CACtB,SAAS,CAAE,MAAM,CACjB,OAAO,CAAE,GAAG,CACZ,UAAU,CAAE,EAAE,CACd,SAAS,QAAQ,CACjB,OAAO,CAAC,CACR,OAAO,CAAE,KAAK,AACf,CAAC,AACD,+BAAG,CAAC,IAAI,4BAAC,CAAC,AACT,KAAK,CAAE,KAAK,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,CAC5B,QAAQ,GAAG,AACR,CAAC,AACL,oBAAM,CAAC,eAAC,MAAM,CAAC,AACd,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,CAItB,YAAY,GAAG,CAAC,GAAG,CAAC,IAAI,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAEzC,WAAW,GAAG,CAAC,KAAK,CAAC,WAAW,AAEjC,CAAC,AACD,oBAAM,CAAC,CAAC,cAAC,CAAC,AAET,YAAY,CAAE,GAAG,CACjB,WAAW,CAAE,GAAG,CAEhB,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACvB,YAAY,GAAG,CAAC,GAAG,CAAC,IAAI,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACzC,UAAU,OAAO,AAClB,CAAC,AACD,iCAAK,CAAE,MAAM,4BAAC,CAAC,AACd,QAAQ,CAAE,QAAQ,CAClB,OAAO,CAAE,YAAY,AACtB,CAAC,AACD,MAAM,4BAAC,CAAC,AACP,MAAM,KAAK,CACX,UAAU,CAAE,EAAE,AACf,CAAC,AACD,KAAK,4BAAC,CAAC,AACN,KAAK,CAAE,IAAI,CACX,OAAO,CAAE,WAAW,AACrB,CAAC"}'
 };
 var Footer = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$f);
-  return `<footer class="${"svelte-10omry2"}"><div class="${"left svelte-10omry2"}"><p class="${"foot svelte-10omry2"}">Last updated July 29, 2021</p>
-	<p class="${"foot svelte-10omry2"}"><a href="${"mailto:clp@clp.is"}" class="${"svelte-10omry2"}">Email</a> me</p></div>
-		<div class="${"right svelte-10omry2"}"><a class="${"nav svelte-10omry2"}" id="${"gl"}" href="${"https://gitlab.com/clpi"}">gitlab</a>
-			<a class="${"nav svelte-10omry2"}" id="${"gh"}" href="${"https://github.com/clpi"}">github</a>
-			<a class="${"nav svelte-10omry2"}" href="${"https://github.com/clpi"}">twitter</a>
-			<a class="${"nav svelte-10omry2"}" href="${"https://github.com/clpi"}">linkedin</a></div>
+  $$result.css.add(css$e);
+  return `<footer class="${"svelte-x2mpcs"}"><div class="${"left svelte-x2mpcs"}"><p class="${"foot svelte-x2mpcs"}">Last updated <span id="${"crea"}" class="${"svelte-x2mpcs"}">July 29, 2021</span></p>
+	<p class="${"foot svelte-x2mpcs"}"><a href="${"mailto:clp@clp.is"}" class="${"svelte-x2mpcs"}">Email</a> me</p></div>
+		<div class="${"right svelte-x2mpcs"}"><a class="${"nav svelte-x2mpcs"}" id="${"gl"}" href="${"https://gitlab.com/clpi"}"><svg role="${"img"}" viewBox="${"0 0 24 24"}" width="${"12"}" height="${"12"}" xmlns="${"http://www.w3.org/2000/svg"}" class="${"svelte-x2mpcs"}"><title>GitLab</title><path d="${"M4.845.904c-.435 0-.82.28-.955.692C2.639 5.449 1.246 9.728.07 13.335a1.437 1.437 0 00.522 1.607l11.071 8.045c.2.145.472.144.67-.004l11.073-8.04a1.436 1.436 0 00.522-1.61c-1.285-3.942-2.683-8.256-3.817-11.746a1.004 1.004 0 00-.957-.684.987.987 0 00-.949.69l-2.405 7.408H8.203l-2.41-7.408a.987.987 0 00-.942-.69h-.006zm-.006 1.42l2.173 6.678H2.675zm14.326 0l2.168 6.678h-4.341zm-10.593 7.81h6.862c-1.142 3.52-2.288 7.04-3.434 10.559L8.572 10.135zm-5.514.005h4.321l3.086 9.5zm13.567 0h4.325c-2.467 3.17-4.95 6.328-7.411 9.502 1.028-3.167 2.059-6.334 3.086-9.502zM2.1 10.762l6.977 8.947-7.817-5.682a.305.305 0 01-.112-.341zm19.798 0l.952 2.922a.305.305 0 01-.11.341v.002l-7.82 5.68.026-.035z"}" class="${"svelte-x2mpcs"}"></path></svg>
+			GitLab</a>
+			<a class="${"nav svelte-x2mpcs"}" id="${"gh"}" href="${"https://github.com/clpi"}"><svg role="${"img"}" viewBox="${"0 0 24 24"}" width="${"12"}" height="${"12"}" xmlns="${"http://www.w3.org/2000/svg"}" class="${"svelte-x2mpcs"}"><title>GitHub</title><path d="${"M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"}" class="${"svelte-x2mpcs"}"></path></svg>
+			GitHub</a>
+			<a class="${"nav svelte-x2mpcs"}" href="${"https://twitter.com/clp_is"}"><svg role="${"img"}" viewBox="${"0 0 24 24"}" width="${"12"}" height="${"12"}" xmlns="${"http://www.w3.org/2000/svg"}" class="${"svelte-x2mpcs"}"><title>Twitter</title><path d="${"M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"}" class="${"svelte-x2mpcs"}"></path></svg>
+			Twitter</a>
+			<a class="${"nav svelte-x2mpcs"}" href="${"https://linkedin.com/in/chrispecunies"}"><svg role="${"img"}" viewBox="${"0 0 24 24"}" width="${"12"}" height="${"12"}" xmlns="${"http://www.w3.org/2000/svg"}" class="${"svelte-x2mpcs"}"><title>LinkedIn</title><path d="${"M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"}" class="${"svelte-x2mpcs"}"></path></svg>
+			LinkedIn</a>
+			<a class="${"nav svelte-x2mpcs"}" href="${"https://facebook.com/chrispecunies"}"><svg role="${"img"}" viewBox="${"0 0 24 24"}" width="${"12"}" height="${"12"}" xmlns="${"http://www.w3.org/2000/svg"}" class="${"svelte-x2mpcs"}"><title>Facebook</title><path d="${"M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"}" class="${"svelte-x2mpcs"}"></path></svg>
+			Facebook</a>
+			<a class="${"nav svelte-x2mpcs"}" href="${"https://last.fm/user/ooohm"}"><svg role="${"img"}" viewBox="${"0 0 24 24"}" height="${"12"}" width="${"12"}" xmlns="${"http://www.w3.org/2000/svg"}" class="${"svelte-x2mpcs"}"><title>Last.fm</title><path d="${"M10.584 17.21l-.88-2.392s-1.43 1.594-3.573 1.594c-1.897 0-3.244-1.649-3.244-4.288 0-3.382 1.704-4.591 3.381-4.591 2.42 0 3.189 1.567 3.849 3.574l.88 2.749c.88 2.666 2.529 4.81 7.285 4.81 3.409 0 5.718-1.044 5.718-3.793 0-2.227-1.265-3.381-3.63-3.931l-1.758-.385c-1.21-.275-1.567-.77-1.567-1.595 0-.934.742-1.484 1.952-1.484 1.32 0 2.034.495 2.144 1.677l2.749-.33c-.22-2.474-1.924-3.492-4.729-3.492-2.474 0-4.893.935-4.893 3.932 0 1.87.907 3.051 3.189 3.601l1.87.44c1.402.33 1.869.907 1.869 1.704 0 1.017-.99 1.43-2.86 1.43-2.776 0-3.93-1.457-4.59-3.464l-.907-2.75c-1.155-3.573-2.997-4.893-6.653-4.893C2.144 5.333 0 7.89 0 12.233c0 4.18 2.144 6.434 5.993 6.434 3.106 0 4.591-1.457 4.591-1.457z"}" class="${"svelte-x2mpcs"}"></path></svg>
+			Last.fm</a></div>
 
 </footer>`;
 });
@@ -2822,19 +2834,20 @@ var Google = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_page();
   return ``;
 });
-var css$e = {
-  code: `ul:not(.navbar){margin-left:3.5%;list-style:decimal;padding-top:2.5%;border-top:1px solid rgba(0,0,0,0.02);border-radius:7px;padding-bottom:2.5%;background-color:rgba(0,0,0,0.01);border-top:1px solid rgba(0,0,0,0.085);border-bottom:1px solid rgba(0,0,0,0.045);margin-top:25px}ul:not(.navbar):hover{background-color:rgba(0,0,0,0.025);transition:all 0.2s ease-in-out;background-color:rgba(0,0,0,0.02);border-top:1px solid rgba(0,0,0,0.175);border-bottom:1px solid rgba(0,0,0,0.095)}li:not(.nav){margin-bottom:4px}li:not(.nav){padding-left:1%}body{border:2px ridge transparent;background-color:#fffefd;height:100vh;min-height:100vh;margin:0;max-width:100%;overflow-x:hidden;padding:2% 8% 2% 8%;font-weight:300}h1,h2,h3,h4{font-weight:300;font-family:monospace;letter-spacing:-2px;border-left:2px solid rgba(0,0,0,0.00)}h1{font-size:2.4rem;padding-left:32px}h2{font-size:2.0rem;padding-left:28px;color:rgba(0,0,0,0.7)}h3{font-size:1.8rem;padding-left:21px;color:rgba(0,0,0,0.64)}h4{font-size:1.6rem;padding-left:16px;color:rgba(0,0,0,0.6)}h1::before{content:"#";color:rgba(0,0,0,0.25);padding-right:16px}h2::before{content:"##";color:rgba(0,0,0,0.20);padding-right:12px}h3::before{content:"###";color:rgba(0,0,0,0.15);padding-right:10px}h4::before{content:"####";color:rgba(0,0,0,0.10);padding-right:8px}h1:hover::after{color:rgba(0,0,0,0.15);padding-left:8px;font-size:1.2rem;content:"[.]" }h2:hover::after{color:rgba(0,0,0,0.12);padding-left:6px;font-size:1.0rem;content:"[..]" }h3:hover::after{color:rgba(0,0,0,0.09);padding-left:4px;font-size:0.9rem;content:"[...]" }h4:hover::after{color:rgba(0,0,0,0.09);padding-left:4px;font-size:0.7rem;content:"[....]" }h1:hover{color:black;border-left:2px solid rgba(0,0,0,0.15);padding-left:34px;transition:all 0.2s ease-in-out}h2:hover{color:rgba(0,0,0,0.8);border-left:2px solid rgba(0,0,0,0.12);padding-left:30px;transition:all 0.2s ease-in-out}h3:hover{color:rgba(0,0,0,0.74);border-left:2px solid rgba(0,0,0,0.09);padding-left:23px;transition:all 0.2s ease-in-out}h4:hover{color:rgba(0,0,0,0.7);border-left:2px solid rgba(0,0,0,0.06);padding-left:18px;transition:all 0.2s ease-in-out}p{padding-left:32px;font-size:1.1rem}.content.svelte-2fspwr{font-size:1.1rem;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;font-weight:400}#head{padding-bottom:8px;border-left:2px solid rgba(0,0,0,0.00);text-shadow:0px 0px 8px rgba(0,0,0,0.06)}#head:hover::after{color:rgba(0,0,0,0.15);padding-left:8px;font-size:1.2rem;content:"[~]" }#head:hover{color:rgba(0,0,0,0.95);border-left:2px solid rgba(0,0,0,0.15);padding-left:37px;transition:all 0.2s ease-in-out}.link:not(.nav):hover{transition:all 0.1s;border-radius:2px;background-color:rgba(0,0,0,0.8);font-weight:500;color:rgba(255,255,255,0.95);text-decoration:underline;text-underline-offset:6px;text-decoration:none}.link:not(.nav){font-family:monospace;border-radius:1px;text-decoration:none;text-decoration:underline;text-underline-offset:6px;font-size:1rem;color:rgba(0,0,0,0.95);letter-spacing:-1px}p{transition:all 0.2s ease-in-out;border-left:2px solid rgba(0,0,0,0.0)}p:hover:not(.foot){border-left:2px solid rgba(0,0,0,0.1);transition:all 0.2s ease-in-out}.content.svelte-2fspwr{padding:12px;height:100%;min-height:45vh;background-color:rgba(0,0,0,0.02);border-left:4px dashed rgba(0,0,0,0.02);border-right:4px dashed rgba(0,0,0,0.02);border-top:1px solid rgba(0,0,0,0.06);border-bottom:2px solid rgba(0,0,0,0.12);box-shadow:0px 0px 22px rgba(0,0,0,0.04);display:block}li a :not(.nav){text-decoration:underline;text-underline-offset:5px;text-shadow:0px 0px 5px rgba(0,0,0,0.01)} .link.ext :not(.nav){color:rgba(0,0,0,0.5)}li a:active:not(.nav){transform:scale(1.3)}li a:hover:not(.nav){background-color:rgba(0,0,0,0.83);font-weight:300;color:rgba(255,255,255,0.98);border-radius:4px;box-shadow:0px 0px 8px rgba(0,0,0,0.1);transition:all 0.2s ease-in-out}li:hover a:not(.nav){transition:all 0.2s ease-in-out;transform:scale(1.2)}form{padding-left:3%;padding-right:1%;padding-top:2%;padding-bottom:2%;background-color:rgba(0,0,0,0.02);box-shadow:0px 0px 7px rgba(0,0,0,0.00);width:50%;display:block;position:relative;align-content:center;justify-content:center;transition:all 0.15s ease-in-out;align-items:center;box-shadow:0px 0px 5px rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.02);border-radius:6px;border-bottom:3px solid rgba(0,0,0,0.09);margin:auto}`,
-  map: `{"version":3,"file":"__layout.svelte","sources":["__layout.svelte"],"sourcesContent":["<script lang=\\"ts\\">import Nav from '../lib/nav.svelte';\\nimport Footer from '../lib/footer.svelte';\\nimport { page, navigating } from '$app/stores';\\nimport GoogleAnalytics from '$lib/google.svelte';\\n$: section = $page.path.split('/')[1];\\n<\/script>\\n\\n<style>\\n:global(ul:not(.navbar)) {\\n\\tmargin-left: 3.5%;\\n\\t    list-style: decimal;\\n\\tpadding-top: 2.5%;\\n\\tborder-top: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 7px;\\n\\tpadding-bottom: 2.5%;\\n\\tbackground-color: rgba(0,0,0,0.01);\\n\\tborder-top:1px solid rgba(0,0,0,0.085);\\n\\tborder-bottom:1px solid rgba(0,0,0,0.045);\\n\\tmargin-top: 25px;\\n    }\\n:global(ul:not(.navbar):hover) {\\n    background-color: rgba(0,0,0,0.025);\\n    transition: all 0.2s ease-in-out;\\n\\tbackground-color: rgba(0,0,0,0.02);\\n\\tborder-top:1px solid rgba(0,0,0,0.175);\\n\\tborder-bottom:1px solid rgba(0,0,0,0.095);\\n}\\n:global(li:not(.nav)) {\\n\\tmargin-bottom: 4px;\\n    }\\n    :global(li:not(.nav)) {\\n\\tpadding-left: 1%;\\n\\n\\t}\\n\\t:global(body) {\\n\\t\\tborder: 2px ridge transparent;\\n\\t\\tbackground-color: #fffefd;\\n\\t\\theight: 100vh;\\n\\t\\tmin-height: 100vh;\\n\\t\\tmargin: 0;\\n\\t\\tmax-width: 100%;\\n\\t\\toverflow-x: hidden;\\n\\t\\tpadding: 2% 8% 2% 8%;\\n\\t\\tfont-weight: 300;\\n\\t}\\n\\t:global(h1),:global(h2),:global(h3),:global(h4) {\\n\\n\\t\\tfont-weight: 300;\\n\\t\\tfont-family: monospace;\\n\\t\\tletter-spacing: -2px;\\n\\t\\tborder-left: 2px solid rgba(0,0,0,0.00);\\n\\t\\t/* border-bottom: 0px solid rgba(0,0,0,0.25); */\\n\\t\\t/* padding: 0px 16px 4px 4px; */\\n\\t}\\n\\t:global(h1) { font-size: 2.4rem; padding-left: 32px;}\\n\\t:global(h2) { font-size: 2.0rem; padding-left: 28px; color: rgba(0,0,0,0.7)}\\n\\t:global(h3) { font-size: 1.8rem; padding-left: 21px; color: rgba(0,0,0,0.64)}\\n\\t:global(h4) { font-size: 1.6rem; padding-left: 16px; color: rgba(0,0,0,0.6)}\\n\\t:global(h1::before) { content: \\"#\\"; color: rgba(0,0,0,0.25); padding-right: 16px; }\\n\\t:global(h2::before) { content: \\"##\\"; color: rgba(0,0,0,0.20); padding-right: 12px; }\\n\\t:global(h3::before) { content: \\"###\\"; color: rgba(0,0,0,0.15); padding-right: 10px; }\\n\\t:global(h4::before) { content: \\"####\\"; color: rgba(0,0,0,0.10); padding-right: 8px; }\\n\\t:global(h1:hover::after) { color: rgba(0,0,0,0.15); padding-left: 8px; font-size: 1.2rem; content: \\"[.]\\" }\\n\\t:global(h2:hover::after) { color: rgba(0,0,0,0.12); padding-left: 6px; font-size: 1.0rem; content: \\"[..]\\" }\\n\\t:global(h3:hover::after) { color: rgba(0,0,0,0.09); padding-left: 4px; font-size: 0.9rem; content: \\"[...]\\" }\\n\\t:global(h4:hover::after) { color: rgba(0,0,0,0.09); padding-left: 4px; font-size: 0.7rem; content: \\"[....]\\" }\\n\\t:global(h1:hover) { color: black;border-left: 2px solid rgba(0,0,0,0.15); padding-left: 34px; transition: all 0.2s ease-in-out}\\n\\t:global(h2:hover) { color:rgba(0,0,0,0.8);border-left: 2px solid rgba(0,0,0,0.12); padding-left: 30px; transition: all 0.2s ease-in-out}\\n\\t:global(h3:hover) { color:rgba(0,0,0,0.74);border-left: 2px solid rgba(0,0,0,0.09); padding-left: 23px; transition: all 0.2s ease-in-out}\\n\\t:global(h4:hover) { color:rgba(0,0,0,0.7);border-left: 2px solid rgba(0,0,0,0.06); padding-left: 18px; transition: all 0.2s ease-in-out}\\n\\t:global(p) {\\n\\t\\tpadding-left: 32px;\\n\\t\\tfont-size: 1.1rem;\\n\\t}\\n\\t.content {\\n\\t\\tfont-size: 1.1rem;\\n\\t\\tfont-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\\n\\t\\tfont-weight: 400;\\n\\t\\t}\\n\\t:global(#head) {\\n\\t\\tpadding-bottom: 8px;\\n\\t\\tborder-left: 2px solid rgba(0,0,0,0.00);\\n\\t\\ttext-shadow: 0px 0px 8px rgba(0,0,0,0.06);\\n\\t}\\n\\t:global(#head:hover::after) { color: rgba(0,0,0,0.15); padding-left: 8px; font-size: 1.2rem; content: \\"[~]\\" }\\n\\t:global(#head:hover) {\\n\\t\\tcolor: rgba(0,0,0,0.95);\\n\\t\\tborder-left: 2px solid rgba(0,0,0,0.15);\\n\\t\\tpadding-left: 37px;\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\n\\t}\\n\\t:global(.link:not(.nav):hover) {\\n\\t\\ttransition: all 0.1s;\\n\\t\\tborder-radius: 2px;\\n\\t\\tbackground-color: rgba(0,0,0,0.8);\\n\\t\\tfont-weight: 500;\\n\\t\\tcolor: rgba(255,255,255,0.95);\\n\\t\\ttext-decoration: underline;\\n\\t\\ttext-underline-offset: 6px;\\n\\t\\ttext-decoration:none;\\n\\t}\\n\\t:global(.link:not(.nav)) {\\n\\t\\tfont-family: monospace;\\n\\t\\tborder-radius: 1px;\\n\\t\\ttext-decoration:none;\\n\\ttext-decoration: underline;\\n\\ttext-underline-offset: 6px;\\n\\t\\tfont-size:1rem;\\n\\t\\tcolor: rgba(0,0,0,0.95);\\n\\t\\tletter-spacing:-1px;\\n\\t}\\n\\t/* :global(a:not(.nav):hover::before){\\n\\t\\tcontent: \\"[\\"\\n\\t}\\n\\t:global(a:not(.nav):hover::after){\\n\\t\\tcontent: \\"]\\"\\n\\t} */\\n\\t:global(p) {\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\t\\tborder-left: 2px solid rgba(0,0,0,0.0);\\n\\t}\\n\\t:global(p:hover:not(.foot)) {\\n\\t\\tborder-left: 2px solid rgba(0,0,0,0.1);\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\t\\t}\\n\\t/* :global(p::before) {\\n\\t\\tcolor: rgba(0,0,0,0.0);\\n\\t\\tcontent: \\"--\\";\\n\\t\\tpadding-right: 4px;\\n\\t}\\n\\t:global(p:hover::before),:global(p:hover::after) {\\n\\t\\tcolor: rgba(0,0,0,0.1);\\n\\t}\\n\\t:global(p::after) {\\n\\t\\tcolor: rgba(0,0,0,0.0);\\n\\t\\tcontent: \\"--\\";\\n\\t\\tpadding-left: 4px;\\n\\t} */\\n\\n.content {\\n\\tpadding: 12px;\\n\\theight: 100%;\\n\\tmin-height: 45vh;\\n\\tbackground-color: rgba(0,0,0,0.02);\\n\\tborder-left: 4px dashed rgba(0,0,0,0.02);\\n\\tborder-right: 4px dashed rgba(0,0,0,0.02);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.06);\\n\\t\\tborder-bottom: 2px solid rgba(0,0,0,0.12);\\n\\t\\tbox-shadow: 0px 0px 22px rgba(0,0,0,0.04);\\n\\tdisplay:block;\\n}\\n:global(li a ):not(.nav) {\\n\\ttext-decoration: underline;\\n\\ttext-underline-offset: 5px;\\n\\ttext-shadow: 0px 0px 5px rgba(0,0,0,0.01);\\n    }\\n    :global( .link.ext ):not(.nav) {\\n\\t    color: rgba(0,0,0,0.5);\\n\\t}\\n\\t:global(li a:active):not(.nav) {\\n\\t\\ttransform: scale(1.3);\\n\\t}\\n\\t:global(li a:hover):not(.nav) {\\n\\t\\tbackground-color: rgba(0,0,0,0.83);\\n\\t\\tfont-weight: 300;\\n\\t\\tcolor: rgba(255,255,255,0.98);\\n\\t\\tborder-radius: 4px;\\n\\t\\tbox-shadow:  0px 0px 8px rgba(0,0,0,0.1);\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\n\\t    }\\n\\t    :global(li:hover a):not(.nav) {\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\t\\ttransform: scale(1.2);\\n\\n\\t\\t}\\n    :global(form) {\\n\\tpadding-left: 3%;\\n\\tpadding-right: 1%;\\n\\tpadding-top: 2%;\\n\\tpadding-bottom: 2%;\\n\\tbackground-color: rgba(0,0,0,0.02);\\n\\tbox-shadow: 0px 0px 7px rgba(0,0,0,0.00);\\n\\twidth: 50%;\\n\\tdisplay: block;\\n\\tposition:relative;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\ttransition: all 0.15s ease-in-out;\\n\\talign-items: center;\\n\\tbox-shadow: 0px 0px 5px rgba(0,0,0,0.03);\\n\\tborder: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 6px;\\n\\tborder-bottom: 3px solid rgba(0,0,0,0.09);\\n\\tmargin: auto;\\n    }\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\n\\n\\t\\t}\\n\\t\\t.formtitle {\\n\\t\\t    font-family:monospace;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t    padding-left: 8px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    .gray {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t}\\n</style>\\n\\n<GoogleAnalytics/>\\n<div>\\n\\t<Nav/>\\n\\t<div class=\\"content\\">\\n\\t\\t<slot></slot>\\n\\t</div>\\n\\t<Footer/>\\n</div>\\n"],"names":[],"mappings":"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"}`
+var css$d = {
+  code: `ul:not(.navbar){margin-left:3.5%;list-style:decimal;padding-top:2.5%;border-top:1px solid rgba(0,0,0,0.02);border-radius:7px;padding-bottom:2.5%;background-color:rgba(0,0,0,0.01);border-top:1px solid rgba(0,0,0,0.085);border-bottom:1px solid rgba(0,0,0,0.045);margin-top:25px}ul:not(.navbar):hover{transition:all 0.2s ease-in-out;background-color:rgba(0,0,0,0.02);border-top:1px solid rgba(0,0,0,0.175);border-bottom:1px solid rgba(0,0,0,0.095)}li:not(.nav){margin-bottom:4px}li:not(.nav){padding-left:1%}body{border:2px ridge transparent;background-color:#fffefd;height:100vh;min-height:100vh;margin:0;max-width:100%;overflow-x:hidden;padding:2% 15% 2% 15%;font-weight:300;background-image:url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='29' height='50.115' patternTransform='scale(1.05) rotate(90)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0.09)'/><path d='M14.498 16.858L0 8.488.002-8.257l14.5-8.374L29-8.26l-.002 16.745zm0 50.06L0 58.548l.002-16.745 14.5-8.373L29 41.8l-.002 16.744zM28.996 41.8l-14.498-8.37.002-16.744L29 8.312l14.498 8.37-.002 16.745zm-29 0l-14.498-8.37.002-16.744L0 8.312l14.498 8.37-.002 16.745z'  stroke-width='0.7' stroke='hsla(0, 0%, 0%, 0.030)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>")
+	}h1,h2,h3,h4{font-weight:100;font-family:Helvetica;letter-spacing:-1px;border-left:1px solid rgba(0,0,0,0.0)}h1{font-size:1.9rem;padding-left:18px;color:rgba(0,0,0,0.70)}#head{font-size:1.9rem;padding-left:18px;color:rgba(0,0,0,0.70)}h2{font-size:1.6rem;padding-left:12px;color:rgba(0,0,0,0.58)}h3{font-size:1.4rem;padding-left:8px;color:rgba(0,0,0,0.53)}h4{font-size:1.2rem;padding-left:7px;color:rgba(0,0,0,0.50)}h1::before{font-size:1.9rem;font-weight:100;content:"\u26AC";color:rgba(140,210,160,0.0);padding-right:12px;text-shadow:0px 0px 18px rgba(140,210,160,0)}#head::before{font-size:1.9rem;font-weight:100;content:"\u2022";color:rgba(140,0,160,0.00);padding-right:12px;text-shadow:0px 0px 18px rgba(140,210,160,0) }h2::before{font-size:1.6rem;font-weight:100;content:"\u26AC\u26AC";color:rgba(140,210,160,0.00);padding-right:9px;text-shadow:0px 0px 18px rgba(140,210,160,0)}h3::before{font-size:1.4rem;font-weight:100;content:"\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.00);padding-right:7px;text-shadow:0px 0px 18px rgba(140,210,160,0)}h4::before{font-size:1.2rem;font-weight:100;content:"\u26AC\u26AC\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.00);padding-right:5px;text-shadow:0px 0px 18px rgba(140,210,160,0)}h1:hover::before{font-size:1.9rem;font-weight:100;content:"\u26AC";color:rgba(140,210,160,0.43) ;padding-right:12px;transition:all 0.15s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.12)}#head:hover::before{font-size:1.9rem;font-weight:100;content:"\u2022";color:rgba(140,210,160,0.53) ;padding-right:12px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.12)}h2:hover::before{font-size:1.6rem;font-weight:100;content:"\u26AC\u26AC";color:rgba(140,210,160,0.48) ;padding-right:9px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.08)}h3:hover::before{font-size:1.4rem;font-weight:100;content:"\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.43) ;padding-right:7px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.06)}h4:hover::before{font-size:1.2rem;font-weight:100;content:"\u26AC\u26AC\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.38);padding-right:5px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.05)}p{padding-left:45px;font-size:1.0rem;border-left:1px solid transparent}.content.svelte-2b4jfb{font-size:0.97rem;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;font-family:Helvetica;font-weight:300;color:rgba(0,2,1,0.58)}#head{padding-bottom:8px;border-left:1px solid rgba(0,0,0,0.0);margin-left:0px}#head:hover{transition:all 0.1s ease-in-out;margin-left:0px;padding-left:18px}.link:not(.nav):hover{transition:all 0.05s;text-shadow:0px 0px 8px rgba(0,0,0,0.0);text-decoration:underline;color:rgba(150,210,180,1)}.link:not(.nav){font-family:Helvetica;text-decoration:none;text-underline-offset:1px;font-size:1rem;color:rgba(100,180,120,0.9)}.content.svelte-2b4jfb{padding-top:12px;line-height:1.4rem;padding-bottom:35px;padding-left:40px;padding-right:40px;height:100%;min-height:45vh;background-color:rgba(246,246,246,0.925);border-left:1px solid rgba(0,0,0,0.065);border-right:1px solid rgba(0,0,0,0.065);border-top:1px solid rgba(0,0,0,0.040);border-bottom:2px solid rgba(0,0,0,0.13);box-shadow:0px 7px 70px rgba(0,0,0,0.105);border-radius:09px;display:block}li a :not(.nav){text-decoration:underline;text-underline-offset:5px;text-shadow:0px 0px 5px rgba(0,0,0,0.01)} .link.ext :not(.nav){color:rgba(0,0,0,0.5)}li a:active:not(.nav){transform:scale(1.1)}li a:hover:not(.nav){font-weight:300;text-shadow:0px 0px 10px rgba(0,0,0,0.05);transition:all 0.2s ease-in-out}li:hover a:not(.nav){transition:all 0.2s ease-in-out;transform:scale(1.1)}form{padding:3% 5% 3% 5%;margin-top:10px;box-shadow:0px 0px 50px rgba(0,0,0,0.03);border-top:1px solid rgba(0,0,0,0.035);border-left:1px solid rgba(0,0,0,0.045);border-right:1px solid rgba(0,0,0,0.045);border-bottom:2px solid rgba(0,0,0,0.12);display:inline-flexbox;transition:all 0.15s ease-in-out;border-radius:5px;min-width:40%;margin:7px}input{padding:15px 30px;margin-top:2px;border-radius:5px;display:inline;width:80%;border:1px transparent;border-top:1px solid rgba(0,0,0,0.1);border-bottom:1px solid rgba(255,255,255,1);background:rgba(0,0,0,0.025)}label{font-size:0.9rem;padding-left:02px;color:rgba(0,0,0,0.6);text-shadow:0px 0px 4px rgba(0,0,0,0.05)}.form{display:inline-flex;width:100%;margin:auto}button{border:2px solid transparent;border-bottom:2px solid rgba(0,0,0,0.1);border-top:1px solid rgba(0,0,0,0.025);border-left:1px solid rgba(0,0,0,0.025);border-right:1px solid rgba(0,0,0,0.025);color:rgba(0,0,0,0.6);background-color:rgba(150,220,170,1);color:rgba(255,255,255,1);text-shadow:0px 1px 0px rgba(0,0,0,0.15);padding:8px 10px;border-radius:4px;transition:all 0.15s ease-in-out}input:focus{border-top:1px solid rgba(0,0,0,0.2);border-bottom:1px solid rgba(150,220,170,0.8);color:rgba(110,210,140,0.9);outline:none;transform:scale(1.05);transition:all 0.1s ease-in-out}form button:hover{background-color:rbga(0,0,0,0.25);border-bottom:2px solid rgba(0,0,0,0.25);border-radius:5px;transform:scale(1.1);transition:all 0.1s ease-in-out}.formtitle{font-family:Helvetica;padding-bottom:12px;display:block}.gray{color:rgba(0,0,0,0.5);font-weight:500}`,
+  map: `{"version":3,"file":"__layout.svelte","sources":["__layout.svelte"],"sourcesContent":["<script lang=\\"ts\\">import Nav from '../lib/nav.svelte';\\nimport Footer from '../lib/footer.svelte';\\nimport { page, navigating } from '$app/stores';\\nimport GoogleAnalytics from '$lib/google.svelte';\\n$: section = $page.path.split('/')[1];\\n<\/script>\\n\\n<style>\\n:global(ul:not(.navbar)) {\\n\\tmargin-left: 3.5%;\\n\\t    list-style: decimal;\\n\\tpadding-top: 2.5%;\\n\\tborder-top: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 7px;\\n\\tpadding-bottom: 2.5%;\\n\\tbackground-color: rgba(0,0,0,0.01);\\n\\tborder-top:1px solid rgba(0,0,0,0.085);\\n\\tborder-bottom:1px solid rgba(0,0,0,0.045);\\n\\tmargin-top: 25px;\\n    }\\n:global(ul:not(.navbar):hover) {\\n    transition: all 0.2s ease-in-out;\\n    background-color: rgba(0,0,0,0.02);\\n    border-top:1px solid rgba(0,0,0,0.175);\\n    border-bottom:1px solid rgba(0,0,0,0.095);\\n}\\n:global(li:not(.nav)) {\\n\\tmargin-bottom: 4px;\\n    }\\n    :global(li:not(.nav)) {\\n\\tpadding-left: 1%;\\n\\n\\t}\\n\\t:global(body) {\\n\\t\\tborder: 2px ridge transparent;\\n\\t\\tbackground-color: #fffefd;\\n\\t\\theight: 100vh;\\n\\t\\tmin-height: 100vh;\\n\\t\\tmargin: 0;\\n\\t\\tmax-width: 100%;\\n\\t\\toverflow-x: hidden;\\n\\t\\tpadding: 2% 15% 2% 15%;\\n\\t\\tfont-weight: 300;\\n\\t\\tbackground-image: url(\\"data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='29' height='50.115' patternTransform='scale(1.05) rotate(90)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0.09)'/><path d='M14.498 16.858L0 8.488.002-8.257l14.5-8.374L29-8.26l-.002 16.745zm0 50.06L0 58.548l.002-16.745 14.5-8.373L29 41.8l-.002 16.744zM28.996 41.8l-14.498-8.37.002-16.744L29 8.312l14.498 8.37-.002 16.745zm-29 0l-14.498-8.37.002-16.744L0 8.312l14.498 8.37-.002 16.745z'  stroke-width='0.7' stroke='hsla(0, 0%, 0%, 0.030)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>\\")\\n\\t}\\n\\t:global(h1),:global(h2),:global(h3),:global(h4) {\\n\\n\\t\\tfont-weight: 100;\\n\\t\\tfont-family: Helvetica;\\n\\t\\tletter-spacing: -1px;\\n\\t\\tborder-left: 1px solid rgba(0,0,0,0.0);\\n\\t\\t/* border-bottom: 0px solid rgba(0,0,0,0.25); */\\n\\t\\t/* padding: 0px 16px 4px 4px; */\\n\\t}\\n\\t:global(h1) { font-size: 1.9rem; padding-left: 18px; color: rgba(0,0,0,0.70); }\\n\\t:global(#head) { font-size: 1.9rem; padding-left: 18px; color: rgba(0,0,0,0.70); }\\n\\t:global(h2) { font-size: 1.6rem; padding-left: 12px; color: rgba(0,0,0,0.58); }\\n\\t:global(h3) { font-size: 1.4rem; padding-left: 8px; color: rgba(0,0,0,0.53); }\\n\\t:global(h4) { font-size: 1.2rem; padding-left: 7px; color: rgba(0,0,0,0.50); }\\n\\t:global(h1::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u26AC\\"; color: rgba(140,210,160,0.0); padding-right: 12px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(#head::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u2022\\"; color: rgba(140,0,160,0.00); padding-right: 12px;text-shadow: 0px 0px 18px rgba(140,210,160,0) }\\n\\t:global(h2::before) { font-size: 1.6rem;font-weight: 100; content: \\"\u26AC\u26AC\\"; color: rgba(140,210,160,0.00); padding-right: 9px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(h3::before) { font-size: 1.4rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\\"; color: rgba(140,210,160,0.00); padding-right: 7px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(h4::before) { font-size: 1.2rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\u26AC\u26AC\\"; color: rgba(140,210,160,0.00); padding-right: 5px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(h1:hover::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u26AC\\"; color:rgba(140,210,160,0.43) ; padding-right: 12px; transition:all 0.15s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.12)}\\n\\t:global(#head:hover::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u2022\\"; color:rgba(140,210,160,0.53) ; padding-right: 12px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.12)}\\n\\t:global(h2:hover::before) { font-size: 1.6rem;font-weight: 100; content: \\"\u26AC\u26AC\\"; color:rgba(140,210,160,0.48) ; padding-right: 9px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.08)}\\n\\t:global(h3:hover::before) { font-size: 1.4rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\\"; color:rgba(140,210,160,0.43) ; padding-right: 7px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.06)}\\n\\t:global(h4:hover::before) { font-size: 1.2rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\u26AC\u26AC\\"; color:rgba(140,210,160,0.38); padding-right: 5px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.05)}\\n\\t:global(h1:hover),:global(h2:hover),:global(h3:hover),:global(h4:hover),:global(#head:hover) {\\n\\t    }\\n\\t/* :global(h1:hover::after) { color: rgba(0,0,0,0.15); padding-left: 25px; font-size: 1.2rem; content: \\".\\" }\\n\\t:global(#head:hover::after) { color: rgba(0,0,0,0.15); padding-left: 25px; font-size: 1.2rem; content: \\".\\" }\\n\\t:global(h2:hover::after) { color: rgba(0,0,0,0.12); padding-left: 15; font-size: 1.0rem; content: \\"..\\" }\\n\\t:global(h3:hover::after) { color: rgba(0,0,0,0.09); padding-left: 10px; font-size: 0.9rem; content: \\"...\\" }\\n\\t:global(h4:hover::after) { color: rgba(0,0,0,0.09); padding-left: 08px; font-size: 0.7rem; content: \\"....\\" } */\\n\\t/* :global(h1:hover) { color: black;border-left: 4px solid rgba(0,0,0,0.15); transition: all 0.2s ease-in-out}\\n\\t:global(#head:hover) { border-left: 1px solid rgba(0,0,0,0.10); transition: all 0.2s ease-in-out}\\n\\t:global(h2:hover) { color:rgba(0,0,0,0.8);border-left: 1px solid rgba(0,0,0,0.10);  transition: all 0.2s ease-in-out}\\n\\t:global(h3:hover) { color:rgba(0,0,0,0.74);border-left: 1px solid rgba(0,0,0,0.10);  transition: all 0.2s ease-in-out}\\n\\t:global(h4:hover) { color:rgba(0,0,0,0.7);border-left: 1px solid rgba(0,0,0,0.1j);  transition: all 0.2s ease-in-out} */\\n\\t:global(p) {\\n\\t\\tpadding-left: 45px;\\n\\t\\tfont-size: 1.0rem;\\n\\t\\tborder-left:1px solid transparent;\\n\\t}\\n\\t.content {\\n\\t\\tfont-size: 0.97rem;\\n\\t\\tfont-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\\n\\t\\tfont-family:Helvetica;\\n\\t\\tfont-weight: 300;\\n\\t\\tcolor: rgba(0,2,1,0.58);\\n\\t\\t}\\n\\t:global(#head) {\\n\\t\\tpadding-bottom: 8px;\\n\\t\\tborder-left: 1px solid rgba(0,0,0,0.0);\\n\\t\\tmargin-left:0px;\\n\\t}\\n\\t/* :global(#head:hover::after) { color: rgba(0,0,0,0.15); padding-left: 8px; font-size: 1.2rem; content: \\"*\\" } */\\n\\t:global(#head:hover) {\\n\\t\\t/* color: rgba(0,0,0,0.76); */\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t\\tmargin-left: 0px;\\n\\t\\tpadding-left:18px;\\n\\n\\t}\\n\\t:global(.link:not(.nav):hover) {\\n\\t    transition: all 0.05s;\\n\\t    text-shadow: 0px 0px 8px rgba(0,0,0,0.0);\\n\\t    text-decoration: underline;\\n\\t    color: rgba(150,210,180,1);\\n\\t}\\n\\t:global(.link:not(.nav)) {\\n\\t    font-family: Helvetica;\\n\\t    text-decoration:none;\\n\\t    text-underline-offset: 1px;\\n\\t    font-size:1rem;\\n\\t    color: rgba(100,180,120,0.9);\\n\\t}\\n\\t/* :global(a:not(.nav):hover::before){\\n\\t\\tcontent: \\"[\\"\\n\\t}\\n\\t:global(a:not(.nav):hover::after){\\n\\t\\tcontent: \\"]\\"\\n\\t} */\\n\\t:global(p:hover:not(.foot)) {\\n\\t\\t/* border-left: 1px solid rgba(0,0,0,0.1); */\\n\\t\\t/* transition: all 0.2s ease-in-out; */\\n\\t\\t}\\n\\t/* :global(p::before) {\\n\\t\\tcolor: rgba(0,0,0,0.0);\\n\\t\\tcontent: \\"--\\";\\n\\t\\tpadding-right: 4px;\\n\\t}\\n\\t:global(p:hover::before),:global(p:hover::after) {\\n\\t\\tcolor: rgba(0,0,0,0.1);\\n\\t}\\n\\t:global(p::after) {\\n\\t\\tcolor: rgba(0,0,0,0.0);\\n\\t\\tcontent: \\"--\\";\\n\\t\\tpadding-left: 4px;\\n\\t} */\\n\\n.content {\\n\\tpadding-top: 12px;\\n\\tline-height: 1.4rem;\\n\\tpadding-bottom: 35px;\\n\\tpadding-left: 40px;\\n\\tpadding-right: 40px;\\n\\theight: 100%;\\n\\tmin-height: 45vh;\\n\\tbackground-color: rgba(246,246,246,0.925);\\n\\tborder-left: 1px solid rgba(0,0,0,0.065);\\n\\tborder-right: 1px solid rgba(0,0,0,0.065);\\n\\tborder-top: 1px solid rgba(0,0,0,0.040);\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.13);\\n\\tbox-shadow: 0px 7px 70px rgba(0,0,0,0.105);\\n\\tborder-radius: 09px;\\n\\tdisplay:block;\\n}\\n:global(li a ):not(.nav) {\\n\\ttext-decoration: underline;\\n\\ttext-underline-offset: 5px;\\n\\ttext-shadow: 0px 0px 5px rgba(0,0,0,0.01);\\n    }\\n    :global( .link.ext ):not(.nav) {\\n\\t    color: rgba(0,0,0,0.5);\\n\\t}\\n\\t:global(li a:active):not(.nav) {\\n\\t\\ttransform: scale(1.1);\\n\\t}\\n\\t:global(li a:hover):not(.nav) {\\n\\t\\tfont-weight: 300;\\n\\t\\t/* color: rgba(255,255,255,0.98); */\\n\\t\\t/* border-radius: 4px; */\\n\\t\\t/* box-shadow:  0px 0px 8px rgba(0,0,0,0.1); */\\n\\t\\ttext-shadow: 0px 0px 10px rgba(0,0,0,0.05);\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\n\\t    }\\n\\t    :global(li:hover a):not(.nav) {\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\t\\ttransform: scale(1.1);\\n\\n\\t\\t}\\n    /* :global(form) {\\n\\tpadding-left: 3%;\\n\\tpadding-right: 1%;\\n\\tpadding-top: 2%;\\n\\tpadding-bottom: 2%;\\n\\tbackground-color: rgba(0,0,0,0.02);\\n\\tbox-shadow: 0px 0px 7px rgba(0,0,0,0.00);\\n\\twidth: 50%;\\n\\tdisplay: block;\\n\\tposition:relative;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\ttransition: all 0.15s ease-in-out;\\n\\talign-items: center;\\n\\tbox-shadow: 0px 0px 5px rgba(0,0,0,0.03);\\n\\tborder: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 6px;\\n\\tborder-bottom: 3px solid rgba(0,0,0,0.09);\\n\\tmargin: auto;\\n    }\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\n\\n\\t\\t}\\n\\t\\t.formtitle {\\n\\t\\t    font-family:Helvetica;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t    padding-left: 8px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    .gray {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t} */\\n    :global(form) {\\n\\tpadding: 3% 5% 3% 5%;\\n\\tmargin-top: 10px;\\n\\t/* background-color: rgba(255,255,255,0.01); */\\n\\tbox-shadow: 0px 0px 50px rgba(0,0,0,0.03);\\n\\tborder-top: 1px solid rgba(0,0,0,0.035);\\n\\tborder-left: 1px solid rgba(0,0,0,0.045);\\n\\tborder-right: 1px solid rgba(0,0,0,0.045);\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.12);\\n\\tdisplay: inline-flexbox;\\n\\ttransition: all 0.15s ease-in-out;\\n\\tborder-radius: 5px;\\n\\tmin-width:40%;\\n\\tmargin: 7px;\\n    }\\n    :global(input) { \\n\\tpadding: 15px 30px; \\n\\tmargin-top: 2px;\\n\\tborder-radius:5px; \\n\\tdisplay:inline;\\n\\twidth: 80%;\\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tborder-bottom: 1px solid rgba(255,255,255,1);\\n\\tbackground: rgba(0,0,0,0.025);\\n\\t}\\n\\t:global(label) {\\n\\t\\tfont-size: 0.9rem;\\n\\t\\tpadding-left: 02px;\\n\\t\\tcolor: rgba(0,0,0,0.6);\\n\\t\\ttext-shadow: 0px 0px 4px rgba(0,0,0,0.05);\\n\\t    }\\n\\t:global(.form) {\\n\\t    display:inline-flex;\\n\\t    width: 100%;\\n\\t    margin:auto;\\n\\t\\t}\\n    :global(button) {\\n\\tborder: 2px solid transparent;\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.1);\\n\\tborder-top: 1px solid rgba(0,0,0,0.025);\\n\\tborder-left: 1px solid rgba(0,0,0,0.025);\\n\\tborder-right: 1px solid rgba(0,0,0,0.025);\\n\\tcolor: rgba(0,0,0,0.6);\\n\\tbackground-color: rgba(150,220,170,1);\\n\\tcolor: rgba(255,255,255,1);\\n\\ttext-shadow: 0px 1px 0px rgba(0,0,0,0.15);\\n\\tpadding: 8px 10px;\\n\\tborder-radius: 4px;\\n\\ttransition: all 0.15s ease-in-out;\\n\\n\\t}\\n\\t:global(input:active) {\\n\\t\\t/* background-color: rgba(255,255,255,0.05); */\\n\\t    }\\n\\t:global(input:focus) {\\n\\t\\t/* background-color: rgba(255,255,255,0.05); */\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\tborder-bottom: 1px solid rgba(150,220,170,0.8);\\n\\t\\tcolor: rgba(110,210,140,0.9);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.05);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\t:global(form button:hover) {\\n\\t    background-color: rbga(0,0,0,0.25);\\n\\t    border-bottom: 2px solid rgba(0,0,0,0.25);\\n\\t    border-radius: 5px;\\n\\t    transform:scale(1.1);\\n\\t    transition:all 0.1s ease-in-out;\\n\\t}\\n\\t\\t:global(.formtitle) {\\n\\t\\t    font-family:Helvetica;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    :global(.gray) {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t    font-weight: 500;\\n\\t\\t\\t}\\n</style>\\n\\n<GoogleAnalytics/>\\n<div>\\n\\t<Nav/>\\n\\t<div class=\\"content\\">\\n\\t\\t<slot></slot>\\n\\t</div>\\n\\t<Footer/>\\n</div>\\n"],"names":[],"mappings":"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"}`
 };
 var _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $page, $$unsubscribe_page;
   $$unsubscribe_page = subscribe(page, (value) => $page = value);
-  $$result.css.add(css$e);
+  $$result.css.add(css$d);
   $page.path.split("/")[1];
   $$unsubscribe_page();
   return `${validate_component(Google, "GoogleAnalytics").$$render($$result, {}, {}, {})}
 <div>${validate_component(Nav, "Nav").$$render($$result, {}, {}, {})}
-	<div class="${"content svelte-2fspwr"}">${slots.default ? slots.default({}) : ``}</div>
+	<div class="${"content svelte-2b4jfb"}">${slots.default ? slots.default({}) : ``}</div>
 	${validate_component(Footer, "Footer").$$render($$result, {}, {}, {})}</div>`;
 });
 var __layout = /* @__PURE__ */ Object.freeze({
@@ -2842,52 +2855,52 @@ var __layout = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": _layout
 });
-function load({ error: error22, status }) {
-  return { props: { error: error22, status } };
+function load({ error: error2, status }) {
+  return {
+    props: { title: `${status}: ${error2.message}` }
+  };
 }
-var Error$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { status } = $$props;
-  let { error: error22 } = $$props;
-  if ($$props.status === void 0 && $$bindings.status && status !== void 0)
-    $$bindings.status(status);
-  if ($$props.error === void 0 && $$bindings.error && error22 !== void 0)
-    $$bindings.error(error22);
-  return `<h1>${escape2(status)}</h1>
-
-<pre>${escape2(error22.message)}</pre>
-
-
-
-${error22.frame ? `<pre>${escape2(error22.frame)}</pre>` : ``}
-${error22.stack ? `<pre>${escape2(error22.stack)}</pre>` : ``}`;
+var _error = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let { title } = $$props;
+  if ($$props.title === void 0 && $$bindings.title && title !== void 0)
+    $$bindings.title(title);
+  return `${$$result.head += `${$$result.title = `<title>${escape2(title)}</title>`, ""}`, ""}
+<h1>${escape2(title)}</h1>
+<p>test</p>`;
 });
-var error2 = /* @__PURE__ */ Object.freeze({
+var __error = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
-  "default": Error$1,
+  "default": _error,
   load
 });
-var css$d = {
-  code: '.date.svelte-1u5v2uq{color:rgba(0,0,0,0.35);font-family:monospace;font-size:1rem;letter-spacing:-1px;padding-right:4px;letter-spacing:-2px}.date.svelte-1u5v2uq::before{content:"[";color:rgba(0,0,0,0.2)}.date.svelte-1u5v2uq::after{content:"]";color:rgba(0,0,0,0.2)}',
-  map: '{"version":3,"file":"date.svelte","sources":["date.svelte"],"sourcesContent":["<script>\\nlet dt = Date.now().toLocaleString();\\nexport let date = dt;\\n\\n\\n<\/script>\\n<style>\\n\\n.date {\\n\\tcolor: rgba(0,0,0,0.35);\\n\\tfont-family:monospace;\\n\\tfont-size: 1rem;\\n\\tletter-spacing:-1px;\\n\\tpadding-right: 4px;\\n\\tletter-spacing:-2px;\\n}\\n.date::before { content: \\"[\\"; color: rgba(0,0,0,0.2); }\\n.date::after { content: \\"]\\";color: rgba(0,0,0,0.2);  }\\n</style>\\n\\n<span class=\\"date\\">{ date }</span>\\n"],"names":[],"mappings":"AAQA,KAAK,eAAC,CAAC,AACN,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACvB,YAAY,SAAS,CACrB,SAAS,CAAE,IAAI,CACf,eAAe,IAAI,CACnB,aAAa,CAAE,GAAG,CAClB,eAAe,IAAI,AACpB,CAAC,AACD,oBAAK,QAAQ,AAAC,CAAC,AAAC,OAAO,CAAE,GAAG,CAAE,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,AAAE,CAAC,AACvD,oBAAK,OAAO,AAAC,CAAC,AAAC,OAAO,CAAE,GAAG,CAAC,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,AAAG,CAAC"}'
+var css$c = {
+  code: '.date.svelte-t4nvtu{color:rgba(0,0,0,0.14);font-family:helvetica;font-size:0.75rem;padding-right:4px;padding-left:9px;letter-spacing:-0px;text-shadow:0px 0px 10px rgba(0,0,0,0.060)}.date.svelte-t4nvtu:hover{color:rgba(0,0,0,0.38);transition:all 0.25s ease-in-out;text-shadow:0px 0px 15px rgba(0,0,0,0.11)}.date.svelte-t4nvtu::before{content:"";color:rgba(0,0,0,0.2)}.date.svelte-t4nvtu::after{content:"";color:rgba(0,0,0,0.2)}',
+  map: '{"version":3,"file":"date.svelte","sources":["date.svelte"],"sourcesContent":["<script>\\nlet dt = Date.now().toLocaleString();\\nexport let date = dt;\\n\\n\\n<\/script>\\n<style>\\n\\n.date {\\n\\tcolor: rgba(0,0,0,0.14);\\n\\tfont-family:helvetica;\\n\\tfont-size: 0.75rem;\\n\\t/* vertical-align:center; */\\n\\tpadding-right: 4px;\\n\\tpadding-left: 9px;\\n\\tletter-spacing:-0px;\\n\\ttext-shadow: 0px 0px 10px rgba(0,0,0,0.060);\\n}\\n.date:hover {\\n\\tcolor: rgba(0,0,0,0.38);\\n\\ttransition: all 0.25s ease-in-out;\\n\\ttext-shadow: 0px 0px 15px rgba(0,0,0,0.11);\\n\\n    }\\n.date::before { content: \\"\\"; color: rgba(0,0,0,0.2); }\\n.date::after { content: \\"\\";color: rgba(0,0,0,0.2);  }\\n</style>\\n\\n<span class=\\"date\\">{ date }</span>\\n"],"names":[],"mappings":"AAQA,KAAK,cAAC,CAAC,AACN,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACvB,YAAY,SAAS,CACrB,SAAS,CAAE,OAAO,CAElB,aAAa,CAAE,GAAG,CAClB,YAAY,CAAE,GAAG,CACjB,eAAe,IAAI,CACnB,WAAW,CAAE,GAAG,CAAC,GAAG,CAAC,IAAI,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,KAAK,CAAC,AAC5C,CAAC,AACD,mBAAK,MAAM,AAAC,CAAC,AACZ,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACvB,UAAU,CAAE,GAAG,CAAC,KAAK,CAAC,WAAW,CACjC,WAAW,CAAE,GAAG,CAAC,GAAG,CAAC,IAAI,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAEvC,CAAC,AACL,mBAAK,QAAQ,AAAC,CAAC,AAAC,OAAO,CAAE,EAAE,CAAE,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,AAAE,CAAC,AACtD,mBAAK,OAAO,AAAC,CAAC,AAAC,OAAO,CAAE,EAAE,CAAC,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,AAAG,CAAC"}'
 };
 var Date_1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let dt = Date.now().toLocaleString();
   let { date = dt } = $$props;
   if ($$props.date === void 0 && $$bindings.date && date !== void 0)
     $$bindings.date(date);
-  $$result.css.add(css$d);
-  return `<span class="${"date svelte-1u5v2uq"}">${escape2(date)}</span>`;
+  $$result.css.add(css$c);
+  return `<span class="${"date svelte-t4nvtu"}">${escape2(date)}</span>`;
 });
 var Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `${$$result.head += `${$$result.title = `<title>home \u2022 clp.is</title>`, ""}`, ""}
+  return `${$$result.head += `${$$result.title = `<title>Home \u2022 clp.is</title>`, ""}`, ""}
 
 
 
-<h1 id="${"head"}">index</h1>
+<h1 id="${"head"}">Index</h1>
 
-<p>${validate_component(Date_1, "Date").$$render($$result, { date: "08-10-21" }, {}, {})} I&#39;m a recent graduate from the University of Washington Seattle&#39;s Materials Science &amp; Engineering program, currently working in the IT domain, especially in cloud infrastructure &amp; engineering. Have spent most of my time in Seattle, WA but now reside in Denver, CO.</p>
-<p>${validate_component(Date_1, "Date").$$render($$result, { date: "07-14-21" }, {}, {})} welcome to clp.is. feel free to check out my <a class="${"link ext"}" href="${"https://github.com/clpi"}">github</a>/<a class="${"link ext"}" href="${"https://gitlab.com/clpi"}">gitlab</a> for any projects i might be working on. for now site is under construction! to reach me, email me <a class="${"link ext"}" href="${"mailto:clp@clp.is"}">here</a>. thanks!</p>`;
+<p>I&#39;m a recent graduate from the University of Washington Seattle&#39;s Materials Science &amp; Engineering program, currently working in the IT domain, especially in cloud infrastructure &amp; engineering. Have spent most of my time in Seattle, WA but now reside in Denver, CO.${validate_component(Date_1, "Date").$$render($$result, { date: "08-10-21" }, {}, {})}</p>
+<p>welcome to clp.is. feel free to check out my <a class="${"link ext"}" href="${"https://github.com/clpi"}">github</a> or <a class="${"link ext"}" href="${"https://gitlab.com/clpi"}">gitlab</a> for any projects i might be working on. for now site is under construction! to reach me, email me <a class="${"link ext"}" href="${"mailto:clp@clp.is"}">here</a>. thanks!${validate_component(Date_1, "Date").$$render($$result, { date: "07-14-21" }, {}, {})}</p>
+
+<h2>Updates</h2>
+<p>Updates to visual design (massive!) and migration to Render from Vercel, plus addition of API lab link${validate_component(Date_1, "Date").$$render($$result, { date: "11-21-21" }, {}, {})}</p>
+
+<h2>Important Links</h2>
+<p>Nothing important yet!</p>`;
 });
 var index$b = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -2895,50 +2908,52 @@ var index$b = /* @__PURE__ */ Object.freeze({
   "default": Routes
 });
 var Resources = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return ``;
+  return `${$$result.head += `${$$result.title = `<title>Resources \u2022 clp.is</title>`, ""}`, ""}`;
 });
 var index$a = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": Resources
 });
-var css$c = {
-  code: 'form{padding-left:3%;padding-right:1%;padding-top:2%;padding-bottom:2%;background-color:rgba(0,0,0,0.02);box-shadow:0px 0px 7px rgba(0,0,0,0.00);width:50%;display:block;position:relative;align-content:center;justify-content:center;align-items:center;box-shadow:0px 0px 5px rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.02);border-radius:6px;border-bottom:3px solid rgba(0,0,0,0.09);margin:auto}label.svelte-18wpjbr.svelte-18wpjbr::before{content:"$   ";font-size:0.8rem;color:rgba(0,0,0,0.2)}input.svelte-18wpjbr.svelte-18wpjbr{padding:10px;margin-top:4px;width:80%;border-radius:5px;border:1px transparent;border-top:1px solid rgba(0,0,0,0.1);background:rgba(0,0,0,0.05)}textarea.svelte-18wpjbr.svelte-18wpjbr{padding:10px;margin-top:4px;border-radius:5px;width:80%;border:1px transparent;border-top:1px solid rgba(0,0,0,0.1);background:rgba(0,0,0,0.05)}label.svelte-18wpjbr.svelte-18wpjbr{font-size:0.9rem;padding-left:02px;color:rgba(0,0,0,0.6);text-shadow:0px 0px 4px rgba(0,0,0,0.05)}button.svelte-18wpjbr.svelte-18wpjbr{border:2px solid transparent;border-bottom:2px solid rgba(0,0,0,0.1);border-top:1px solid rgba(0,0,0,0.025);border-left:1px solid rgba(0,0,0,0.025);border-right:1px solid rgba(0,0,0,0.025);color:rgba(0,0,0,0.6);background-color:rgba(255,255,255,1);padding:8px;border-radius:3px}input.svelte-18wpjbr.svelte-18wpjbr:active{background-color:rgba(0,0,0,0.2)}input.svelte-18wpjbr.svelte-18wpjbr:focus{background-color:rgba(0,0,0,0.12);border-top:1px solid rgba(0,0,0,0.2);outline:none;transform:scale(1.1);transition:all 0.1s ease-in-out}textarea.svelte-18wpjbr.svelte-18wpjbr:active{background-color:rgba(0,0,0,0.2);transform:scale(0.9)}textarea.svelte-18wpjbr.svelte-18wpjbr:focus{background-color:rgba(0,0,0,0.12);border-top:1px solid rgba(0,0,0,0.2);outline:none;transform:scale(1.05);transition:all 0.1s ease-in-out}form.svelte-18wpjbr button.svelte-18wpjbr:hover{background-color:rbga(0,0,0,0.25);border-bottom:2px solid rgba(0,0,0,0.25);border-radius:5px;transform:scale(1.05);transition:all 0.1s ease-in-out}.form.svelte-18wpjbr.svelte-18wpjbr{align-content:center;align-content:center;justify-content:center}.form.svelte-18wpjbr.svelte-18wpjbr{align-content:center;align-content:center;justify-content:center}.formtitle.svelte-18wpjbr.svelte-18wpjbr{font-family:monospace;padding-bottom:12px;padding-left:8px;display:block}.gray.svelte-18wpjbr.svelte-18wpjbr{color:rgba(0,0,0,0.5)}',
-  map: `{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<script context=\\"module\\">\\nexport const hydrate = false;\\nexport const prerender = true;\\nimport Date from '$lib/date.svelte'\\n<\/script>\\n\\n<svelte:head>\\n\\t<title>about \u2022 clp.is</title>\\n</svelte:head>\\n<style>\\n    :global(form) {\\n\\tpadding-left: 3%;\\n\\tpadding-right: 1%;\\n\\tpadding-top: 2%;\\n\\tpadding-bottom: 2%;\\n\\tbackground-color: rgba(0,0,0,0.02);\\n\\tbox-shadow: 0px 0px 7px rgba(0,0,0,0.00);\\n\\twidth: 50%;\\n\\tdisplay: block;\\n\\tposition:relative;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\talign-items: center;\\n\\tbox-shadow: 0px 0px 5px rgba(0,0,0,0.03);\\n\\tborder: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 6px;\\n\\tborder-bottom: 3px solid rgba(0,0,0,0.09);\\n\\tmargin: auto;\\n    }\\n    label::before {\\n\\t    content: \\"$   \\";\\n\\t    font-size: 0.8rem;\\n\\t    color: rgba(0,0,0,0.2);\\n\\t}\\n    input { \\n\\tpadding: 10px; \\n\\tmargin-top: 4px;\\n\\twidth: 80%;\\n\\tborder-radius:5px; \\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tbackground: rgba(0,0,0,0.05);\\n\\t}\\n    textarea { \\n\\tpadding: 10px; \\n\\tmargin-top: 4px;\\n\\tborder-radius:5px; \\n\\twidth: 80%;\\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tbackground: rgba(0,0,0,0.05);\\n\\t}\\n\\tlabel {\\n\\t\\tfont-size: 0.9rem;\\n\\t\\tpadding-left: 02px;\\n\\t\\tcolor: rgba(0,0,0,0.6);\\n\\t\\ttext-shadow: 0px 0px 4px rgba(0,0,0,0.05);\\n\\t    }\\n    button {\\n\\tborder: 2px solid transparent;\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.1);\\n\\tborder-top: 1px solid rgba(0,0,0,0.025);\\n\\tborder-left: 1px solid rgba(0,0,0,0.025);\\n\\tborder-right: 1px solid rgba(0,0,0,0.025);\\n\\tcolor: rgba(0,0,0,0.6);\\n\\tbackground-color: rgba(255,255,255,1);\\n\\tpadding: 8px;\\n\\tborder-radius: 3px;\\n\\n\\t}\\n\\tinput:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t    }\\n\\tinput:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.1);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\ttextarea:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t\\ttransform:scale(0.9);\\n\\t    }\\n\\ttextarea:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.05);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\tform button:hover {\\n\\t    background-color: rbga(0,0,0,0.25);\\n\\t    border-bottom: 2px solid rgba(0,0,0,0.25);\\n\\t    border-radius: 5px;\\n\\t    transform:scale(1.05);\\n\\t    transition:all 0.1s ease-in-out;\\n\\t}\\n\\tform button:active {\\n\\n\\t    }\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\n\\n\\t\\t}\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\t}\\n\\n\\n\\t\\t.formtitle {\\n\\t\\t    font-family:monospace;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t    padding-left: 8px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    .gray {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t}\\n\\n/* .walloftext { width: 80%; margin: auto; display:block; } */\\n</style>\\n\\n<h1 id=\\"head\\">about</h1>\\n<p class=\\"walloftext\\">Hi there! And <i>welcome</i> to Chris P's internet property. I'm a budding engineer, a few years out of the University of Washington Materials science & engineering program in Seattle.</p>\\n<p class=\\"walloftext\\">I'm currenlty most practiced in backend software development + cloud infrastructure architecture & engineering. Coming from a physical engineering background, I've had to learn quite a lot in my IT endeavours, both on my own and from the gracious assistance of others, whose patience I am grateful for eternally. I envision that with my multifaceted background and cross-disciplinary engineering cultivation, I can really bring a new perspective to the table in backend development and architecture.</p>\\n\\n<p class=\\"walloftext\\">I'm also working to build <a class=\\"link\\" href=\\"https://devisa.io\\">devisa</a> and <a class=\\"link\\" href=\\"https://idlets.com\\">idlets</a>. Keep in touch with me through real means or quietly stalk my <a class=\\"link\\" href=\\"/etc/updates\\">activity</a> <a class=\\"link\\" href=\\"/posts\\">feeds</a> if you're into that. If you wanna talk, email me at <a href=\\"mailto:clp@clp.is\\" class=\\"link\\">clp@clp.is</a> or message me on LinkedIn. Thank you, sincerely!</p>\\n\\n<p class=\\"walloftext\\">- Chris P<Date date=\\"07-29-21\\"/> </p>\\n<br/>\\n<h3>show yourself!</h3>\\n<div class=\\"form\\">\\n<form class=\\"login\\">\\n    <span class=\\"formtitle\\">contact <span class=\\"gray\\">me</span></span>\\n\\n    <label for=\\"msg\\">message</label><br/>\\n    <textarea name=\\"msg\\" rows=8/>\\n\\n\\n    <br/><br/>\\n    <label for=\\"email\\">email</label><br/>\\n    <input name=\\"email\\" type=\\"email\\"/>\\n\\n<br/>\\n<br/>\\n    <button label=\\"login\\" type=\\"submit\\">login</button>\\n</form>\\n<h3>pics</h3>\\n<img src=\\"me/closed.jpeg\\" height=\\"375\\" width=\\"375\\"/>\\n<img src=\\"me/stare.jpeg\\" height=\\"375\\" width=\\"375\\"/>\\n<img src=\\"me/cout.jpeg\\" height=\\"375\\" width=\\"375\\"/>\\n</div>\\n"],"names":[],"mappings":"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"}`
+var css$b = {
+  code: "textarea.svelte-1vc3au4.svelte-1vc3au4{padding:10px;margin-top:4px;border-radius:5px;width:80%;border:1px transparent;border-top:1px solid rgba(0,0,0,0.1);background:rgba(0,0,0,0.05)}label.svelte-1vc3au4.svelte-1vc3au4{font-size:0.9rem;padding-left:02px;color:rgba(0,0,0,0.6);text-shadow:0px 0px 4px rgba(0,0,0,0.05)}button.svelte-1vc3au4.svelte-1vc3au4{border:2px solid transparent;border-bottom:2px solid rgba(0,0,0,0.1);border-top:1px solid rgba(0,0,0,0.025);border-left:1px solid rgba(0,0,0,0.025);border-right:1px solid rgba(0,0,0,0.025);color:rgba(0,0,0,0.6);background-color:rgba(255,255,255,1);padding:8px;border-radius:3px}input.svelte-1vc3au4.svelte-1vc3au4:active{background-color:rgba(0,0,0,0.2)}input.svelte-1vc3au4.svelte-1vc3au4:focus{background-color:rgba(0,0,0,0.12);border-top:1px solid rgba(0,0,0,0.2);outline:none;transform:scale(1.1);transition:all 0.1s ease-in-out}textarea.svelte-1vc3au4.svelte-1vc3au4:active{background-color:rgba(0,0,0,0.2);transform:scale(0.9)}textarea.svelte-1vc3au4.svelte-1vc3au4:focus{background-color:rgba(0,0,0,0.12);border-top:1px solid rgba(0,0,0,0.2);outline:none;transform:scale(1.05);transition:all 0.1s ease-in-out}form.svelte-1vc3au4 button.svelte-1vc3au4:hover{background-color:rbga(0,0,0,0.25);border-bottom:2px solid rgba(0,0,0,0.25);border-radius:5px;transform:scale(1.05);transition:all 0.1s ease-in-out}.form.svelte-1vc3au4.svelte-1vc3au4{align-content:center;align-content:center;justify-content:center}.form.svelte-1vc3au4.svelte-1vc3au4{align-content:center;align-content:center;justify-content:center}.formtitle.svelte-1vc3au4.svelte-1vc3au4{font-family:monospace;padding-bottom:12px;padding-left:8px;display:block}.gray.svelte-1vc3au4.svelte-1vc3au4{color:rgba(0,0,0,0.5)}",
+  map: `{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<script context=\\"module\\">\\nexport const hydrate = false;\\nexport const prerender = true;\\nimport Date from '$lib/date.svelte'\\n<\/script>\\n\\n<svelte:head>\\n\\t<title>About \u2022 clp.is</title>\\n</svelte:head>\\n<style>\\n    textarea { \\n\\tpadding: 10px; \\n\\tmargin-top: 4px;\\n\\tborder-radius:5px; \\n\\twidth: 80%;\\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tbackground: rgba(0,0,0,0.05);\\n\\t}\\n\\tlabel {\\n\\t\\tfont-size: 0.9rem;\\n\\t\\tpadding-left: 02px;\\n\\t\\tcolor: rgba(0,0,0,0.6);\\n\\t\\ttext-shadow: 0px 0px 4px rgba(0,0,0,0.05);\\n\\t    }\\n    button {\\n\\tborder: 2px solid transparent;\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.1);\\n\\tborder-top: 1px solid rgba(0,0,0,0.025);\\n\\tborder-left: 1px solid rgba(0,0,0,0.025);\\n\\tborder-right: 1px solid rgba(0,0,0,0.025);\\n\\tcolor: rgba(0,0,0,0.6);\\n\\tbackground-color: rgba(255,255,255,1);\\n\\tpadding: 8px;\\n\\tborder-radius: 3px;\\n\\n\\t}\\n\\tinput:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t    }\\n\\tinput:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.1);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\ttextarea:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t\\ttransform:scale(0.9);\\n\\t    }\\n\\ttextarea:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.05);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\tform button:hover {\\n\\t    background-color: rbga(0,0,0,0.25);\\n\\t    border-bottom: 2px solid rgba(0,0,0,0.25);\\n\\t    border-radius: 5px;\\n\\t    transform:scale(1.05);\\n\\t    transition:all 0.1s ease-in-out;\\n\\t}\\n\\tform button:active {\\n\\n\\t    }\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\n\\n\\t\\t}\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\t}\\n\\n\\n\\t\\t.formtitle {\\n\\t\\t    font-family:monospace;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t    padding-left: 8px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    .gray {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t}\\n\\n/* .walloftext { width: 80%; margin: auto; display:block; } */\\n</style>\\n\\n<h1 id=\\"head\\">About</h1>\\n<p class=\\"walloftext\\">Hi there! And <i>welcome</i> to Chris P's internet property. I'm a budding engineer, a few years out of the University of Washington Materials science & engineering program in Seattle.</p>\\n<p class=\\"walloftext\\">I'm currenlty most practiced in backend software development + cloud infrastructure architecture & engineering. Coming from a physical engineering background, I've had to learn quite a lot in my IT endeavours, both on my own and from the gracious assistance of others, whose patience I am grateful for eternally. I envision that with my multifaceted background and cross-disciplinary engineering cultivation, I can really bring a new perspective to the table in backend development and architecture.</p>\\n\\n<p class=\\"walloftext\\">I'm also working to build <a class=\\"link\\" href=\\"https://devisa.io\\">devisa</a> and <a class=\\"link\\" href=\\"https://idlets.com\\">idlets</a>. Keep in touch with me through real means or quietly stalk my <a class=\\"link\\" href=\\"/etc/updates\\">activity</a> <a class=\\"link\\" href=\\"/posts\\">feeds</a> if you're into that. If you wanna talk, email me at <a href=\\"mailto:clp@clp.is\\" class=\\"link\\">clp@clp.is</a> or message me on LinkedIn. Thank you, sincerely!</p>\\n\\n<p class=\\"walloftext\\">- Chris P<Date date=\\"07-29-21\\"/> </p>\\n<br/><br/>\\n<h3>show yourself!</h3>\\n<div class=\\"form\\">\\n<form class=\\"login\\">\\n    <span class=\\"formtitle\\">Contact <span class=\\"gray\\">me</span></span>\\n\\n    <label for=\\"msg\\">message</label><br/>\\n    <textarea name=\\"msg\\" rows=8/>\\n\\n\\n    <br/><br/>\\n    <label for=\\"email\\">email</label><br/>\\n    <input name=\\"email\\" type=\\"email\\"/>\\n\\n<br/>\\n<br/>\\n    <button label=\\"login\\" type=\\"submit\\">login</button>\\n</form>\\n</div>\\n<br/>\\n<br/>\\n<h3>Pics</h3>\\n<img src=\\"me/closed.jpeg\\" height=\\"275\\" width=\\"275\\"/>\\n<img src=\\"me/stare.jpeg\\" height=\\"275\\" width=\\"275\\"/>\\n<img src=\\"me/cout.jpeg\\" height=\\"275\\" width=\\"275\\"/>\\n"],"names":[],"mappings":"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"}`
 };
 var hydrate$a = false;
 var prerender$a = true;
 var About = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$c);
-  return `${$$result.head += `${$$result.title = `<title>about \u2022 clp.is</title>`, ""}`, ""}
+  $$result.css.add(css$b);
+  return `${$$result.head += `${$$result.title = `<title>About \u2022 clp.is</title>`, ""}`, ""}
 
 
-<h1 id="${"head"}">about</h1>
+<h1 id="${"head"}">About</h1>
 <p class="${"walloftext"}">Hi there! And <i>welcome</i> to Chris P&#39;s internet property. I&#39;m a budding engineer, a few years out of the University of Washington Materials science &amp; engineering program in Seattle.</p>
 <p class="${"walloftext"}">I&#39;m currenlty most practiced in backend software development + cloud infrastructure architecture &amp; engineering. Coming from a physical engineering background, I&#39;ve had to learn quite a lot in my IT endeavours, both on my own and from the gracious assistance of others, whose patience I am grateful for eternally. I envision that with my multifaceted background and cross-disciplinary engineering cultivation, I can really bring a new perspective to the table in backend development and architecture.</p>
 
 <p class="${"walloftext"}">I&#39;m also working to build <a class="${"link"}" href="${"https://devisa.io"}">devisa</a> and <a class="${"link"}" href="${"https://idlets.com"}">idlets</a>. Keep in touch with me through real means or quietly stalk my <a class="${"link"}" href="${"/etc/updates"}">activity</a> <a class="${"link"}" href="${"/posts"}">feeds</a> if you&#39;re into that. If you wanna talk, email me at <a href="${"mailto:clp@clp.is"}" class="${"link"}">clp@clp.is</a> or message me on LinkedIn. Thank you, sincerely!</p>
 
 <p class="${"walloftext"}">- Chris P${validate_component(Date_1, "Date").$$render($$result, { date: "07-29-21" }, {}, {})}</p>
-<br>
+<br><br>
 <h3>show yourself!</h3>
-<div class="${"form svelte-18wpjbr"}"><form class="${"login svelte-18wpjbr"}"><span class="${"formtitle svelte-18wpjbr"}">contact <span class="${"gray svelte-18wpjbr"}">me</span></span>
+<div class="${"form svelte-1vc3au4"}"><form class="${"login svelte-1vc3au4"}"><span class="${"formtitle svelte-1vc3au4"}">Contact <span class="${"gray svelte-1vc3au4"}">me</span></span>
 
-    <label for="${"msg"}" class="${"svelte-18wpjbr"}">message</label><br>
-    <textarea name="${"msg"}" rows="${"8"}" class="${"svelte-18wpjbr"}"></textarea>
+    <label for="${"msg"}" class="${"svelte-1vc3au4"}">message</label><br>
+    <textarea name="${"msg"}" rows="${"8"}" class="${"svelte-1vc3au4"}"></textarea>
 
 
     <br><br>
-    <label for="${"email"}" class="${"svelte-18wpjbr"}">email</label><br>
-    <input name="${"email"}" type="${"email"}" class="${"svelte-18wpjbr"}">
+    <label for="${"email"}" class="${"svelte-1vc3au4"}">email</label><br>
+    <input name="${"email"}" type="${"email"}" class="${"svelte-1vc3au4"}">
 
 <br>
 <br>
-    <button label="${"login"}" type="${"submit"}" class="${"svelte-18wpjbr"}">login</button></form>
-<h3>pics</h3>
-<img src="${"me/closed.jpeg"}" height="${"375"}" width="${"375"}">
-<img src="${"me/stare.jpeg"}" height="${"375"}" width="${"375"}">
-<img src="${"me/cout.jpeg"}" height="${"375"}" width="${"375"}"></div>`;
+    <button label="${"login"}" type="${"submit"}" class="${"svelte-1vc3au4"}">login</button></form></div>
+<br>
+<br>
+<h3>Pics</h3>
+<img src="${"me/closed.jpeg"}" height="${"275"}" width="${"275"}">
+<img src="${"me/stare.jpeg"}" height="${"275"}" width="${"275"}">
+<img src="${"me/cout.jpeg"}" height="${"275"}" width="${"275"}">`;
 });
 var index$9 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -2947,14 +2962,14 @@ var index$9 = /* @__PURE__ */ Object.freeze({
   hydrate: hydrate$a,
   prerender: prerender$a
 });
-var css$b = {
+var css$a = {
   code: "form{padding-left:3%;padding-right:1%;padding-top:2%;padding-bottom:2%;background-color:rgba(0,0,0,0.02);box-shadow:0px 0px 7px rgba(0,0,0,0.00);width:50%;display:block;position:relative;align-content:center;justify-content:center;align-items:center;box-shadow:0px 0px 5px rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.02);border-radius:6px;border-bottom:3px solid rgba(0,0,0,0.09);margin:auto}",
   map: `{"version":3,"file":"pics.svelte","sources":["pics.svelte"],"sourcesContent":["<script context=\\"module\\">\\nexport const hydrate = false;\\nexport const prerender = true;\\nimport Date from '$lib/date.svelte'\\n<\/script>\\n\\n<svelte:head>\\n\\t<title>about/pics \u2022 clp.is</title>\\n</svelte:head>\\n<style>\\n    :global(form) {\\n\\tpadding-left: 3%;\\n\\tpadding-right: 1%;\\n\\tpadding-top: 2%;\\n\\tpadding-bottom: 2%;\\n\\tbackground-color: rgba(0,0,0,0.02);\\n\\tbox-shadow: 0px 0px 7px rgba(0,0,0,0.00);\\n\\twidth: 50%;\\n\\tdisplay: block;\\n\\tposition:relative;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\talign-items: center;\\n\\tbox-shadow: 0px 0px 5px rgba(0,0,0,0.03);\\n\\tborder: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 6px;\\n\\tborder-bottom: 3px solid rgba(0,0,0,0.09);\\n\\tmargin: auto;\\n    }\\n    label::before {\\n\\t    content: \\"$   \\";\\n\\t    font-size: 0.8rem;\\n\\t    color: rgba(0,0,0,0.2);\\n\\t}\\n    input { \\n\\tpadding: 10px; \\n\\tmargin-top: 4px;\\n\\twidth: 80%;\\n\\tborder-radius:5px; \\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tbackground: rgba(0,0,0,0.05);\\n\\t}\\n    textarea { \\n\\tpadding: 10px; \\n\\tmargin-top: 4px;\\n\\tborder-radius:5px; \\n\\twidth: 80%;\\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tbackground: rgba(0,0,0,0.05);\\n\\t}\\n\\tlabel {\\n\\t\\tfont-size: 0.9rem;\\n\\t\\tpadding-left: 02px;\\n\\t\\tcolor: rgba(0,0,0,0.6);\\n\\t\\ttext-shadow: 0px 0px 4px rgba(0,0,0,0.05);\\n\\t    }\\n    button {\\n\\tborder: 2px solid transparent;\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.1);\\n\\tborder-top: 1px solid rgba(0,0,0,0.025);\\n\\tborder-left: 1px solid rgba(0,0,0,0.025);\\n\\tborder-right: 1px solid rgba(0,0,0,0.025);\\n\\tcolor: rgba(0,0,0,0.6);\\n\\tbackground-color: rgba(255,255,255,1);\\n\\tpadding: 8px;\\n\\tborder-radius: 3px;\\n\\n\\t}\\n\\tinput:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t    }\\n\\tinput:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.1);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\ttextarea:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t\\ttransform:scale(0.9);\\n\\t    }\\n\\ttextarea:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.05);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\tform button:hover {\\n\\t    background-color: rbga(0,0,0,0.25);\\n\\t    border-bottom: 2px solid rgba(0,0,0,0.25);\\n\\t    border-radius: 5px;\\n\\t    transform:scale(1.05);\\n\\t    transition:all 0.1s ease-in-out;\\n\\t}\\n\\tform button:active {\\n\\n\\t    }\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\n\\n\\t\\t}\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\t}\\n\\n\\n\\t\\t.formtitle {\\n\\t\\t    font-family:monospace;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t    padding-left: 8px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    .gray {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t}\\n\\n/* .walloftext { width: 80%; margin: auto; display:block; } */\\n</style>\\n\\n<h1 id=\\"head\\">about / pics</h1>\\n"],"names":[],"mappings":"AAUY,IAAI,AAAE,CAAC,AAClB,YAAY,CAAE,EAAE,CAChB,aAAa,CAAE,EAAE,CACjB,WAAW,CAAE,EAAE,CACf,cAAc,CAAE,EAAE,CAClB,gBAAgB,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAClC,UAAU,CAAE,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACxC,KAAK,CAAE,GAAG,CACV,OAAO,CAAE,KAAK,CACd,SAAS,QAAQ,CACjB,aAAa,CAAE,MAAM,CACrB,gBAAgB,MAAM,CACtB,WAAW,CAAE,MAAM,CACnB,UAAU,CAAE,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACxC,MAAM,CAAE,GAAG,CAAC,KAAK,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAClC,aAAa,CAAE,GAAG,CAClB,aAAa,CAAE,GAAG,CAAC,KAAK,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACzC,MAAM,CAAE,IAAI,AACT,CAAC"}`
 };
 var hydrate$9 = false;
 var prerender$9 = true;
 var Pics = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$b);
+  $$result.css.add(css$a);
   return `${$$result.head += `${$$result.title = `<title>about/pics \u2022 clp.is</title>`, ""}`, ""}
 
 
@@ -2970,8 +2985,8 @@ var pics = /* @__PURE__ */ Object.freeze({
 var hydrate$8 = false;
 var prerender$8 = true;
 var Links = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `${$$result.head += `${$$result.title = `<title>links \u2022 clp.is</title>`, ""}`, ""}
-<h1 id="${"head"}">links</h1>`;
+  return `${$$result.head += `${$$result.title = `<title>Links \u2022 clp.is</title>`, ""}`, ""}
+<h1 id="${"head"}">Links</h1>`;
 });
 var index$8 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -2983,10 +2998,10 @@ var index$8 = /* @__PURE__ */ Object.freeze({
 var hydrate$7 = false;
 var prerender$7 = true;
 var Posts = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `${$$result.head += `${$$result.title = `<title>posts \u2022 clp.is</title>`, ""}`, ""}
+  return `${$$result.head += `${$$result.title = `<title>Posts \u2022 clp.is</title>`, ""}`, ""}
 
 
-<h1 id="${"head"}">posts</h1>
+<h1 id="${"head"}">Posts</h1>
 <p>this is where posts will be</p>
 
 <h2>list</h2>
@@ -3015,27 +3030,36 @@ var _slug_ = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": U5Bslugu5D
 });
-var css$a = {
-  code: 'form{padding-left:2%;padding-right:2%;background-color:rgba(0,0,0,0.02);box-shadow:0px 0px 7px rgba(0,0,0,0.00);display:inline-flex;transition:all 0.15s ease-in-out;align-self:center;margin:10px 15px;border:1px solid rgba(0,0,0,0.0025);border-radius:6px;border-bottom:3px solid rgba(0,0,0,0.09);place-self:center;place-items:center;width:10%}label.svelte-hvaqce.svelte-hvaqce::before{content:"$   ";font-size:0.8rem;color:rgba(0,0,0,0.2)}input.svelte-hvaqce.svelte-hvaqce{padding:10px;margin-top:4px;border-radius:5px;width:90%;border:1px transparent;border-top:1px solid rgba(0,0,0,0.1);background:rgba(0,0,0,0.05)}label.svelte-hvaqce.svelte-hvaqce{font-size:0.9rem;padding-left:02px;color:rgba(0,0,0,0.6);text-shadow:0px 0px 4px rgba(0,0,0,0.05)}button.svelte-hvaqce.svelte-hvaqce{border:2px solid transparent;border-bottom:2px solid rgba(0,0,0,0.1);border-top:1px solid rgba(0,0,0,0.025);border-left:1px solid rgba(0,0,0,0.025);border-right:1px solid rgba(0,0,0,0.025);color:rgba(0,0,0,0.6);background-color:rgba(255,255,255,1);padding:8px;border-radius:3px;transition:all 0.15s ease-in-out}input.svelte-hvaqce.svelte-hvaqce:active{background-color:rgba(0,0,0,0.2)}input.svelte-hvaqce.svelte-hvaqce:focus{background-color:rgba(0,0,0,0.12);border-top:1px solid rgba(0,0,0,0.2);outline:none;transform:scale(1.1);transition:all 0.1s ease-in-out}form.svelte-hvaqce button.svelte-hvaqce:hover{background-color:rbga(0,0,0,0.25);border-bottom:2px solid rgba(0,0,0,0.25);border-radius:5px;transform:scale(1.1);transition:all 0.1s ease-in-out}.formtitle.svelte-hvaqce.svelte-hvaqce{font-family:monospace;padding-bottom:12px;padding-left:8px;display:block}.gray.svelte-hvaqce.svelte-hvaqce{color:rgba(0,0,0,0.5)}',
-  map: '{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<style>\\n   :global(form) {\\npadding-left: 2%;\\npadding-right: 2%;\\nbackground-color: rgba(0,0,0,0.02);\\nbox-shadow: 0px 0px 7px rgba(0,0,0,0.00);\\ndisplay: inline-flex;\\ntransition: all 0.15s ease-in-out;\\nalign-self: center;\\nmargin: 10px 15px;\\nborder: 1px solid rgba(0,0,0,0.0025);\\nborder-radius: 6px;\\nborder-bottom: 3px solid rgba(0,0,0,0.09);\\nplace-self: center;\\nplace-items: center;\\nwidth: 10%;\\n   }\\n   label::before {\\n    content: \\"$   \\";\\n    font-size: 0.8rem;\\n    color: rgba(0,0,0,0.2);\\n}\\n   input { \\npadding: 10px; \\nmargin-top: 4px;\\nborder-radius:5px; \\nwidth: 90%;\\nborder: 1px transparent; \\nborder-top: 1px solid rgba(0,0,0,0.1);\\nbackground: rgba(0,0,0,0.05);\\n}\\nlabel {\\n\\tfont-size: 0.9rem;\\n\\tpadding-left: 02px;\\n\\tcolor: rgba(0,0,0,0.6);\\n\\ttext-shadow: 0px 0px 4px rgba(0,0,0,0.05);\\n    }\\n   button {\\nborder: 2px solid transparent;\\nborder-bottom: 2px solid rgba(0,0,0,0.1);\\nborder-top: 1px solid rgba(0,0,0,0.025);\\nborder-left: 1px solid rgba(0,0,0,0.025);\\nborder-right: 1px solid rgba(0,0,0,0.025);\\ncolor: rgba(0,0,0,0.6);\\nbackground-color: rgba(255,255,255,1);\\npadding: 8px;\\nborder-radius: 3px;\\ntransition: all 0.15s ease-in-out;\\n\\n}\\ninput:active {\\n\\tbackground-color: rgba(0,0,0,0.2);\\n    }\\ninput:focus {\\n\\tbackground-color: rgba(0,0,0,0.12);\\n\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\toutline:none;\\n\\ttransform:scale(1.1);\\n\\ttransition: all 0.1s ease-in-out;\\n    }\\nform button:hover {\\n    background-color: rbga(0,0,0,0.25);\\n    border-bottom: 2px solid rgba(0,0,0,0.25);\\n    border-radius: 5px;\\n    transform:scale(1.1);\\n    transition:all 0.1s ease-in-out;\\n}\\nform button:active {\\n\\n    }\\n\\t.formtitle {\\n\\t    font-family:monospace;\\n\\t    padding-bottom: 12px;\\n\\t    padding-left: 8px;\\n\\t\\tdisplay:block;\\n\\t    }\\n\\t    .gray {\\n\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t}\\n</style>\\n<h1>auth</h1>\\n\\n<div class=\\"form\\">\\n<form class=\\"login\\">\\n    <span class=\\"formtitle\\">log <span class=\\"gray\\">in</span></span>\\n\\n    <label for=\\"user\\">user</label><br/>\\n    <input name=\\"user\\" placeholder=\\"user\\"/>\\n\\n\\n    <br/><br/>\\n    <label for=\\"passwor\\">pass</label><br/>\\n    <input name=\\"password\\" type=\\"password\\" placeholder=\\"password\\"/>\\n\\n<br/>\\n<br/>\\n    <button label=\\"login\\">login</button>\\n</form>\\n</div>\\n"],"names":[],"mappings":"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"}'
-};
 var Auth = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$a);
-  return `<h1>auth</h1>
+  return `${$$result.head += `${$$result.title = `<title>Auth \u2022 clp.is</title>`, ""}`, ""}
 
-<div class="${"form"}"><form class="${"login svelte-hvaqce"}"><span class="${"formtitle svelte-hvaqce"}">log <span class="${"gray svelte-hvaqce"}">in</span></span>
 
-    <label for="${"user"}" class="${"svelte-hvaqce"}">user</label><br>
-    <input name="${"user"}" placeholder="${"user"}" class="${"svelte-hvaqce"}">
+<div class="${"form"}"><form class="${"login"}"><span class="${"formtitle"}">Log <span class="${"gray"}">in</span> to clp.is</span>
+
+    <label for="${"email"}">E-mail</label><br>
+    <input name="${"email"}" placeholder="${"E-mail"}">
 
 
     <br><br>
-    <label for="${"passwor"}" class="${"svelte-hvaqce"}">pass</label><br>
-    <input name="${"password"}" type="${"password"}" placeholder="${"password"}" class="${"svelte-hvaqce"}">
+    <label for="${"passwor"}">Password</label><br>
+    <input name="${"password"}" type="${"password"}" placeholder="${"password"}">
 
 <br>
 <br>
-    <button label="${"login"}" class="${"svelte-hvaqce"}">login</button></form></div>`;
+    <button label="${"login"}">Login</button></form>
+<form class="${"sigunp"}"><span class="${"formtitle"}">(Apply) to sign up <span class="${"gray"}">up</span> to clp.is</span>
+
+    <label for="${"email"}">E-mail</label><br>
+    <input name="${"email"}" placeholder="${"E-mail"}">
+
+
+    <br><br>
+    <label for="${"password"}">Password</label><br>
+    <input name="${"password"}" type="${"password"}" placeholder="${"Password"}">
+
+<br>
+<br>
+    <button label="${"login"}">Next</button></form></div>`;
 });
 var index$6 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -3109,11 +3133,11 @@ var uses = /* @__PURE__ */ Object.freeze({
 var hydrate$5 = false;
 var prerender$5 = true;
 var Etc = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `${$$result.head += `${$$result.title = `<title>etc \u2022 clp.is</title>`, ""}`, ""}
+  return `${$$result.head += `${$$result.title = `<title>Etcetera \u2022 clp.is</title>`, ""}`, ""}
 
 
 
-<h1 id="${"head"}">etc</h1>
+<h1 id="${"head"}">Etc.</h1>
 <p>${validate_component(Date_1, "Date").$$render($$result, { date: "07/14/21" }, {}, {})}welcome to the attic of my site</p>
 <h3>cool and great info</h3>
 <ul><li><a class="${"link"}" href="${"/etc/updates"}">updates</a>:  \xA0\xA0updates${validate_component(Date_1, "Date").$$render($$result, { date: "08-10-21" }, {}, {})}</li>
@@ -3248,11 +3272,12 @@ var plangs = /* @__PURE__ */ Object.freeze({
 });
 var css$4 = {
   code: ".l.svelte-bth4dt{list-style:decimal}",
-  map: '{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<style>\\n   .l {\\n    list-style: decimal;\\n}\\n</style>\\n<h1>lab</h1>\\n<ul class=\\"l\\">\\n\\t<li><a class=\\"link ext\\" href=\\"https://github.com/clpi/dotfiles\\">dotfiles</a>:  &nbsp;&nbsp;My dotfiles for nvim, alacritty, tmux, etc.</li>\\n</ul>\\n"],"names":[],"mappings":"AACG,EAAE,cAAC,CAAC,AACH,UAAU,CAAE,OAAO,AACvB,CAAC"}'
+  map: '{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<style>\\n   .l {\\n    list-style: decimal;\\n}\\n</style>\\n<svelte:head>\\n\\t<title>Lab \u2022 clp.is</title>\\n</svelte:head>\\n<h1>lab</h1>\\n<ul class=\\"l\\">\\n\\t<li><a class=\\"link ext\\" href=\\"https://github.com/clpi/dotfiles\\">dotfiles</a>:  &nbsp;&nbsp;My dotfiles for nvim, alacritty, tmux, etc.</li>\\n</ul>\\n"],"names":[],"mappings":"AACG,EAAE,cAAC,CAAC,AACH,UAAU,CAAE,OAAO,AACvB,CAAC"}'
 };
 var Lab = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$result.css.add(css$4);
-  return `<h1>lab</h1>
+  return `${$$result.head += `${$$result.title = `<title>Lab \u2022 clp.is</title>`, ""}`, ""}
+<h1>lab</h1>
 <ul class="${"l svelte-bth4dt"}"><li><a class="${"link ext"}" href="${"https://github.com/clpi/dotfiles"}">dotfiles</a>:  \xA0\xA0My dotfiles for nvim, alacritty, tmux, etc.</li></ul>`;
 });
 var index$3 = /* @__PURE__ */ Object.freeze({
@@ -3262,15 +3287,15 @@ var index$3 = /* @__PURE__ */ Object.freeze({
 });
 var css$3 = {
   code: ".tag.svelte-oucym9{padding:3px;margin:3px;border-radius:3px;font-size:0.85rem;color:rgba(0,0,0,0.28);background-color:rgba(0,0,0,0.06)}.tag.svelte-oucym9:hover{background-color:rgba(0,0,0,0.10);transform:scale(1.1);transition:all 0.2s ease-in-out;color:rgba(0,0,0,0.38)}.lite.svelte-oucym9{color:rgba(0,0,0,0.5)}",
-  map: `{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["\\n<svelte:head>\\n\\t<title>projects \u2022 clp.is</title>\\n</svelte:head>\\n\\n<script>\\nimport  Date  from '$lib/date.svelte'\\n<\/script>\\n<style>\\n   /* :global(.ext::after) {\\ncontent: \\" [->]\\";\\nfont-size: 0.6rem;\\ntransition: all 0.15s ease-in-out;\\ncolor: rgba(0,0,0,0.4);\\n   }\\n   :global(.ext:hover::after) {\\ncontent: \\" [->]\\";\\ntransition: all 0.15s ease-in-out;\\n   } */\\n   .tag { \\npadding: 3px;\\nmargin: 3px;\\nborder-radius: 3px;\\nfont-size: 0.85rem;\\ncolor: rgba(0,0,0,0.28);\\nbackground-color: rgba(0,0,0,0.06);\\n\\n}\\n.tag:hover {\\n\\tbackground-color: rgba(0,0,0,0.10);\\n\\ttransform: scale(1.1);\\n\\ttransition: all 0.2s ease-in-out;\\ncolor: rgba(0,0,0,0.38);\\n    }\\n   .lite { color: rgba(0,0,0,0.5);}\\n</style>\\n<h1 id=\\"head\\">projects</h1>\\n<ul>\\n<li><a class=\\"link\\" href=\\"/p/recollection\\">recollection</a>  <a class=\\"link ext lite\\" href=\\"https://github.com/clpi/recollection\\"> (github)</a>:&nbsp;&nbsp; implementations and reimplementations of common data structures & algorithms, both in and out of the rust std library. a work in progress in its very infant stage. mostly meant for future project utility.<span class='tag'>#lib</span><span class='tag'>#rust</span><Date date=\\"07-29-21\\"/></li>\\n<li><a class=\\"link\\" href=\\"/p/iz\\">iz</a>  <a class=\\"link ext lite\\" href=\\"https://github.com/clpi/iz\\"> (github)</a>:&nbsp;&nbsp; Zig implementation of CLI utility to automate and motivate daily data tasks esp. regarding health, like logging blood glucose levels for type 1 diabetics and performing elementary data analaysis and management. Also using to learn zig and generally become more experienced, as well as  uprototyping certain ideas for down the road. <span class='tag'>#zig</span><span class=\\"tag\\">#nim</span><span class=\\"tag\\">#cli</span><Date date=\\"08-07-21\\"/></li>\\n</ul>\\n<p>Last updated <Date date=\\"08-07-21\\"/>. Not a comprehensive list</p>\\n<br/>\\n\\n\\n"],"names":[],"mappings":"AAmBG,IAAI,cAAC,CAAC,AACT,OAAO,CAAE,GAAG,CACZ,MAAM,CAAE,GAAG,CACX,aAAa,CAAE,GAAG,CAClB,SAAS,CAAE,OAAO,CAClB,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACvB,gBAAgB,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAElC,CAAC,AACD,kBAAI,MAAM,AAAC,CAAC,AACX,gBAAgB,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAClC,SAAS,CAAE,MAAM,GAAG,CAAC,CACrB,UAAU,CAAE,GAAG,CAAC,IAAI,CAAC,WAAW,CACjC,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AACnB,CAAC,AACF,KAAK,cAAC,CAAC,AAAC,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,AAAC,CAAC"}`
+  map: `{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["\\n<svelte:head>\\n\\t<title>Projects \u2022 clp.is</title>\\n</svelte:head>\\n\\n<script>\\nimport  Date  from '$lib/date.svelte'\\n<\/script>\\n<style>\\n   /* :global(.ext::after) {\\ncontent: \\" [->]\\";\\nfont-size: 0.6rem;\\ntransition: all 0.15s ease-in-out;\\ncolor: rgba(0,0,0,0.4);\\n   }\\n   :global(.ext:hover::after) {\\ncontent: \\" [->]\\";\\ntransition: all 0.15s ease-in-out;\\n   } */\\n   .tag { \\npadding: 3px;\\nmargin: 3px;\\nborder-radius: 3px;\\nfont-size: 0.85rem;\\ncolor: rgba(0,0,0,0.28);\\nbackground-color: rgba(0,0,0,0.06);\\n\\n}\\n.tag:hover {\\n\\tbackground-color: rgba(0,0,0,0.10);\\n\\ttransform: scale(1.1);\\n\\ttransition: all 0.2s ease-in-out;\\ncolor: rgba(0,0,0,0.38);\\n    }\\n   .lite { color: rgba(0,0,0,0.5);}\\n</style>\\n<h1 id=\\"head\\">Projects</h1>\\n<ul>\\n<li><a class=\\"link\\" href=\\"/p/recollection\\">recollection</a>  <a class=\\"link ext lite\\" href=\\"https://github.com/clpi/recollection\\"> (github)</a>:&nbsp;&nbsp; implementations and reimplementations of common data structures & algorithms, both in and out of the rust std library. a work in progress in its very infant stage. mostly meant for future project utility.<span class='tag'>#lib</span><span class='tag'>#rust</span><Date date=\\"07-29-21\\"/></li>\\n<li><a class=\\"link\\" href=\\"/p/iz\\">iz</a>  <a class=\\"link ext lite\\" href=\\"https://github.com/clpi/iz\\"> (github)</a>:&nbsp;&nbsp; Zig implementation of CLI utility to automate and motivate daily data tasks esp. regarding health, like logging blood glucose levels for type 1 diabetics and performing elementary data analaysis and management. Also using to learn zig and generally become more experienced, as well as  uprototyping certain ideas for down the road. <span class='tag'>#zig</span><span class=\\"tag\\">#nim</span><span class=\\"tag\\">#cli</span><Date date=\\"08-07-21\\"/></li>\\n</ul>\\n<p>Last updated <Date date=\\"08-07-21\\"/>. Not a comprehensive list</p>\\n<br/>\\n\\n\\n"],"names":[],"mappings":"AAmBG,IAAI,cAAC,CAAC,AACT,OAAO,CAAE,GAAG,CACZ,MAAM,CAAE,GAAG,CACX,aAAa,CAAE,GAAG,CAClB,SAAS,CAAE,OAAO,CAClB,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACvB,gBAAgB,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAElC,CAAC,AACD,kBAAI,MAAM,AAAC,CAAC,AACX,gBAAgB,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAClC,SAAS,CAAE,MAAM,GAAG,CAAC,CACrB,UAAU,CAAE,GAAG,CAAC,IAAI,CAAC,WAAW,CACjC,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AACnB,CAAC,AACF,KAAK,cAAC,CAAC,AAAC,KAAK,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,AAAC,CAAC"}`
 };
 var P = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$result.css.add(css$3);
-  return `${$$result.head += `${$$result.title = `<title>projects \u2022 clp.is</title>`, ""}`, ""}
+  return `${$$result.head += `${$$result.title = `<title>Projects \u2022 clp.is</title>`, ""}`, ""}
 
 
 
-<h1 id="${"head"}">projects</h1>
+<h1 id="${"head"}">Projects</h1>
 <ul><li><a class="${"link"}" href="${"/p/recollection"}">recollection</a>  <a class="${"link ext lite svelte-oucym9"}" href="${"https://github.com/clpi/recollection"}">(github)</a>:\xA0\xA0 implementations and reimplementations of common data structures &amp; algorithms, both in and out of the rust std library. a work in progress in its very infant stage. mostly meant for future project utility.<span class="${"tag svelte-oucym9"}">#lib</span><span class="${"tag svelte-oucym9"}">#rust</span>${validate_component(Date_1, "Date").$$render($$result, { date: "07-29-21" }, {}, {})}</li>
 <li><a class="${"link"}" href="${"/p/iz"}">iz</a>  <a class="${"link ext lite svelte-oucym9"}" href="${"https://github.com/clpi/iz"}">(github)</a>:\xA0\xA0 Zig implementation of CLI utility to automate and motivate daily data tasks esp. regarding health, like logging blood glucose levels for type 1 diabetics and performing elementary data analaysis and management. Also using to learn zig and generally become more experienced, as well as  uprototyping certain ideas for down the road. <span class="${"tag svelte-oucym9"}">#zig</span><span class="${"tag svelte-oucym9"}">#nim</span><span class="${"tag svelte-oucym9"}">#cli</span>${validate_component(Date_1, "Date").$$render($$result, { date: "08-07-21" }, {}, {})}</li></ul>
 <p>Last updated ${validate_component(Date_1, "Date").$$render($$result, { date: "08-07-21" }, {}, {})}. Not a comprehensive list</p>
