@@ -1,6 +1,6 @@
 
 <svelte:head>
-	<title>posts • clp.is</title>
+	<title>Posts • clp.is</title>
 </svelte:head>
 <script context="module">
 	export const hydrate = false;

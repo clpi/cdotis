@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>about • clp.is</title>
+	<title>About • clp.is</title>
 </svelte:head>
 <style>
     :global(form) {

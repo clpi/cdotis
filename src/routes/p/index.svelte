@@ -1,6 +1,6 @@
 
 <svelte:head>
-	<title>projects • clp.is</title>
+	<title>Projects • clp.is</title>
 </svelte:head>
 
 <script>

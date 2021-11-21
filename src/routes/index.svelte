@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>home • clp.is</title>
+	<title>Home • clp.is</title>
 </svelte:head>
 
 <script>

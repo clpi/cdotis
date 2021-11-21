@@ -3,6 +3,6 @@
 	export const prerender = true;
 </script>
 <svelte:head>
-	<title>links • clp.is</title>
+	<title>Links • clp.is</title>
 </svelte:head>
 <h1 id="head">Links</h1>

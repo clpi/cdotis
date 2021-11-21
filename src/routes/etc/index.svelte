@@ -1,7 +1,7 @@
 
 
 <svelte:head>
-	<title>etc • clp.is</title>
+	<title>Etcetera • clp.is</title>
 </svelte:head>
 <script context="module">
 import  Date  from '$lib/date.svelte'

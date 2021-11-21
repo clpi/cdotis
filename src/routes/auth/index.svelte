@@ -1,3 +1,6 @@
+<svelte:head>
+	<title>Auth • clp.is</title>
+</svelte:head>
 <style>
     :global(form) {
 	padding-left: 2%;
