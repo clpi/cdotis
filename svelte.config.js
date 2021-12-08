@@ -14,10 +14,10 @@ const config = {
     kit: {
 	// hydrate the <div id="svelte"> element in src/app.html
 	target: '#svelte',
-	adapter: vercel()
-	/* vite: () => ({
+	adapter: vercel(),
+	vite: () => ({
 	    resolve: {
-		alias: {
+		/* alias: {
 		    $stores: resolve(__dirname, './src/stores'),
 		    $components: resolve(__dirname, './src/lib/shared/components'),
 		    $ui: resolve(__dirname, './src/lib/shared/ui'),
@@ -28,12 +28,11 @@ const config = {
 		    $core: resolve(__dirname, './src/lib/core'),
 		    $utils: resolve(__dirname, './src/lib/utils'),
 		    $environment: resolve(__dirname, './src/environments'),
-		},
+		}, */
 	    },
 	    envPrefix: ['VITE_', 'SVELTEKIT_STARTER_'],
-	    plugins: [imagetools({ force: true })],
+	    // plugins: [imagetools({ force: true })],
 	}),
-	*/
      },
 };
 

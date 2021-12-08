@@ -293,6 +293,14 @@ import Footer from '../lib/footer.svelte';
 	    transform:scale(1.1);
 	    transition:all 0.1s ease-in-out;
 	}
+	:global(.secondary) {
+	    background-color: rbga(0,0,0,0.25);
+
+	    }
+	:global(.secondary:hover) {
+	    background-color: rbga(0,0,0,0.35);
+
+	    }
 		:global(.formtitle) {
 		    font-family:Helvetica;
 		    padding-bottom: 12px;

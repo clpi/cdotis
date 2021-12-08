@@ -845,7 +845,7 @@ async function fetch(url, options_) {
       resolve2(response2);
       return;
     }
-    const send = (options2.protocol === "https:" ? import_https.default : import_http.default).request;
+    const send2 = (options2.protocol === "https:" ? import_https.default : import_http.default).request;
     const { signal } = request;
     let response = null;
     const abort = () => {
@@ -867,7 +867,7 @@ async function fetch(url, options_) {
       abort();
       finalize();
     };
-    const request_ = send(options2);
+    const request_ = send2(options2);
     if (signal) {
       signal.addEventListener("abort", abortAndFinalize);
     }
@@ -1422,7 +1422,7 @@ async function render_response({
     error2.stack = options2.get_stack(error2);
   }
   if (page_config.ssr) {
-    branch.forEach(({ node, loaded, fetched, uses_credentials }) => {
+    branch.forEach(({ node, loaded: loaded2, fetched, uses_credentials }) => {
       if (node.css)
         node.css.forEach((url) => css2.add(url));
       if (node.js)
@@ -1433,7 +1433,7 @@ async function render_response({
         serialized_data.push(...fetched);
       if (uses_credentials)
         is_private = true;
-      maxage = loaded.maxage;
+      maxage = loaded2.maxage;
     });
     const session = writable($session);
     const props = {
@@ -1563,17 +1563,17 @@ function serialize_error(error2) {
   }
   return serialized;
 }
-function normalize(loaded) {
-  const has_error_status = loaded.status && loaded.status >= 400 && loaded.status <= 599 && !loaded.redirect;
-  if (loaded.error || has_error_status) {
-    const status = loaded.status;
-    if (!loaded.error && has_error_status) {
+function normalize(loaded2) {
+  const has_error_status = loaded2.status && loaded2.status >= 400 && loaded2.status <= 599 && !loaded2.redirect;
+  if (loaded2.error || has_error_status) {
+    const status = loaded2.status;
+    if (!loaded2.error && has_error_status) {
       return {
         status: status || 500,
         error: new Error()
       };
     }
-    const error2 = typeof loaded.error === "string" ? new Error(loaded.error) : loaded.error;
+    const error2 = typeof loaded2.error === "string" ? new Error(loaded2.error) : loaded2.error;
     if (!(error2 instanceof Error)) {
       return {
         status: 500,
@@ -1586,21 +1586,21 @@ function normalize(loaded) {
     }
     return { status, error: error2 };
   }
-  if (loaded.redirect) {
-    if (!loaded.status || Math.floor(loaded.status / 100) !== 3) {
+  if (loaded2.redirect) {
+    if (!loaded2.status || Math.floor(loaded2.status / 100) !== 3) {
       return {
         status: 500,
         error: new Error('"redirect" property returned from load() must be accompanied by a 3xx status code')
       };
     }
-    if (typeof loaded.redirect !== "string") {
+    if (typeof loaded2.redirect !== "string") {
       return {
         status: 500,
         error: new Error('"redirect" property returned from load() must be a string')
       };
     }
   }
-  return loaded;
+  return loaded2;
 }
 var s = JSON.stringify;
 async function load_node({
@@ -1621,7 +1621,7 @@ async function load_node({
   const { module: module2 } = node;
   let uses_credentials = false;
   const fetched = [];
-  let loaded;
+  let loaded2;
   const page_proxy = new Proxy(page2, {
     get: (target, prop, receiver) => {
       if (prop === "query" && prerender_enabled) {
@@ -1761,19 +1761,19 @@ async function load_node({
       load_input.status = status;
       load_input.error = error2;
     }
-    loaded = await module2.load.call(null, load_input);
+    loaded2 = await module2.load.call(null, load_input);
   } else {
-    loaded = {};
+    loaded2 = {};
   }
-  if (!loaded && is_leaf && !is_error)
+  if (!loaded2 && is_leaf && !is_error)
     return;
-  if (!loaded) {
+  if (!loaded2) {
     throw new Error(`${node.entry} - load must return a value except for page fall through`);
   }
   return {
     node,
-    loaded: normalize(loaded),
-    context: loaded.context || context,
+    loaded: normalize(loaded2),
+    context: loaded2.context || context,
     fetched,
     uses_credentials
   };
@@ -1849,7 +1849,7 @@ async function respond_with_error({ request, options: options2, state, $session,
     query: request.query,
     params: {}
   };
-  const loaded = await load_node({
+  const loaded2 = await load_node({
     request,
     options: options2,
     state,
@@ -1863,7 +1863,7 @@ async function respond_with_error({ request, options: options2, state, $session,
     is_error: false
   });
   const branch = [
-    loaded,
+    loaded2,
     await load_node({
       request,
       options: options2,
@@ -1872,7 +1872,7 @@ async function respond_with_error({ request, options: options2, state, $session,
       page: page2,
       node: default_error,
       $session,
-      context: loaded ? loaded.context : {},
+      context: loaded2 ? loaded2.context : {},
       prerender_enabled: is_prerender_enabled(options2, default_error, state),
       is_leaf: false,
       is_error: true,
@@ -1941,10 +1941,10 @@ async function respond$1(opts) {
       let context = {};
       for (let i = 0; i < nodes.length; i += 1) {
         const node = nodes[i];
-        let loaded;
+        let loaded2;
         if (node) {
           try {
-            loaded = await load_node({
+            loaded2 = await load_node({
               ...opts,
               node,
               context,
@@ -1952,18 +1952,18 @@ async function respond$1(opts) {
               is_leaf: i === nodes.length - 1,
               is_error: false
             });
-            if (!loaded)
+            if (!loaded2)
               return;
-            if (loaded.loaded.redirect) {
+            if (loaded2.loaded.redirect) {
               return {
-                status: loaded.loaded.status,
+                status: loaded2.loaded.status,
                 headers: {
-                  location: encodeURI(loaded.loaded.redirect)
+                  location: encodeURI(loaded2.loaded.redirect)
                 }
               };
             }
-            if (loaded.loaded.error) {
-              ({ status, error: error2 } = loaded.loaded);
+            if (loaded2.loaded.error) {
+              ({ status, error: error2 } = loaded2.loaded);
             }
           } catch (err) {
             const e = coalesce_to_error(err);
@@ -1971,8 +1971,8 @@ async function respond$1(opts) {
             status = 500;
             error2 = e;
           }
-          if (loaded && !error2) {
-            branch.push(loaded);
+          if (loaded2 && !error2) {
+            branch.push(loaded2);
           }
           if (error2) {
             while (i--) {
@@ -2017,10 +2017,10 @@ async function respond$1(opts) {
             });
           }
         }
-        if (loaded && loaded.loaded.context) {
+        if (loaded2 && loaded2.loaded.context) {
           context = {
             ...context,
-            ...loaded.loaded.context
+            ...loaded2.loaded.context
           };
         }
       }
@@ -2300,12 +2300,17 @@ function blank_object() {
 function run_all(fns) {
   fns.forEach(run);
 }
-function subscribe(store, ...callbacks) {
+function subscribe(store, ...callbacks2) {
   if (store == null) {
     return noop2;
   }
-  const unsub = store.subscribe(...callbacks);
+  const unsub = store.subscribe(...callbacks2);
   return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+}
+function custom_event(type, detail) {
+  const e = document.createEvent("CustomEvent");
+  e.initCustomEvent(type, false, false, detail);
+  return e;
 }
 var current_component;
 function set_current_component(component) {
@@ -2322,6 +2327,21 @@ function onMount(fn) {
 function afterUpdate(fn) {
   get_current_component().$$.after_update.push(fn);
 }
+function onDestroy(fn) {
+  get_current_component().$$.on_destroy.push(fn);
+}
+function createEventDispatcher() {
+  const component = get_current_component();
+  return (type, detail) => {
+    const callbacks2 = component.$$.callbacks[type];
+    if (callbacks2) {
+      const event = custom_event(type, detail);
+      callbacks2.slice().forEach((fn) => {
+        fn.call(component, event);
+      });
+    }
+  };
+}
 function setContext(key, context) {
   get_current_component().$$.context.set(key, context);
 }
@@ -2329,6 +2349,58 @@ function getContext(key) {
   return get_current_component().$$.context.get(key);
 }
 Promise.resolve();
+var boolean_attributes = new Set([
+  "allowfullscreen",
+  "allowpaymentrequest",
+  "async",
+  "autofocus",
+  "autoplay",
+  "checked",
+  "controls",
+  "default",
+  "defer",
+  "disabled",
+  "formnovalidate",
+  "hidden",
+  "ismap",
+  "loop",
+  "multiple",
+  "muted",
+  "nomodule",
+  "novalidate",
+  "open",
+  "playsinline",
+  "readonly",
+  "required",
+  "reversed",
+  "selected"
+]);
+var invalid_attribute_name_character = /[\s'">/=\u{FDD0}-\u{FDEF}\u{FFFE}\u{FFFF}\u{1FFFE}\u{1FFFF}\u{2FFFE}\u{2FFFF}\u{3FFFE}\u{3FFFF}\u{4FFFE}\u{4FFFF}\u{5FFFE}\u{5FFFF}\u{6FFFE}\u{6FFFF}\u{7FFFE}\u{7FFFF}\u{8FFFE}\u{8FFFF}\u{9FFFE}\u{9FFFF}\u{AFFFE}\u{AFFFF}\u{BFFFE}\u{BFFFF}\u{CFFFE}\u{CFFFF}\u{DFFFE}\u{DFFFF}\u{EFFFE}\u{EFFFF}\u{FFFFE}\u{FFFFF}\u{10FFFE}\u{10FFFF}]/u;
+function spread(args, classes_to_add) {
+  const attributes = Object.assign({}, ...args);
+  if (classes_to_add) {
+    if (attributes.class == null) {
+      attributes.class = classes_to_add;
+    } else {
+      attributes.class += " " + classes_to_add;
+    }
+  }
+  let str = "";
+  Object.keys(attributes).forEach((name) => {
+    if (invalid_attribute_name_character.test(name))
+      return;
+    const value = attributes[name];
+    if (value === true)
+      str += " " + name;
+    else if (boolean_attributes.has(name.toLowerCase())) {
+      if (value)
+        str += " " + name;
+    } else if (value != null) {
+      str += ` ${name}="${value}"`;
+    }
+  });
+  return str;
+}
 var escaped2 = {
   '"': "&quot;",
   "'": "&#39;",
@@ -2338,6 +2410,16 @@ var escaped2 = {
 };
 function escape2(html) {
   return String(html).replace(/["'&<>]/g, (match) => escaped2[match]);
+}
+function escape_attribute_value(value) {
+  return typeof value === "string" ? escape2(value) : value;
+}
+function escape_object(obj) {
+  const result = {};
+  for (const key in obj) {
+    result[key] = escape_attribute_value(obj[key]);
+  }
+  return result;
 }
 var missing_component = {
   $$render: () => ""
@@ -2475,9 +2557,9 @@ function init(settings = default_settings) {
     amp: false,
     dev: false,
     entry: {
-      file: "/./_app/start-ac9f699c.js",
+      file: "/./_app/start-e2fede94.js",
       css: ["/./_app/assets/start-c550a47d.css"],
-      js: ["/./_app/start-ac9f699c.js", "/./_app/chunks/vendor-33ac96d6.js"]
+      js: ["/./_app/start-e2fede94.js", "/./_app/chunks/vendor-6926e56a.js"]
     },
     fetched: void 0,
     floc: false,
@@ -2510,7 +2592,7 @@ function init(settings = default_settings) {
 var d = decodeURIComponent;
 var empty = () => ({});
 var manifest = {
-  assets: [{ "file": ".DS_Store", "size": 6148, "type": null }, { "file": "favicon.png", "size": 1571, "type": "image/png" }, { "file": "me/closed.jpeg", "size": 1620728, "type": "image/jpeg" }, { "file": "me/cout.jpeg", "size": 2039614, "type": "image/jpeg" }, { "file": "me/stare.jpeg", "size": 3015008, "type": "image/jpeg" }, { "file": "me/zoomedcout.jpeg", "size": 456628, "type": "image/jpeg" }, { "file": "swappy-20210729_134838.png", "size": 488459, "type": "image/png" }, { "file": "swappy-20210729_135416.png", "size": 556530, "type": "image/png" }],
+  assets: [{ "file": ".DS_Store", "size": 6148, "type": null }, { "file": "android-chrome-192x192.png", "size": 6276, "type": "image/png" }, { "file": "android-chrome-512x512.png", "size": 18608, "type": "image/png" }, { "file": "apple-touch-icon.png", "size": 5755, "type": "image/png" }, { "file": "favicon-16x16.png", "size": 579, "type": "image/png" }, { "file": "favicon.ico", "size": 15406, "type": "image/vnd.microsoft.icon" }, { "file": "favicon.png", "size": 1138, "type": "image/png" }, { "file": "me/closed.jpeg", "size": 1620728, "type": "image/jpeg" }, { "file": "me/cout.jpeg", "size": 2039614, "type": "image/jpeg" }, { "file": "me/stare.jpeg", "size": 3015008, "type": "image/jpeg" }, { "file": "me/zoomedcout.jpeg", "size": 456628, "type": "image/jpeg" }, { "file": "swappy-20210729_134838.png", "size": 488459, "type": "image/png" }, { "file": "swappy-20210729_135416.png", "size": 556530, "type": "image/png" }],
   layout: "src/routes/__layout.svelte",
   error: "src/routes/__error.svelte",
   routes: [
@@ -2553,28 +2635,42 @@ var manifest = {
       type: "page",
       pattern: /^\/posts\/?$/,
       params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/posts/index.svelte"],
-      b: ["src/routes/__error.svelte"]
+      a: ["src/routes/__layout.svelte", , "src/routes/posts/index.svelte"],
+      b: ["src/routes/__error.svelte", "src/routes/posts/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/posts\/tag\/([^/]+?)\/?$/,
       params: (m) => ({ tag: d(m[1]) }),
-      a: ["src/routes/__layout.svelte", "src/routes/posts/tag/[tag].svelte"],
-      b: ["src/routes/__error.svelte"]
+      a: ["src/routes/__layout.svelte", , "src/routes/posts/tag/[tag].svelte"],
+      b: ["src/routes/__error.svelte", "src/routes/posts/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/posts\/([^/]+?)\/?$/,
       params: (m) => ({ slug: d(m[1]) }),
-      a: ["src/routes/__layout.svelte", "src/routes/posts/[slug].svelte"],
-      b: ["src/routes/__error.svelte"]
+      a: ["src/routes/__layout.svelte", , "src/routes/posts/[slug].svelte"],
+      b: ["src/routes/__error.svelte", "src/routes/posts/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/auth\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/auth/index.svelte"],
+      b: ["src/routes/__error.svelte"]
+    },
+    {
+      type: "page",
+      pattern: /^\/auth\/signup\/?$/,
+      params: empty,
+      a: ["src/routes/__layout.svelte", "src/routes/auth/signup/index.svelte"],
+      b: ["src/routes/__error.svelte"]
+    },
+    {
+      type: "page",
+      pattern: /^\/auth\/login\/?$/,
+      params: empty,
+      a: ["src/routes/__layout.svelte", "src/routes/auth/login/index.svelte"],
       b: ["src/routes/__error.svelte"]
     },
     {
@@ -2590,6 +2686,22 @@ var manifest = {
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/uses.svelte"],
       b: ["src/routes/__error.svelte"]
+    },
+    {
+      type: "endpoint",
+      pattern: /^\/api\/lastfm\/tracks\/?$/,
+      params: empty,
+      load: () => Promise.resolve().then(function() {
+        return tracks;
+      })
+    },
+    {
+      type: "endpoint",
+      pattern: /^\/api\/lastfm\/?$/,
+      params: empty,
+      load: () => Promise.resolve().then(function() {
+        return lastfm;
+      })
     },
     {
       type: "page",
@@ -2628,6 +2740,27 @@ var manifest = {
     },
     {
       type: "page",
+      pattern: /^\/etc\/ling\/?$/,
+      params: empty,
+      a: ["src/routes/__layout.svelte", "src/routes/etc/ling/index.svelte"],
+      b: ["src/routes/__error.svelte"]
+    },
+    {
+      type: "page",
+      pattern: /^\/etc\/ling\/russian\/?$/,
+      params: empty,
+      a: ["src/routes/__layout.svelte", "src/routes/etc/ling/russian/index.svelte"],
+      b: ["src/routes/__error.svelte"]
+    },
+    {
+      type: "page",
+      pattern: /^\/etc\/ling\/con\/?$/,
+      params: empty,
+      a: ["src/routes/__layout.svelte", "src/routes/etc/ling/con/index.svelte"],
+      b: ["src/routes/__error.svelte"]
+    },
+    {
+      type: "page",
       pattern: /^\/lab\/?$/,
       params: empty,
       a: ["src/routes/__layout.svelte", "src/routes/lab/index.svelte"],
@@ -2637,29 +2770,29 @@ var manifest = {
       type: "page",
       pattern: /^\/p\/?$/,
       params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/p/index.svelte"],
-      b: ["src/routes/__error.svelte"]
+      a: ["src/routes/__layout.svelte", , "src/routes/p/index.svelte"],
+      b: ["src/routes/__error.svelte", "src/routes/p/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/p\/recollection\/?$/,
       params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/p/recollection/index.svelte"],
-      b: ["src/routes/__error.svelte"]
+      a: ["src/routes/__layout.svelte", , "src/routes/p/recollection/index.svelte"],
+      b: ["src/routes/__error.svelte", "src/routes/p/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/p\/iz\/?$/,
       params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/p/iz/index.svelte"],
-      b: ["src/routes/__error.svelte"]
+      a: ["src/routes/__layout.svelte", , "src/routes/p/iz/index.svelte"],
+      b: ["src/routes/__error.svelte", "src/routes/p/__error.svelte"]
     },
     {
       type: "page",
       pattern: /^\/p\/iz\/docs\/?$/,
       params: empty,
-      a: ["src/routes/__layout.svelte", "src/routes/p/iz/docs.svelte"],
-      b: ["src/routes/__error.svelte"]
+      a: ["src/routes/__layout.svelte", , "src/routes/p/iz/docs.svelte"],
+      b: ["src/routes/__error.svelte", "src/routes/p/__error.svelte"]
     }
   ]
 };
@@ -2673,25 +2806,28 @@ var module_lookup = {
     return __layout;
   }),
   "src/routes/__error.svelte": () => Promise.resolve().then(function() {
-    return __error;
+    return __error$2;
   }),
   "src/routes/index.svelte": () => Promise.resolve().then(function() {
-    return index$b;
+    return index$g;
   }),
   "src/routes/resources/index.svelte": () => Promise.resolve().then(function() {
-    return index$a;
+    return index$f;
   }),
   "src/routes/about/index.svelte": () => Promise.resolve().then(function() {
-    return index$9;
+    return index$e;
   }),
   "src/routes/about/pics.svelte": () => Promise.resolve().then(function() {
     return pics;
   }),
   "src/routes/links/index.svelte": () => Promise.resolve().then(function() {
-    return index$8;
+    return index$d;
+  }),
+  "src/routes/posts/__error.svelte": () => Promise.resolve().then(function() {
+    return __error$1;
   }),
   "src/routes/posts/index.svelte": () => Promise.resolve().then(function() {
-    return index$7;
+    return index$c;
   }),
   "src/routes/posts/tag/[tag].svelte": () => Promise.resolve().then(function() {
     return _tag_;
@@ -2700,7 +2836,13 @@ var module_lookup = {
     return _slug_;
   }),
   "src/routes/auth/index.svelte": () => Promise.resolve().then(function() {
-    return index$6;
+    return index$b;
+  }),
+  "src/routes/auth/signup/index.svelte": () => Promise.resolve().then(function() {
+    return index$a;
+  }),
+  "src/routes/auth/login/index.svelte": () => Promise.resolve().then(function() {
+    return index$9;
   }),
   "src/routes/auth/login.svelte": () => Promise.resolve().then(function() {
     return login;
@@ -2709,10 +2851,10 @@ var module_lookup = {
     return uses;
   }),
   "src/routes/etc/index.svelte": () => Promise.resolve().then(function() {
-    return index$5;
+    return index$8;
   }),
   "src/routes/etc/frontend/index.svelte": () => Promise.resolve().then(function() {
-    return index$4;
+    return index$7;
   }),
   "src/routes/etc/laptops.svelte": () => Promise.resolve().then(function() {
     return laptops;
@@ -2723,8 +2865,20 @@ var module_lookup = {
   "src/routes/etc/plangs.svelte": () => Promise.resolve().then(function() {
     return plangs;
   }),
+  "src/routes/etc/ling/index.svelte": () => Promise.resolve().then(function() {
+    return index$6;
+  }),
+  "src/routes/etc/ling/russian/index.svelte": () => Promise.resolve().then(function() {
+    return index$5;
+  }),
+  "src/routes/etc/ling/con/index.svelte": () => Promise.resolve().then(function() {
+    return index$4;
+  }),
   "src/routes/lab/index.svelte": () => Promise.resolve().then(function() {
     return index$3;
+  }),
+  "src/routes/p/__error.svelte": () => Promise.resolve().then(function() {
+    return __error;
   }),
   "src/routes/p/index.svelte": () => Promise.resolve().then(function() {
     return index$2;
@@ -2739,19 +2893,38 @@ var module_lookup = {
     return docs;
   })
 };
-var metadata_lookup = { "src/routes/__layout.svelte": { "entry": "/./_app/pages/__layout.svelte-e7134831.js", "css": ["/./_app/assets/pages/__layout.svelte-ddb50406.css"], "js": ["/./_app/pages/__layout.svelte-e7134831.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/__error.svelte": { "entry": "/./_app/pages/__error.svelte-e7adea32.js", "css": [], "js": ["/./_app/pages/__error.svelte-e7adea32.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/index.svelte": { "entry": "/./_app/pages/index.svelte-f51c5733.js", "css": ["/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/index.svelte-f51c5733.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/resources/index.svelte": { "entry": "/./_app/pages/resources/index.svelte-ba449a9d.js", "css": [], "js": ["/./_app/pages/resources/index.svelte-ba449a9d.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/about/index.svelte": { "entry": "/./_app/pages/about/index.svelte-33416151.js", "css": ["/./_app/assets/pages/about/index.svelte-974ba8cd.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/about/index.svelte-33416151.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/about/pics.svelte": { "entry": "/./_app/pages/about/pics.svelte-a5ab6fd8.js", "css": ["/./_app/assets/pages/about/pics.svelte-2fa41759.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/about/pics.svelte-a5ab6fd8.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/links/index.svelte": { "entry": "/./_app/pages/links/index.svelte-7c2d5d45.js", "css": [], "js": ["/./_app/pages/links/index.svelte-7c2d5d45.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/posts/index.svelte": { "entry": "/./_app/pages/posts/index.svelte-b5ac7d7f.js", "css": [], "js": ["/./_app/pages/posts/index.svelte-b5ac7d7f.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/posts/tag/[tag].svelte": { "entry": "/./_app/pages/posts/tag/[tag].svelte-42d4df28.js", "css": [], "js": ["/./_app/pages/posts/tag/[tag].svelte-42d4df28.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/posts/[slug].svelte": { "entry": "/./_app/pages/posts/[slug].svelte-6f4a0a18.js", "css": [], "js": ["/./_app/pages/posts/[slug].svelte-6f4a0a18.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/auth/index.svelte": { "entry": "/./_app/pages/auth/index.svelte-e4b03b7a.js", "css": [], "js": ["/./_app/pages/auth/index.svelte-e4b03b7a.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/auth/login.svelte": { "entry": "/./_app/pages/auth/login.svelte-60c17d49.js", "css": [], "js": ["/./_app/pages/auth/login.svelte-60c17d49.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/uses.svelte": { "entry": "/./_app/pages/uses.svelte-5e2656f3.js", "css": ["/./_app/assets/pages/uses.svelte-09104085.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/uses.svelte-5e2656f3.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/index.svelte": { "entry": "/./_app/pages/etc/index.svelte-a9dd2aec.js", "css": ["/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/index.svelte-a9dd2aec.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/frontend/index.svelte": { "entry": "/./_app/pages/etc/frontend/index.svelte-67dacb26.js", "css": ["/./_app/assets/pages/etc/frontend/index.svelte-1716761b.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/frontend/index.svelte-67dacb26.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/laptops.svelte": { "entry": "/./_app/pages/etc/laptops.svelte-6e9bec83.js", "css": ["/./_app/assets/pages/etc/laptops.svelte-d46d2292.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/laptops.svelte-6e9bec83.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/updates.svelte": { "entry": "/./_app/pages/etc/updates.svelte-fe29e024.js", "css": ["/./_app/assets/pages/etc/frontend/index.svelte-1716761b.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/updates.svelte-fe29e024.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/etc/plangs.svelte": { "entry": "/./_app/pages/etc/plangs.svelte-cbd39d36.js", "css": ["/./_app/assets/pages/etc/laptops.svelte-d46d2292.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/plangs.svelte-cbd39d36.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/lab/index.svelte": { "entry": "/./_app/pages/lab/index.svelte-57182496.js", "css": ["/./_app/assets/pages/lab/index.svelte-c2f25261.css"], "js": ["/./_app/pages/lab/index.svelte-57182496.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] }, "src/routes/p/index.svelte": { "entry": "/./_app/pages/p/index.svelte-8f997f1c.js", "css": ["/./_app/assets/pages/p/index.svelte-ccb2e8be.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/index.svelte-8f997f1c.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/p/recollection/index.svelte": { "entry": "/./_app/pages/p/recollection/index.svelte-423dd2d8.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/recollection/index.svelte-423dd2d8.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/p/iz/index.svelte": { "entry": "/./_app/pages/p/iz/index.svelte-c24fee4b.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/iz/index.svelte-c24fee4b.js", "/./_app/chunks/vendor-33ac96d6.js", "/./_app/chunks/date-fb86eb85.js"], "styles": [] }, "src/routes/p/iz/docs.svelte": { "entry": "/./_app/pages/p/iz/docs.svelte-a7075189.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/iz/docs.svelte-a7075189.js", "/./_app/chunks/vendor-33ac96d6.js"], "styles": [] } };
+var metadata_lookup = { "src/routes/__layout.svelte": { "entry": "/./_app/pages/__layout.svelte-25195a89.js", "css": ["/./_app/assets/pages/__layout.svelte-5b0dd24c.css"], "js": ["/./_app/pages/__layout.svelte-25195a89.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/__error.svelte": { "entry": "/./_app/pages/__error.svelte-d1dce897.js", "css": [], "js": ["/./_app/pages/__error.svelte-d1dce897.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/index.svelte": { "entry": "/./_app/pages/index.svelte-4e1e7152.js", "css": ["/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/index.svelte-4e1e7152.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/resources/index.svelte": { "entry": "/./_app/pages/resources/index.svelte-eedb98e5.js", "css": [], "js": ["/./_app/pages/resources/index.svelte-eedb98e5.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/about/index.svelte": { "entry": "/./_app/pages/about/index.svelte-6d1e0d34.js", "css": ["/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/about/index.svelte-6d1e0d34.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/about/pics.svelte": { "entry": "/./_app/pages/about/pics.svelte-4e8eb59f.js", "css": ["/./_app/assets/pages/about/pics.svelte-2fa41759.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/about/pics.svelte-4e8eb59f.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/links/index.svelte": { "entry": "/./_app/pages/links/index.svelte-24277c6d.js", "css": [], "js": ["/./_app/pages/links/index.svelte-24277c6d.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/posts/__error.svelte": { "entry": "/./_app/pages/posts/__error.svelte-d00d716d.js", "css": [], "js": ["/./_app/pages/posts/__error.svelte-d00d716d.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/posts/index.svelte": { "entry": "/./_app/pages/posts/index.svelte-a7e0bbe6.js", "css": [], "js": ["/./_app/pages/posts/index.svelte-a7e0bbe6.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/posts/tag/[tag].svelte": { "entry": "/./_app/pages/posts/tag/[tag].svelte-a6c56853.js", "css": [], "js": ["/./_app/pages/posts/tag/[tag].svelte-a6c56853.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/posts/[slug].svelte": { "entry": "/./_app/pages/posts/[slug].svelte-202b788b.js", "css": [], "js": ["/./_app/pages/posts/[slug].svelte-202b788b.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/auth/index.svelte": { "entry": "/./_app/pages/auth/index.svelte-72652715.js", "css": ["/./_app/assets/pages/auth/index.svelte-d3fe2b48.css"], "js": ["/./_app/pages/auth/index.svelte-72652715.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/auth/signup/index.svelte": { "entry": "/./_app/pages/auth/signup/index.svelte-5148a3f7.js", "css": [], "js": ["/./_app/pages/auth/signup/index.svelte-5148a3f7.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/auth/login/index.svelte": { "entry": "/./_app/pages/auth/login/index.svelte-76c60587.js", "css": [], "js": ["/./_app/pages/auth/login/index.svelte-76c60587.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/auth/login.svelte": { "entry": "/./_app/pages/auth/login.svelte-eefcbe86.js", "css": [], "js": ["/./_app/pages/auth/login.svelte-eefcbe86.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/uses.svelte": { "entry": "/./_app/pages/uses.svelte-ea5af438.js", "css": ["/./_app/assets/pages/uses.svelte-09104085.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/uses.svelte-ea5af438.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/etc/index.svelte": { "entry": "/./_app/pages/etc/index.svelte-f06a1c9d.js", "css": ["/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/index.svelte-f06a1c9d.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/etc/frontend/index.svelte": { "entry": "/./_app/pages/etc/frontend/index.svelte-5e830a08.js", "css": ["/./_app/assets/pages/etc/frontend/index.svelte-1716761b.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/frontend/index.svelte-5e830a08.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/etc/laptops.svelte": { "entry": "/./_app/pages/etc/laptops.svelte-f6828f41.js", "css": ["/./_app/assets/pages/etc/laptops.svelte-d46d2292.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/laptops.svelte-f6828f41.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/etc/updates.svelte": { "entry": "/./_app/pages/etc/updates.svelte-65df771b.js", "css": ["/./_app/assets/pages/etc/frontend/index.svelte-1716761b.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/updates.svelte-65df771b.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/etc/plangs.svelte": { "entry": "/./_app/pages/etc/plangs.svelte-f62b635a.js", "css": ["/./_app/assets/pages/etc/laptops.svelte-d46d2292.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/etc/plangs.svelte-f62b635a.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/etc/ling/index.svelte": { "entry": "/./_app/pages/etc/ling/index.svelte-fc64c216.js", "css": [], "js": ["/./_app/pages/etc/ling/index.svelte-fc64c216.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/etc/ling/russian/index.svelte": { "entry": "/./_app/pages/etc/ling/russian/index.svelte-3861f38f.js", "css": [], "js": ["/./_app/pages/etc/ling/russian/index.svelte-3861f38f.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/etc/ling/con/index.svelte": { "entry": "/./_app/pages/etc/ling/con/index.svelte-d0f56a51.js", "css": [], "js": ["/./_app/pages/etc/ling/con/index.svelte-d0f56a51.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/lab/index.svelte": { "entry": "/./_app/pages/lab/index.svelte-4e822258.js", "css": ["/./_app/assets/pages/lab/index.svelte-c2f25261.css"], "js": ["/./_app/pages/lab/index.svelte-4e822258.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/p/__error.svelte": { "entry": "/./_app/pages/p/__error.svelte-510c9086.js", "css": [], "js": ["/./_app/pages/p/__error.svelte-510c9086.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] }, "src/routes/p/index.svelte": { "entry": "/./_app/pages/p/index.svelte-658c1903.js", "css": ["/./_app/assets/pages/p/index.svelte-ccb2e8be.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/index.svelte-658c1903.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/p/recollection/index.svelte": { "entry": "/./_app/pages/p/recollection/index.svelte-899222e4.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/recollection/index.svelte-899222e4.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/p/iz/index.svelte": { "entry": "/./_app/pages/p/iz/index.svelte-6e2d63b7.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/iz/index.svelte-6e2d63b7.js", "/./_app/chunks/vendor-6926e56a.js", "/./_app/chunks/date-97fcd7e7.js"], "styles": [] }, "src/routes/p/iz/docs.svelte": { "entry": "/./_app/pages/p/iz/docs.svelte-82999fa7.js", "css": ["/./_app/assets/pages/p/recollection/index.svelte-ef4dd6ed.css", "/./_app/assets/date.svelte_svelte&type=style&lang-5d2bc558.css"], "js": ["/./_app/pages/p/iz/docs.svelte-82999fa7.js", "/./_app/chunks/vendor-6926e56a.js"], "styles": [] } };
 async function load_component(file) {
   return {
     module: await module_lookup[file](),
     ...metadata_lookup[file]
   };
 }
-function render(request, {
+function render$1(request, {
   prerender: prerender2
 } = {}) {
   const host = request.headers["host"];
   return respond({ ...request, host }, options, { prerender: prerender2 });
 }
+var VITE_LASTFM_API_ROOT = "http://ws.audioscrobbler.com/2.0/";
+var clientId = {}.LASTFM_API_KEY;
+var clientSecret = {}.LASTFM_API_SECRET;
+async function get(req) {
+  console.log(clientId, clientSecret);
+  const res = await fetch(VITE_LASTFM_API_ROOT + "?method=user.getrecenttracks&user=ooohm&api_key=" + clientSecret + "&format=json&limit=1").then((r) => r.json());
+  return {
+    body: res
+  };
+}
+var tracks = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  get
+});
+var lastfm = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module"
+});
 var getStores = () => {
   const stores = getContext("__svelte__");
   return {
@@ -2836,8 +3009,8 @@ var Google = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 });
 var css$d = {
   code: `ul:not(.navbar){margin-left:3.5%;list-style:decimal;padding-top:2.5%;border-top:1px solid rgba(0,0,0,0.02);border-radius:7px;padding-bottom:2.5%;background-color:rgba(0,0,0,0.01);border-top:1px solid rgba(0,0,0,0.085);border-bottom:1px solid rgba(0,0,0,0.045);margin-top:25px}ul:not(.navbar):hover{transition:all 0.2s ease-in-out;background-color:rgba(0,0,0,0.02);border-top:1px solid rgba(0,0,0,0.175);border-bottom:1px solid rgba(0,0,0,0.095)}li:not(.nav){margin-bottom:4px}li:not(.nav){padding-left:1%}body{border:2px ridge transparent;background-color:#fffefd;height:100vh;min-height:100vh;margin:0;max-width:100%;overflow-x:hidden;padding:2% 15% 2% 15%;font-weight:300;background-image:url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='29' height='50.115' patternTransform='scale(1.05) rotate(90)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0.09)'/><path d='M14.498 16.858L0 8.488.002-8.257l14.5-8.374L29-8.26l-.002 16.745zm0 50.06L0 58.548l.002-16.745 14.5-8.373L29 41.8l-.002 16.744zM28.996 41.8l-14.498-8.37.002-16.744L29 8.312l14.498 8.37-.002 16.745zm-29 0l-14.498-8.37.002-16.744L0 8.312l14.498 8.37-.002 16.745z'  stroke-width='0.7' stroke='hsla(0, 0%, 0%, 0.030)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>")
-	}h1,h2,h3,h4{font-weight:100;font-family:Helvetica;letter-spacing:-1px;border-left:1px solid rgba(0,0,0,0.0)}h1{font-size:1.9rem;padding-left:18px;color:rgba(0,0,0,0.70)}#head{font-size:1.9rem;padding-left:18px;color:rgba(0,0,0,0.70)}h2{font-size:1.6rem;padding-left:12px;color:rgba(0,0,0,0.58)}h3{font-size:1.4rem;padding-left:8px;color:rgba(0,0,0,0.53)}h4{font-size:1.2rem;padding-left:7px;color:rgba(0,0,0,0.50)}h1::before{font-size:1.9rem;font-weight:100;content:"\u26AC";color:rgba(140,210,160,0.0);padding-right:12px;text-shadow:0px 0px 18px rgba(140,210,160,0)}#head::before{font-size:1.9rem;font-weight:100;content:"\u2022";color:rgba(140,0,160,0.00);padding-right:12px;text-shadow:0px 0px 18px rgba(140,210,160,0) }h2::before{font-size:1.6rem;font-weight:100;content:"\u26AC\u26AC";color:rgba(140,210,160,0.00);padding-right:9px;text-shadow:0px 0px 18px rgba(140,210,160,0)}h3::before{font-size:1.4rem;font-weight:100;content:"\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.00);padding-right:7px;text-shadow:0px 0px 18px rgba(140,210,160,0)}h4::before{font-size:1.2rem;font-weight:100;content:"\u26AC\u26AC\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.00);padding-right:5px;text-shadow:0px 0px 18px rgba(140,210,160,0)}h1:hover::before{font-size:1.9rem;font-weight:100;content:"\u26AC";color:rgba(140,210,160,0.43) ;padding-right:12px;transition:all 0.15s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.12)}#head:hover::before{font-size:1.9rem;font-weight:100;content:"\u2022";color:rgba(140,210,160,0.53) ;padding-right:12px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.12)}h2:hover::before{font-size:1.6rem;font-weight:100;content:"\u26AC\u26AC";color:rgba(140,210,160,0.48) ;padding-right:9px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.08)}h3:hover::before{font-size:1.4rem;font-weight:100;content:"\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.43) ;padding-right:7px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.06)}h4:hover::before{font-size:1.2rem;font-weight:100;content:"\u26AC\u26AC\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.38);padding-right:5px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.05)}p{padding-left:45px;font-size:1.0rem;border-left:1px solid transparent}.content.svelte-2b4jfb{font-size:0.97rem;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;font-family:Helvetica;font-weight:300;color:rgba(0,2,1,0.58)}#head{padding-bottom:8px;border-left:1px solid rgba(0,0,0,0.0);margin-left:0px}#head:hover{transition:all 0.1s ease-in-out;margin-left:0px;padding-left:18px}.link:not(.nav):hover{transition:all 0.05s;text-shadow:0px 0px 8px rgba(0,0,0,0.0);text-decoration:underline;color:rgba(150,210,180,1)}.link:not(.nav){font-family:Helvetica;text-decoration:none;text-underline-offset:1px;font-size:1rem;color:rgba(100,180,120,0.9)}.content.svelte-2b4jfb{padding-top:12px;line-height:1.4rem;padding-bottom:35px;padding-left:40px;padding-right:40px;height:100%;min-height:45vh;background-color:rgba(246,246,246,0.925);border-left:1px solid rgba(0,0,0,0.065);border-right:1px solid rgba(0,0,0,0.065);border-top:1px solid rgba(0,0,0,0.040);border-bottom:2px solid rgba(0,0,0,0.13);box-shadow:0px 7px 70px rgba(0,0,0,0.105);border-radius:09px;display:block}li a :not(.nav){text-decoration:underline;text-underline-offset:5px;text-shadow:0px 0px 5px rgba(0,0,0,0.01)} .link.ext :not(.nav){color:rgba(0,0,0,0.5)}li a:active:not(.nav){transform:scale(1.1)}li a:hover:not(.nav){font-weight:300;text-shadow:0px 0px 10px rgba(0,0,0,0.05);transition:all 0.2s ease-in-out}li:hover a:not(.nav){transition:all 0.2s ease-in-out;transform:scale(1.1)}form{padding:3% 5% 3% 5%;margin-top:10px;box-shadow:0px 0px 50px rgba(0,0,0,0.03);border-top:1px solid rgba(0,0,0,0.035);border-left:1px solid rgba(0,0,0,0.045);border-right:1px solid rgba(0,0,0,0.045);border-bottom:2px solid rgba(0,0,0,0.12);display:inline-flexbox;transition:all 0.15s ease-in-out;border-radius:5px;min-width:40%;margin:7px}input{padding:15px 30px;margin-top:2px;border-radius:5px;display:inline;width:80%;border:1px transparent;border-top:1px solid rgba(0,0,0,0.1);border-bottom:1px solid rgba(255,255,255,1);background:rgba(0,0,0,0.025)}label{font-size:0.9rem;padding-left:02px;color:rgba(0,0,0,0.6);text-shadow:0px 0px 4px rgba(0,0,0,0.05)}.form{display:inline-flex;width:100%;margin:auto}button{border:2px solid transparent;border-bottom:2px solid rgba(0,0,0,0.1);border-top:1px solid rgba(0,0,0,0.025);border-left:1px solid rgba(0,0,0,0.025);border-right:1px solid rgba(0,0,0,0.025);color:rgba(0,0,0,0.6);background-color:rgba(150,220,170,1);color:rgba(255,255,255,1);text-shadow:0px 1px 0px rgba(0,0,0,0.15);padding:8px 10px;border-radius:4px;transition:all 0.15s ease-in-out}input:focus{border-top:1px solid rgba(0,0,0,0.2);border-bottom:1px solid rgba(150,220,170,0.8);color:rgba(110,210,140,0.9);outline:none;transform:scale(1.05);transition:all 0.1s ease-in-out}form button:hover{background-color:rbga(0,0,0,0.25);border-bottom:2px solid rgba(0,0,0,0.25);border-radius:5px;transform:scale(1.1);transition:all 0.1s ease-in-out}.formtitle{font-family:Helvetica;padding-bottom:12px;display:block}.gray{color:rgba(0,0,0,0.5);font-weight:500}`,
-  map: `{"version":3,"file":"__layout.svelte","sources":["__layout.svelte"],"sourcesContent":["<script lang=\\"ts\\">import Nav from '../lib/nav.svelte';\\nimport Footer from '../lib/footer.svelte';\\nimport { page, navigating } from '$app/stores';\\nimport GoogleAnalytics from '$lib/google.svelte';\\n$: section = $page.path.split('/')[1];\\n<\/script>\\n\\n<style>\\n:global(ul:not(.navbar)) {\\n\\tmargin-left: 3.5%;\\n\\t    list-style: decimal;\\n\\tpadding-top: 2.5%;\\n\\tborder-top: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 7px;\\n\\tpadding-bottom: 2.5%;\\n\\tbackground-color: rgba(0,0,0,0.01);\\n\\tborder-top:1px solid rgba(0,0,0,0.085);\\n\\tborder-bottom:1px solid rgba(0,0,0,0.045);\\n\\tmargin-top: 25px;\\n    }\\n:global(ul:not(.navbar):hover) {\\n    transition: all 0.2s ease-in-out;\\n    background-color: rgba(0,0,0,0.02);\\n    border-top:1px solid rgba(0,0,0,0.175);\\n    border-bottom:1px solid rgba(0,0,0,0.095);\\n}\\n:global(li:not(.nav)) {\\n\\tmargin-bottom: 4px;\\n    }\\n    :global(li:not(.nav)) {\\n\\tpadding-left: 1%;\\n\\n\\t}\\n\\t:global(body) {\\n\\t\\tborder: 2px ridge transparent;\\n\\t\\tbackground-color: #fffefd;\\n\\t\\theight: 100vh;\\n\\t\\tmin-height: 100vh;\\n\\t\\tmargin: 0;\\n\\t\\tmax-width: 100%;\\n\\t\\toverflow-x: hidden;\\n\\t\\tpadding: 2% 15% 2% 15%;\\n\\t\\tfont-weight: 300;\\n\\t\\tbackground-image: url(\\"data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='29' height='50.115' patternTransform='scale(1.05) rotate(90)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0.09)'/><path d='M14.498 16.858L0 8.488.002-8.257l14.5-8.374L29-8.26l-.002 16.745zm0 50.06L0 58.548l.002-16.745 14.5-8.373L29 41.8l-.002 16.744zM28.996 41.8l-14.498-8.37.002-16.744L29 8.312l14.498 8.37-.002 16.745zm-29 0l-14.498-8.37.002-16.744L0 8.312l14.498 8.37-.002 16.745z'  stroke-width='0.7' stroke='hsla(0, 0%, 0%, 0.030)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>\\")\\n\\t}\\n\\t:global(h1),:global(h2),:global(h3),:global(h4) {\\n\\n\\t\\tfont-weight: 100;\\n\\t\\tfont-family: Helvetica;\\n\\t\\tletter-spacing: -1px;\\n\\t\\tborder-left: 1px solid rgba(0,0,0,0.0);\\n\\t\\t/* border-bottom: 0px solid rgba(0,0,0,0.25); */\\n\\t\\t/* padding: 0px 16px 4px 4px; */\\n\\t}\\n\\t:global(h1) { font-size: 1.9rem; padding-left: 18px; color: rgba(0,0,0,0.70); }\\n\\t:global(#head) { font-size: 1.9rem; padding-left: 18px; color: rgba(0,0,0,0.70); }\\n\\t:global(h2) { font-size: 1.6rem; padding-left: 12px; color: rgba(0,0,0,0.58); }\\n\\t:global(h3) { font-size: 1.4rem; padding-left: 8px; color: rgba(0,0,0,0.53); }\\n\\t:global(h4) { font-size: 1.2rem; padding-left: 7px; color: rgba(0,0,0,0.50); }\\n\\t:global(h1::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u26AC\\"; color: rgba(140,210,160,0.0); padding-right: 12px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(#head::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u2022\\"; color: rgba(140,0,160,0.00); padding-right: 12px;text-shadow: 0px 0px 18px rgba(140,210,160,0) }\\n\\t:global(h2::before) { font-size: 1.6rem;font-weight: 100; content: \\"\u26AC\u26AC\\"; color: rgba(140,210,160,0.00); padding-right: 9px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(h3::before) { font-size: 1.4rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\\"; color: rgba(140,210,160,0.00); padding-right: 7px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(h4::before) { font-size: 1.2rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\u26AC\u26AC\\"; color: rgba(140,210,160,0.00); padding-right: 5px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(h1:hover::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u26AC\\"; color:rgba(140,210,160,0.43) ; padding-right: 12px; transition:all 0.15s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.12)}\\n\\t:global(#head:hover::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u2022\\"; color:rgba(140,210,160,0.53) ; padding-right: 12px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.12)}\\n\\t:global(h2:hover::before) { font-size: 1.6rem;font-weight: 100; content: \\"\u26AC\u26AC\\"; color:rgba(140,210,160,0.48) ; padding-right: 9px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.08)}\\n\\t:global(h3:hover::before) { font-size: 1.4rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\\"; color:rgba(140,210,160,0.43) ; padding-right: 7px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.06)}\\n\\t:global(h4:hover::before) { font-size: 1.2rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\u26AC\u26AC\\"; color:rgba(140,210,160,0.38); padding-right: 5px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.05)}\\n\\t:global(h1:hover),:global(h2:hover),:global(h3:hover),:global(h4:hover),:global(#head:hover) {\\n\\t    }\\n\\t/* :global(h1:hover::after) { color: rgba(0,0,0,0.15); padding-left: 25px; font-size: 1.2rem; content: \\".\\" }\\n\\t:global(#head:hover::after) { color: rgba(0,0,0,0.15); padding-left: 25px; font-size: 1.2rem; content: \\".\\" }\\n\\t:global(h2:hover::after) { color: rgba(0,0,0,0.12); padding-left: 15; font-size: 1.0rem; content: \\"..\\" }\\n\\t:global(h3:hover::after) { color: rgba(0,0,0,0.09); padding-left: 10px; font-size: 0.9rem; content: \\"...\\" }\\n\\t:global(h4:hover::after) { color: rgba(0,0,0,0.09); padding-left: 08px; font-size: 0.7rem; content: \\"....\\" } */\\n\\t/* :global(h1:hover) { color: black;border-left: 4px solid rgba(0,0,0,0.15); transition: all 0.2s ease-in-out}\\n\\t:global(#head:hover) { border-left: 1px solid rgba(0,0,0,0.10); transition: all 0.2s ease-in-out}\\n\\t:global(h2:hover) { color:rgba(0,0,0,0.8);border-left: 1px solid rgba(0,0,0,0.10);  transition: all 0.2s ease-in-out}\\n\\t:global(h3:hover) { color:rgba(0,0,0,0.74);border-left: 1px solid rgba(0,0,0,0.10);  transition: all 0.2s ease-in-out}\\n\\t:global(h4:hover) { color:rgba(0,0,0,0.7);border-left: 1px solid rgba(0,0,0,0.1j);  transition: all 0.2s ease-in-out} */\\n\\t:global(p) {\\n\\t\\tpadding-left: 45px;\\n\\t\\tfont-size: 1.0rem;\\n\\t\\tborder-left:1px solid transparent;\\n\\t}\\n\\t.content {\\n\\t\\tfont-size: 0.97rem;\\n\\t\\tfont-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\\n\\t\\tfont-family:Helvetica;\\n\\t\\tfont-weight: 300;\\n\\t\\tcolor: rgba(0,2,1,0.58);\\n\\t\\t}\\n\\t:global(#head) {\\n\\t\\tpadding-bottom: 8px;\\n\\t\\tborder-left: 1px solid rgba(0,0,0,0.0);\\n\\t\\tmargin-left:0px;\\n\\t}\\n\\t/* :global(#head:hover::after) { color: rgba(0,0,0,0.15); padding-left: 8px; font-size: 1.2rem; content: \\"*\\" } */\\n\\t:global(#head:hover) {\\n\\t\\t/* color: rgba(0,0,0,0.76); */\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t\\tmargin-left: 0px;\\n\\t\\tpadding-left:18px;\\n\\n\\t}\\n\\t:global(.link:not(.nav):hover) {\\n\\t    transition: all 0.05s;\\n\\t    text-shadow: 0px 0px 8px rgba(0,0,0,0.0);\\n\\t    text-decoration: underline;\\n\\t    color: rgba(150,210,180,1);\\n\\t}\\n\\t:global(.link:not(.nav)) {\\n\\t    font-family: Helvetica;\\n\\t    text-decoration:none;\\n\\t    text-underline-offset: 1px;\\n\\t    font-size:1rem;\\n\\t    color: rgba(100,180,120,0.9);\\n\\t}\\n\\t/* :global(a:not(.nav):hover::before){\\n\\t\\tcontent: \\"[\\"\\n\\t}\\n\\t:global(a:not(.nav):hover::after){\\n\\t\\tcontent: \\"]\\"\\n\\t} */\\n\\t:global(p:hover:not(.foot)) {\\n\\t\\t/* border-left: 1px solid rgba(0,0,0,0.1); */\\n\\t\\t/* transition: all 0.2s ease-in-out; */\\n\\t\\t}\\n\\t/* :global(p::before) {\\n\\t\\tcolor: rgba(0,0,0,0.0);\\n\\t\\tcontent: \\"--\\";\\n\\t\\tpadding-right: 4px;\\n\\t}\\n\\t:global(p:hover::before),:global(p:hover::after) {\\n\\t\\tcolor: rgba(0,0,0,0.1);\\n\\t}\\n\\t:global(p::after) {\\n\\t\\tcolor: rgba(0,0,0,0.0);\\n\\t\\tcontent: \\"--\\";\\n\\t\\tpadding-left: 4px;\\n\\t} */\\n\\n.content {\\n\\tpadding-top: 12px;\\n\\tline-height: 1.4rem;\\n\\tpadding-bottom: 35px;\\n\\tpadding-left: 40px;\\n\\tpadding-right: 40px;\\n\\theight: 100%;\\n\\tmin-height: 45vh;\\n\\tbackground-color: rgba(246,246,246,0.925);\\n\\tborder-left: 1px solid rgba(0,0,0,0.065);\\n\\tborder-right: 1px solid rgba(0,0,0,0.065);\\n\\tborder-top: 1px solid rgba(0,0,0,0.040);\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.13);\\n\\tbox-shadow: 0px 7px 70px rgba(0,0,0,0.105);\\n\\tborder-radius: 09px;\\n\\tdisplay:block;\\n}\\n:global(li a ):not(.nav) {\\n\\ttext-decoration: underline;\\n\\ttext-underline-offset: 5px;\\n\\ttext-shadow: 0px 0px 5px rgba(0,0,0,0.01);\\n    }\\n    :global( .link.ext ):not(.nav) {\\n\\t    color: rgba(0,0,0,0.5);\\n\\t}\\n\\t:global(li a:active):not(.nav) {\\n\\t\\ttransform: scale(1.1);\\n\\t}\\n\\t:global(li a:hover):not(.nav) {\\n\\t\\tfont-weight: 300;\\n\\t\\t/* color: rgba(255,255,255,0.98); */\\n\\t\\t/* border-radius: 4px; */\\n\\t\\t/* box-shadow:  0px 0px 8px rgba(0,0,0,0.1); */\\n\\t\\ttext-shadow: 0px 0px 10px rgba(0,0,0,0.05);\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\n\\t    }\\n\\t    :global(li:hover a):not(.nav) {\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\t\\ttransform: scale(1.1);\\n\\n\\t\\t}\\n    /* :global(form) {\\n\\tpadding-left: 3%;\\n\\tpadding-right: 1%;\\n\\tpadding-top: 2%;\\n\\tpadding-bottom: 2%;\\n\\tbackground-color: rgba(0,0,0,0.02);\\n\\tbox-shadow: 0px 0px 7px rgba(0,0,0,0.00);\\n\\twidth: 50%;\\n\\tdisplay: block;\\n\\tposition:relative;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\ttransition: all 0.15s ease-in-out;\\n\\talign-items: center;\\n\\tbox-shadow: 0px 0px 5px rgba(0,0,0,0.03);\\n\\tborder: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 6px;\\n\\tborder-bottom: 3px solid rgba(0,0,0,0.09);\\n\\tmargin: auto;\\n    }\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\n\\n\\t\\t}\\n\\t\\t.formtitle {\\n\\t\\t    font-family:Helvetica;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t    padding-left: 8px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    .gray {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t} */\\n    :global(form) {\\n\\tpadding: 3% 5% 3% 5%;\\n\\tmargin-top: 10px;\\n\\t/* background-color: rgba(255,255,255,0.01); */\\n\\tbox-shadow: 0px 0px 50px rgba(0,0,0,0.03);\\n\\tborder-top: 1px solid rgba(0,0,0,0.035);\\n\\tborder-left: 1px solid rgba(0,0,0,0.045);\\n\\tborder-right: 1px solid rgba(0,0,0,0.045);\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.12);\\n\\tdisplay: inline-flexbox;\\n\\ttransition: all 0.15s ease-in-out;\\n\\tborder-radius: 5px;\\n\\tmin-width:40%;\\n\\tmargin: 7px;\\n    }\\n    :global(input) { \\n\\tpadding: 15px 30px; \\n\\tmargin-top: 2px;\\n\\tborder-radius:5px; \\n\\tdisplay:inline;\\n\\twidth: 80%;\\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tborder-bottom: 1px solid rgba(255,255,255,1);\\n\\tbackground: rgba(0,0,0,0.025);\\n\\t}\\n\\t:global(label) {\\n\\t\\tfont-size: 0.9rem;\\n\\t\\tpadding-left: 02px;\\n\\t\\tcolor: rgba(0,0,0,0.6);\\n\\t\\ttext-shadow: 0px 0px 4px rgba(0,0,0,0.05);\\n\\t    }\\n\\t:global(.form) {\\n\\t    display:inline-flex;\\n\\t    width: 100%;\\n\\t    margin:auto;\\n\\t\\t}\\n    :global(button) {\\n\\tborder: 2px solid transparent;\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.1);\\n\\tborder-top: 1px solid rgba(0,0,0,0.025);\\n\\tborder-left: 1px solid rgba(0,0,0,0.025);\\n\\tborder-right: 1px solid rgba(0,0,0,0.025);\\n\\tcolor: rgba(0,0,0,0.6);\\n\\tbackground-color: rgba(150,220,170,1);\\n\\tcolor: rgba(255,255,255,1);\\n\\ttext-shadow: 0px 1px 0px rgba(0,0,0,0.15);\\n\\tpadding: 8px 10px;\\n\\tborder-radius: 4px;\\n\\ttransition: all 0.15s ease-in-out;\\n\\n\\t}\\n\\t:global(input:active) {\\n\\t\\t/* background-color: rgba(255,255,255,0.05); */\\n\\t    }\\n\\t:global(input:focus) {\\n\\t\\t/* background-color: rgba(255,255,255,0.05); */\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\tborder-bottom: 1px solid rgba(150,220,170,0.8);\\n\\t\\tcolor: rgba(110,210,140,0.9);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.05);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\t:global(form button:hover) {\\n\\t    background-color: rbga(0,0,0,0.25);\\n\\t    border-bottom: 2px solid rgba(0,0,0,0.25);\\n\\t    border-radius: 5px;\\n\\t    transform:scale(1.1);\\n\\t    transition:all 0.1s ease-in-out;\\n\\t}\\n\\t\\t:global(.formtitle) {\\n\\t\\t    font-family:Helvetica;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    :global(.gray) {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t    font-weight: 500;\\n\\t\\t\\t}\\n</style>\\n\\n<GoogleAnalytics/>\\n<div>\\n\\t<Nav/>\\n\\t<div class=\\"content\\">\\n\\t\\t<slot></slot>\\n\\t</div>\\n\\t<Footer/>\\n</div>\\n"],"names":[],"mappings":"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"}`
+	}h1,h2,h3,h4{font-weight:100;font-family:Helvetica;letter-spacing:-1px;border-left:1px solid rgba(0,0,0,0.0)}h1{font-size:1.9rem;padding-left:18px;color:rgba(0,0,0,0.70)}#head{font-size:1.9rem;padding-left:18px;color:rgba(0,0,0,0.70)}h2{font-size:1.6rem;padding-left:12px;color:rgba(0,0,0,0.58)}h3{font-size:1.4rem;padding-left:8px;color:rgba(0,0,0,0.53)}h4{font-size:1.2rem;padding-left:7px;color:rgba(0,0,0,0.50)}h1::before{font-size:1.9rem;font-weight:100;content:"\u26AC";color:rgba(140,210,160,0.0);padding-right:12px;text-shadow:0px 0px 18px rgba(140,210,160,0)}#head::before{font-size:1.9rem;font-weight:100;content:"\u2022";color:rgba(140,0,160,0.00);padding-right:12px;text-shadow:0px 0px 18px rgba(140,210,160,0) }h2::before{font-size:1.6rem;font-weight:100;content:"\u26AC\u26AC";color:rgba(140,210,160,0.00);padding-right:9px;text-shadow:0px 0px 18px rgba(140,210,160,0)}h3::before{font-size:1.4rem;font-weight:100;content:"\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.00);padding-right:7px;text-shadow:0px 0px 18px rgba(140,210,160,0)}h4::before{font-size:1.2rem;font-weight:100;content:"\u26AC\u26AC\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.00);padding-right:5px;text-shadow:0px 0px 18px rgba(140,210,160,0)}h1:hover::before{font-size:1.9rem;font-weight:100;content:"\u26AC";color:rgba(140,210,160,0.43) ;padding-right:12px;transition:all 0.15s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.12)}#head:hover::before{font-size:1.9rem;font-weight:100;content:"\u2022";color:rgba(140,210,160,0.53) ;padding-right:12px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.12)}h2:hover::before{font-size:1.6rem;font-weight:100;content:"\u26AC\u26AC";color:rgba(140,210,160,0.48) ;padding-right:9px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.08)}h3:hover::before{font-size:1.4rem;font-weight:100;content:"\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.43) ;padding-right:7px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.06)}h4:hover::before{font-size:1.2rem;font-weight:100;content:"\u26AC\u26AC\u26AC\u26AC\u26AC";color:rgba(140,210,160,0.38);padding-right:5px;transition:all 0.25s ease-in;text-shadow:0px 0px 18px rgba(140,210,160,0.05)}p{padding-left:45px;font-size:1.0rem;border-left:1px solid transparent}.content.svelte-1aer3dc{font-size:0.97rem;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;font-family:Helvetica;font-weight:300;color:rgba(0,2,1,0.58)}#head{padding-bottom:8px;border-left:1px solid rgba(0,0,0,0.0);margin-left:0px}#head:hover{transition:all 0.1s ease-in-out;margin-left:0px;padding-left:18px}.link:not(.nav):hover{transition:all 0.05s;text-shadow:0px 0px 8px rgba(0,0,0,0.0);text-decoration:underline;color:rgba(150,210,180,1)}.link:not(.nav){font-family:Helvetica;text-decoration:none;text-underline-offset:1px;font-size:1rem;color:rgba(100,180,120,0.9)}.content.svelte-1aer3dc{padding-top:12px;line-height:1.4rem;padding-bottom:35px;padding-left:40px;padding-right:40px;height:100%;min-height:45vh;background-color:rgba(246,246,246,0.925);border-left:1px solid rgba(0,0,0,0.065);border-right:1px solid rgba(0,0,0,0.065);border-top:1px solid rgba(0,0,0,0.040);border-bottom:2px solid rgba(0,0,0,0.13);box-shadow:0px 7px 70px rgba(0,0,0,0.105);border-radius:09px;display:block}li a :not(.nav){text-decoration:underline;text-underline-offset:5px;text-shadow:0px 0px 5px rgba(0,0,0,0.01)} .link.ext :not(.nav){color:rgba(0,0,0,0.5)}li a:active:not(.nav){transform:scale(1.1)}li a:hover:not(.nav){font-weight:300;text-shadow:0px 0px 10px rgba(0,0,0,0.05);transition:all 0.2s ease-in-out}li:hover a:not(.nav){transition:all 0.2s ease-in-out;transform:scale(1.1)}form{padding:3% 5% 3% 5%;margin-top:10px;box-shadow:0px 0px 50px rgba(0,0,0,0.03);border-top:1px solid rgba(0,0,0,0.035);border-left:1px solid rgba(0,0,0,0.045);border-right:1px solid rgba(0,0,0,0.045);border-bottom:2px solid rgba(0,0,0,0.12);display:inline-flexbox;transition:all 0.15s ease-in-out;border-radius:5px;min-width:40%;margin:7px}input{padding:15px 30px;margin-top:2px;border-radius:5px;display:inline;width:80%;border:1px transparent;border-top:1px solid rgba(0,0,0,0.1);border-bottom:1px solid rgba(255,255,255,1);background:rgba(0,0,0,0.025)}label{font-size:0.9rem;padding-left:02px;color:rgba(0,0,0,0.6);text-shadow:0px 0px 4px rgba(0,0,0,0.05)}.form{display:inline-flex;width:100%;margin:auto}button{border:2px solid transparent;border-bottom:2px solid rgba(0,0,0,0.1);border-top:1px solid rgba(0,0,0,0.025);border-left:1px solid rgba(0,0,0,0.025);border-right:1px solid rgba(0,0,0,0.025);color:rgba(0,0,0,0.6);background-color:rgba(150,220,170,1);color:rgba(255,255,255,1);text-shadow:0px 1px 0px rgba(0,0,0,0.15);padding:8px 10px;border-radius:4px;transition:all 0.15s ease-in-out}input:focus{border-top:1px solid rgba(0,0,0,0.2);border-bottom:1px solid rgba(150,220,170,0.8);color:rgba(110,210,140,0.9);outline:none;transform:scale(1.05);transition:all 0.1s ease-in-out}form button:hover{background-color:rbga(0,0,0,0.25);border-bottom:2px solid rgba(0,0,0,0.25);border-radius:5px;transform:scale(1.1);transition:all 0.1s ease-in-out}.secondary{background-color:rbga(0,0,0,0.25)}.secondary:hover{background-color:rbga(0,0,0,0.35)}.formtitle{font-family:Helvetica;padding-bottom:12px;display:block}.gray{color:rgba(0,0,0,0.5);font-weight:500}`,
+  map: `{"version":3,"file":"__layout.svelte","sources":["__layout.svelte"],"sourcesContent":["<script lang=\\"ts\\">import Nav from '../lib/nav.svelte';\\nimport Footer from '../lib/footer.svelte';\\nimport { page, navigating } from '$app/stores';\\nimport GoogleAnalytics from '$lib/google.svelte';\\n$: section = $page.path.split('/')[1];\\n<\/script>\\n\\n<style>\\n:global(ul:not(.navbar)) {\\n\\tmargin-left: 3.5%;\\n\\t    list-style: decimal;\\n\\tpadding-top: 2.5%;\\n\\tborder-top: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 7px;\\n\\tpadding-bottom: 2.5%;\\n\\tbackground-color: rgba(0,0,0,0.01);\\n\\tborder-top:1px solid rgba(0,0,0,0.085);\\n\\tborder-bottom:1px solid rgba(0,0,0,0.045);\\n\\tmargin-top: 25px;\\n    }\\n:global(ul:not(.navbar):hover) {\\n    transition: all 0.2s ease-in-out;\\n    background-color: rgba(0,0,0,0.02);\\n    border-top:1px solid rgba(0,0,0,0.175);\\n    border-bottom:1px solid rgba(0,0,0,0.095);\\n}\\n:global(li:not(.nav)) {\\n\\tmargin-bottom: 4px;\\n    }\\n    :global(li:not(.nav)) {\\n\\tpadding-left: 1%;\\n\\n\\t}\\n\\t:global(body) {\\n\\t\\tborder: 2px ridge transparent;\\n\\t\\tbackground-color: #fffefd;\\n\\t\\theight: 100vh;\\n\\t\\tmin-height: 100vh;\\n\\t\\tmargin: 0;\\n\\t\\tmax-width: 100%;\\n\\t\\toverflow-x: hidden;\\n\\t\\tpadding: 2% 15% 2% 15%;\\n\\t\\tfont-weight: 300;\\n\\t\\tbackground-image: url(\\"data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='29' height='50.115' patternTransform='scale(1.05) rotate(90)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0.09)'/><path d='M14.498 16.858L0 8.488.002-8.257l14.5-8.374L29-8.26l-.002 16.745zm0 50.06L0 58.548l.002-16.745 14.5-8.373L29 41.8l-.002 16.744zM28.996 41.8l-14.498-8.37.002-16.744L29 8.312l14.498 8.37-.002 16.745zm-29 0l-14.498-8.37.002-16.744L0 8.312l14.498 8.37-.002 16.745z'  stroke-width='0.7' stroke='hsla(0, 0%, 0%, 0.030)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>\\")\\n\\t}\\n\\t:global(h1),:global(h2),:global(h3),:global(h4) {\\n\\n\\t\\tfont-weight: 100;\\n\\t\\tfont-family: Helvetica;\\n\\t\\tletter-spacing: -1px;\\n\\t\\tborder-left: 1px solid rgba(0,0,0,0.0);\\n\\t\\t/* border-bottom: 0px solid rgba(0,0,0,0.25); */\\n\\t\\t/* padding: 0px 16px 4px 4px; */\\n\\t}\\n\\t:global(h1) { font-size: 1.9rem; padding-left: 18px; color: rgba(0,0,0,0.70); }\\n\\t:global(#head) { font-size: 1.9rem; padding-left: 18px; color: rgba(0,0,0,0.70); }\\n\\t:global(h2) { font-size: 1.6rem; padding-left: 12px; color: rgba(0,0,0,0.58); }\\n\\t:global(h3) { font-size: 1.4rem; padding-left: 8px; color: rgba(0,0,0,0.53); }\\n\\t:global(h4) { font-size: 1.2rem; padding-left: 7px; color: rgba(0,0,0,0.50); }\\n\\t:global(h1::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u26AC\\"; color: rgba(140,210,160,0.0); padding-right: 12px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(#head::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u2022\\"; color: rgba(140,0,160,0.00); padding-right: 12px;text-shadow: 0px 0px 18px rgba(140,210,160,0) }\\n\\t:global(h2::before) { font-size: 1.6rem;font-weight: 100; content: \\"\u26AC\u26AC\\"; color: rgba(140,210,160,0.00); padding-right: 9px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(h3::before) { font-size: 1.4rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\\"; color: rgba(140,210,160,0.00); padding-right: 7px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(h4::before) { font-size: 1.2rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\u26AC\u26AC\\"; color: rgba(140,210,160,0.00); padding-right: 5px; text-shadow: 0px 0px 18px rgba(140,210,160,0)}\\n\\t:global(h1:hover::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u26AC\\"; color:rgba(140,210,160,0.43) ; padding-right: 12px; transition:all 0.15s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.12)}\\n\\t:global(#head:hover::before) { font-size: 1.9rem;font-weight: 100; content: \\"\u2022\\"; color:rgba(140,210,160,0.53) ; padding-right: 12px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.12)}\\n\\t:global(h2:hover::before) { font-size: 1.6rem;font-weight: 100; content: \\"\u26AC\u26AC\\"; color:rgba(140,210,160,0.48) ; padding-right: 9px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.08)}\\n\\t:global(h3:hover::before) { font-size: 1.4rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\\"; color:rgba(140,210,160,0.43) ; padding-right: 7px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.06)}\\n\\t:global(h4:hover::before) { font-size: 1.2rem;font-weight: 100; content: \\"\u26AC\u26AC\u26AC\u26AC\u26AC\\"; color:rgba(140,210,160,0.38); padding-right: 5px; transition:all 0.25s ease-in; text-shadow: 0px 0px 18px rgba(140,210,160,0.05)}\\n\\t:global(h1:hover),:global(h2:hover),:global(h3:hover),:global(h4:hover),:global(#head:hover) {\\n\\t    }\\n\\t/* :global(h1:hover::after) { color: rgba(0,0,0,0.15); padding-left: 25px; font-size: 1.2rem; content: \\".\\" }\\n\\t:global(#head:hover::after) { color: rgba(0,0,0,0.15); padding-left: 25px; font-size: 1.2rem; content: \\".\\" }\\n\\t:global(h2:hover::after) { color: rgba(0,0,0,0.12); padding-left: 15; font-size: 1.0rem; content: \\"..\\" }\\n\\t:global(h3:hover::after) { color: rgba(0,0,0,0.09); padding-left: 10px; font-size: 0.9rem; content: \\"...\\" }\\n\\t:global(h4:hover::after) { color: rgba(0,0,0,0.09); padding-left: 08px; font-size: 0.7rem; content: \\"....\\" } */\\n\\t/* :global(h1:hover) { color: black;border-left: 4px solid rgba(0,0,0,0.15); transition: all 0.2s ease-in-out}\\n\\t:global(#head:hover) { border-left: 1px solid rgba(0,0,0,0.10); transition: all 0.2s ease-in-out}\\n\\t:global(h2:hover) { color:rgba(0,0,0,0.8);border-left: 1px solid rgba(0,0,0,0.10);  transition: all 0.2s ease-in-out}\\n\\t:global(h3:hover) { color:rgba(0,0,0,0.74);border-left: 1px solid rgba(0,0,0,0.10);  transition: all 0.2s ease-in-out}\\n\\t:global(h4:hover) { color:rgba(0,0,0,0.7);border-left: 1px solid rgba(0,0,0,0.1j);  transition: all 0.2s ease-in-out} */\\n\\t:global(p) {\\n\\t\\tpadding-left: 45px;\\n\\t\\tfont-size: 1.0rem;\\n\\t\\tborder-left:1px solid transparent;\\n\\t}\\n\\t.content {\\n\\t\\tfont-size: 0.97rem;\\n\\t\\tfont-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\\n\\t\\tfont-family:Helvetica;\\n\\t\\tfont-weight: 300;\\n\\t\\tcolor: rgba(0,2,1,0.58);\\n\\t\\t}\\n\\t:global(#head) {\\n\\t\\tpadding-bottom: 8px;\\n\\t\\tborder-left: 1px solid rgba(0,0,0,0.0);\\n\\t\\tmargin-left:0px;\\n\\t}\\n\\t/* :global(#head:hover::after) { color: rgba(0,0,0,0.15); padding-left: 8px; font-size: 1.2rem; content: \\"*\\" } */\\n\\t:global(#head:hover) {\\n\\t\\t/* color: rgba(0,0,0,0.76); */\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t\\tmargin-left: 0px;\\n\\t\\tpadding-left:18px;\\n\\n\\t}\\n\\t:global(.link:not(.nav):hover) {\\n\\t    transition: all 0.05s;\\n\\t    text-shadow: 0px 0px 8px rgba(0,0,0,0.0);\\n\\t    text-decoration: underline;\\n\\t    color: rgba(150,210,180,1);\\n\\t}\\n\\t:global(.link:not(.nav)) {\\n\\t    font-family: Helvetica;\\n\\t    text-decoration:none;\\n\\t    text-underline-offset: 1px;\\n\\t    font-size:1rem;\\n\\t    color: rgba(100,180,120,0.9);\\n\\t}\\n\\t/* :global(a:not(.nav):hover::before){\\n\\t\\tcontent: \\"[\\"\\n\\t}\\n\\t:global(a:not(.nav):hover::after){\\n\\t\\tcontent: \\"]\\"\\n\\t} */\\n\\t:global(p:hover:not(.foot)) {\\n\\t\\t/* border-left: 1px solid rgba(0,0,0,0.1); */\\n\\t\\t/* transition: all 0.2s ease-in-out; */\\n\\t\\t}\\n\\t/* :global(p::before) {\\n\\t\\tcolor: rgba(0,0,0,0.0);\\n\\t\\tcontent: \\"--\\";\\n\\t\\tpadding-right: 4px;\\n\\t}\\n\\t:global(p:hover::before),:global(p:hover::after) {\\n\\t\\tcolor: rgba(0,0,0,0.1);\\n\\t}\\n\\t:global(p::after) {\\n\\t\\tcolor: rgba(0,0,0,0.0);\\n\\t\\tcontent: \\"--\\";\\n\\t\\tpadding-left: 4px;\\n\\t} */\\n\\n.content {\\n\\tpadding-top: 12px;\\n\\tline-height: 1.4rem;\\n\\tpadding-bottom: 35px;\\n\\tpadding-left: 40px;\\n\\tpadding-right: 40px;\\n\\theight: 100%;\\n\\tmin-height: 45vh;\\n\\tbackground-color: rgba(246,246,246,0.925);\\n\\tborder-left: 1px solid rgba(0,0,0,0.065);\\n\\tborder-right: 1px solid rgba(0,0,0,0.065);\\n\\tborder-top: 1px solid rgba(0,0,0,0.040);\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.13);\\n\\tbox-shadow: 0px 7px 70px rgba(0,0,0,0.105);\\n\\tborder-radius: 09px;\\n\\tdisplay:block;\\n}\\n:global(li a ):not(.nav) {\\n\\ttext-decoration: underline;\\n\\ttext-underline-offset: 5px;\\n\\ttext-shadow: 0px 0px 5px rgba(0,0,0,0.01);\\n    }\\n    :global( .link.ext ):not(.nav) {\\n\\t    color: rgba(0,0,0,0.5);\\n\\t}\\n\\t:global(li a:active):not(.nav) {\\n\\t\\ttransform: scale(1.1);\\n\\t}\\n\\t:global(li a:hover):not(.nav) {\\n\\t\\tfont-weight: 300;\\n\\t\\t/* color: rgba(255,255,255,0.98); */\\n\\t\\t/* border-radius: 4px; */\\n\\t\\t/* box-shadow:  0px 0px 8px rgba(0,0,0,0.1); */\\n\\t\\ttext-shadow: 0px 0px 10px rgba(0,0,0,0.05);\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\n\\t    }\\n\\t    :global(li:hover a):not(.nav) {\\n\\t\\ttransition: all 0.2s ease-in-out;\\n\\t\\ttransform: scale(1.1);\\n\\n\\t\\t}\\n    /* :global(form) {\\n\\tpadding-left: 3%;\\n\\tpadding-right: 1%;\\n\\tpadding-top: 2%;\\n\\tpadding-bottom: 2%;\\n\\tbackground-color: rgba(0,0,0,0.02);\\n\\tbox-shadow: 0px 0px 7px rgba(0,0,0,0.00);\\n\\twidth: 50%;\\n\\tdisplay: block;\\n\\tposition:relative;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\ttransition: all 0.15s ease-in-out;\\n\\talign-items: center;\\n\\tbox-shadow: 0px 0px 5px rgba(0,0,0,0.03);\\n\\tborder: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 6px;\\n\\tborder-bottom: 3px solid rgba(0,0,0,0.09);\\n\\tmargin: auto;\\n    }\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\n\\n\\t\\t}\\n\\t\\t.formtitle {\\n\\t\\t    font-family:Helvetica;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t    padding-left: 8px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    .gray {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t} */\\n    :global(form) {\\n\\tpadding: 3% 5% 3% 5%;\\n\\tmargin-top: 10px;\\n\\t/* background-color: rgba(255,255,255,0.01); */\\n\\tbox-shadow: 0px 0px 50px rgba(0,0,0,0.03);\\n\\tborder-top: 1px solid rgba(0,0,0,0.035);\\n\\tborder-left: 1px solid rgba(0,0,0,0.045);\\n\\tborder-right: 1px solid rgba(0,0,0,0.045);\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.12);\\n\\tdisplay: inline-flexbox;\\n\\ttransition: all 0.15s ease-in-out;\\n\\tborder-radius: 5px;\\n\\tmin-width:40%;\\n\\tmargin: 7px;\\n    }\\n    :global(input) { \\n\\tpadding: 15px 30px; \\n\\tmargin-top: 2px;\\n\\tborder-radius:5px; \\n\\tdisplay:inline;\\n\\twidth: 80%;\\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tborder-bottom: 1px solid rgba(255,255,255,1);\\n\\tbackground: rgba(0,0,0,0.025);\\n\\t}\\n\\t:global(label) {\\n\\t\\tfont-size: 0.9rem;\\n\\t\\tpadding-left: 02px;\\n\\t\\tcolor: rgba(0,0,0,0.6);\\n\\t\\ttext-shadow: 0px 0px 4px rgba(0,0,0,0.05);\\n\\t    }\\n\\t:global(.form) {\\n\\t    display:inline-flex;\\n\\t    width: 100%;\\n\\t    margin:auto;\\n\\t\\t}\\n    :global(button) {\\n\\tborder: 2px solid transparent;\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.1);\\n\\tborder-top: 1px solid rgba(0,0,0,0.025);\\n\\tborder-left: 1px solid rgba(0,0,0,0.025);\\n\\tborder-right: 1px solid rgba(0,0,0,0.025);\\n\\tcolor: rgba(0,0,0,0.6);\\n\\tbackground-color: rgba(150,220,170,1);\\n\\tcolor: rgba(255,255,255,1);\\n\\ttext-shadow: 0px 1px 0px rgba(0,0,0,0.15);\\n\\tpadding: 8px 10px;\\n\\tborder-radius: 4px;\\n\\ttransition: all 0.15s ease-in-out;\\n\\n\\t}\\n\\t:global(input:active) {\\n\\t\\t/* background-color: rgba(255,255,255,0.05); */\\n\\t    }\\n\\t:global(input:focus) {\\n\\t\\t/* background-color: rgba(255,255,255,0.05); */\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\tborder-bottom: 1px solid rgba(150,220,170,0.8);\\n\\t\\tcolor: rgba(110,210,140,0.9);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.05);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\t:global(form button:hover) {\\n\\t    background-color: rbga(0,0,0,0.25);\\n\\t    border-bottom: 2px solid rgba(0,0,0,0.25);\\n\\t    border-radius: 5px;\\n\\t    transform:scale(1.1);\\n\\t    transition:all 0.1s ease-in-out;\\n\\t}\\n\\t:global(.secondary) {\\n\\t    background-color: rbga(0,0,0,0.25);\\n\\n\\t    }\\n\\t:global(.secondary:hover) {\\n\\t    background-color: rbga(0,0,0,0.35);\\n\\n\\t    }\\n\\t\\t:global(.formtitle) {\\n\\t\\t    font-family:Helvetica;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    :global(.gray) {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t    font-weight: 500;\\n\\t\\t\\t}\\n</style>\\n\\n<GoogleAnalytics/>\\n<div>\\n\\t<Nav/>\\n\\t<div class=\\"content\\">\\n\\t\\t<slot></slot>\\n\\t</div>\\n\\t<Footer/>\\n</div>\\n"],"names":[],"mappings":"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"}`
 };
 var _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $page, $$unsubscribe_page;
@@ -2847,7 +3020,7 @@ var _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_page();
   return `${validate_component(Google, "GoogleAnalytics").$$render($$result, {}, {}, {})}
 <div>${validate_component(Nav, "Nav").$$render($$result, {}, {}, {})}
-	<div class="${"content svelte-2b4jfb"}">${slots.default ? slots.default({}) : ``}</div>
+	<div class="${"content svelte-1aer3dc"}">${slots.default ? slots.default({}) : ``}</div>
 	${validate_component(Footer, "Footer").$$render($$result, {}, {}, {})}</div>`;
 });
 var __layout = /* @__PURE__ */ Object.freeze({
@@ -2860,18 +3033,24 @@ function load({ error: error2, status }) {
     props: { title: `${status}: ${error2.message}` }
   };
 }
-var _error = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+var _error$2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { title } = $$props;
+  let { error: error2 } = $$props, { status } = $$props;
   if ($$props.title === void 0 && $$bindings.title && title !== void 0)
     $$bindings.title(title);
+  if ($$props.error === void 0 && $$bindings.error && error2 !== void 0)
+    $$bindings.error(error2);
+  if ($$props.status === void 0 && $$bindings.status && status !== void 0)
+    $$bindings.status(status);
   return `${$$result.head += `${$$result.title = `<title>${escape2(title)}</title>`, ""}`, ""}
-<h1>${escape2(title)}</h1>
+
+<h1>ERROR: ${escape2(title)}</h1>
 <p>test</p>`;
 });
-var __error = /* @__PURE__ */ Object.freeze({
+var __error$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
-  "default": _error,
+  "default": _error$2,
   load
 });
 var css$c = {
@@ -2902,7 +3081,7 @@ var Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 <h2>Important Links</h2>
 <p>Nothing important yet!</p>`;
 });
-var index$b = /* @__PURE__ */ Object.freeze({
+var index$g = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": Routes
@@ -2910,19 +3089,1980 @@ var index$b = /* @__PURE__ */ Object.freeze({
 var Resources = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `${$$result.head += `${$$result.title = `<title>Resources \u2022 clp.is</title>`, ""}`, ""}`;
 });
-var index$a = /* @__PURE__ */ Object.freeze({
+var index$f = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": Resources
 });
-var css$b = {
-  code: "textarea.svelte-1vc3au4.svelte-1vc3au4{padding:10px;margin-top:4px;border-radius:5px;width:80%;border:1px transparent;border-top:1px solid rgba(0,0,0,0.1);background:rgba(0,0,0,0.05)}label.svelte-1vc3au4.svelte-1vc3au4{font-size:0.9rem;padding-left:02px;color:rgba(0,0,0,0.6);text-shadow:0px 0px 4px rgba(0,0,0,0.05)}button.svelte-1vc3au4.svelte-1vc3au4{border:2px solid transparent;border-bottom:2px solid rgba(0,0,0,0.1);border-top:1px solid rgba(0,0,0,0.025);border-left:1px solid rgba(0,0,0,0.025);border-right:1px solid rgba(0,0,0,0.025);color:rgba(0,0,0,0.6);background-color:rgba(255,255,255,1);padding:8px;border-radius:3px}input.svelte-1vc3au4.svelte-1vc3au4:active{background-color:rgba(0,0,0,0.2)}input.svelte-1vc3au4.svelte-1vc3au4:focus{background-color:rgba(0,0,0,0.12);border-top:1px solid rgba(0,0,0,0.2);outline:none;transform:scale(1.1);transition:all 0.1s ease-in-out}textarea.svelte-1vc3au4.svelte-1vc3au4:active{background-color:rgba(0,0,0,0.2);transform:scale(0.9)}textarea.svelte-1vc3au4.svelte-1vc3au4:focus{background-color:rgba(0,0,0,0.12);border-top:1px solid rgba(0,0,0,0.2);outline:none;transform:scale(1.05);transition:all 0.1s ease-in-out}form.svelte-1vc3au4 button.svelte-1vc3au4:hover{background-color:rbga(0,0,0,0.25);border-bottom:2px solid rgba(0,0,0,0.25);border-radius:5px;transform:scale(1.05);transition:all 0.1s ease-in-out}.form.svelte-1vc3au4.svelte-1vc3au4{align-content:center;align-content:center;justify-content:center}.form.svelte-1vc3au4.svelte-1vc3au4{align-content:center;align-content:center;justify-content:center}.formtitle.svelte-1vc3au4.svelte-1vc3au4{font-family:monospace;padding-bottom:12px;padding-left:8px;display:block}.gray.svelte-1vc3au4.svelte-1vc3au4{color:rgba(0,0,0,0.5)}",
-  map: `{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<script context=\\"module\\">\\nexport const hydrate = false;\\nexport const prerender = true;\\nimport Date from '$lib/date.svelte'\\n<\/script>\\n\\n<svelte:head>\\n\\t<title>About \u2022 clp.is</title>\\n</svelte:head>\\n<style>\\n    textarea { \\n\\tpadding: 10px; \\n\\tmargin-top: 4px;\\n\\tborder-radius:5px; \\n\\twidth: 80%;\\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tbackground: rgba(0,0,0,0.05);\\n\\t}\\n\\tlabel {\\n\\t\\tfont-size: 0.9rem;\\n\\t\\tpadding-left: 02px;\\n\\t\\tcolor: rgba(0,0,0,0.6);\\n\\t\\ttext-shadow: 0px 0px 4px rgba(0,0,0,0.05);\\n\\t    }\\n    button {\\n\\tborder: 2px solid transparent;\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.1);\\n\\tborder-top: 1px solid rgba(0,0,0,0.025);\\n\\tborder-left: 1px solid rgba(0,0,0,0.025);\\n\\tborder-right: 1px solid rgba(0,0,0,0.025);\\n\\tcolor: rgba(0,0,0,0.6);\\n\\tbackground-color: rgba(255,255,255,1);\\n\\tpadding: 8px;\\n\\tborder-radius: 3px;\\n\\n\\t}\\n\\tinput:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t    }\\n\\tinput:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.1);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\ttextarea:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t\\ttransform:scale(0.9);\\n\\t    }\\n\\ttextarea:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.05);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\tform button:hover {\\n\\t    background-color: rbga(0,0,0,0.25);\\n\\t    border-bottom: 2px solid rgba(0,0,0,0.25);\\n\\t    border-radius: 5px;\\n\\t    transform:scale(1.05);\\n\\t    transition:all 0.1s ease-in-out;\\n\\t}\\n\\tform button:active {\\n\\n\\t    }\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\n\\n\\t\\t}\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\t}\\n\\n\\n\\t\\t.formtitle {\\n\\t\\t    font-family:monospace;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t    padding-left: 8px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    .gray {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t}\\n\\n/* .walloftext { width: 80%; margin: auto; display:block; } */\\n</style>\\n\\n<h1 id=\\"head\\">About</h1>\\n<p class=\\"walloftext\\">Hi there! And <i>welcome</i> to Chris P's internet property. I'm a budding engineer, a few years out of the University of Washington Materials science & engineering program in Seattle.</p>\\n<p class=\\"walloftext\\">I'm currenlty most practiced in backend software development + cloud infrastructure architecture & engineering. Coming from a physical engineering background, I've had to learn quite a lot in my IT endeavours, both on my own and from the gracious assistance of others, whose patience I am grateful for eternally. I envision that with my multifaceted background and cross-disciplinary engineering cultivation, I can really bring a new perspective to the table in backend development and architecture.</p>\\n\\n<p class=\\"walloftext\\">I'm also working to build <a class=\\"link\\" href=\\"https://devisa.io\\">devisa</a> and <a class=\\"link\\" href=\\"https://idlets.com\\">idlets</a>. Keep in touch with me through real means or quietly stalk my <a class=\\"link\\" href=\\"/etc/updates\\">activity</a> <a class=\\"link\\" href=\\"/posts\\">feeds</a> if you're into that. If you wanna talk, email me at <a href=\\"mailto:clp@clp.is\\" class=\\"link\\">clp@clp.is</a> or message me on LinkedIn. Thank you, sincerely!</p>\\n\\n<p class=\\"walloftext\\">- Chris P<Date date=\\"07-29-21\\"/> </p>\\n<br/><br/>\\n<h3>show yourself!</h3>\\n<div class=\\"form\\">\\n<form class=\\"login\\">\\n    <span class=\\"formtitle\\">Contact <span class=\\"gray\\">me</span></span>\\n\\n    <label for=\\"msg\\">message</label><br/>\\n    <textarea name=\\"msg\\" rows=8/>\\n\\n\\n    <br/><br/>\\n    <label for=\\"email\\">email</label><br/>\\n    <input name=\\"email\\" type=\\"email\\"/>\\n\\n<br/>\\n<br/>\\n    <button label=\\"login\\" type=\\"submit\\">login</button>\\n</form>\\n</div>\\n<br/>\\n<br/>\\n<h3>Pics</h3>\\n<img src=\\"me/closed.jpeg\\" height=\\"275\\" width=\\"275\\"/>\\n<img src=\\"me/stare.jpeg\\" height=\\"275\\" width=\\"275\\"/>\\n<img src=\\"me/cout.jpeg\\" height=\\"275\\" width=\\"275\\"/>\\n"],"names":[],"mappings":"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"}`
+var matchName = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+var iconDefaults = Object.freeze({
+  left: 0,
+  top: 0,
+  width: 16,
+  height: 16,
+  rotate: 0,
+  vFlip: false,
+  hFlip: false
+});
+function fullIcon(data) {
+  return { ...iconDefaults, ...data };
+}
+var stringToIcon = (value, validate, allowSimpleName, provider = "") => {
+  const colonSeparated = value.split(":");
+  if (value.slice(0, 1) === "@") {
+    if (colonSeparated.length < 2 || colonSeparated.length > 3) {
+      return null;
+    }
+    provider = colonSeparated.shift().slice(1);
+  }
+  if (colonSeparated.length > 3 || !colonSeparated.length) {
+    return null;
+  }
+  if (colonSeparated.length > 1) {
+    const name2 = colonSeparated.pop();
+    const prefix = colonSeparated.pop();
+    const result = {
+      provider: colonSeparated.length > 0 ? colonSeparated[0] : provider,
+      prefix,
+      name: name2
+    };
+    return validate && !validateIcon(result) ? null : result;
+  }
+  const name = colonSeparated[0];
+  const dashSeparated = name.split("-");
+  if (dashSeparated.length > 1) {
+    const result = {
+      provider,
+      prefix: dashSeparated.shift(),
+      name: dashSeparated.join("-")
+    };
+    return validate && !validateIcon(result) ? null : result;
+  }
+  if (allowSimpleName && provider === "") {
+    const result = {
+      provider,
+      prefix: "",
+      name
+    };
+    return validate && !validateIcon(result, allowSimpleName) ? null : result;
+  }
+  return null;
 };
+var validateIcon = (icon, allowSimpleName) => {
+  if (!icon) {
+    return false;
+  }
+  return !!((icon.provider === "" || icon.provider.match(matchName)) && (allowSimpleName && icon.prefix === "" || icon.prefix.match(matchName)) && icon.name.match(matchName));
+};
+function mergeIconData(icon, alias) {
+  const result = { ...icon };
+  for (const key in iconDefaults) {
+    const prop = key;
+    if (alias[prop] !== void 0) {
+      const value = alias[prop];
+      if (result[prop] === void 0) {
+        result[prop] = value;
+        continue;
+      }
+      switch (prop) {
+        case "rotate":
+          result[prop] = (result[prop] + value) % 4;
+          break;
+        case "hFlip":
+        case "vFlip":
+          result[prop] = value !== result[prop];
+          break;
+        default:
+          result[prop] = value;
+      }
+    }
+  }
+  return result;
+}
+function getIconData$1(data, name, full = false) {
+  function getIcon(name2, iteration) {
+    var _a, _b, _c, _d;
+    if (data.icons[name2] !== void 0) {
+      return Object.assign({}, data.icons[name2]);
+    }
+    if (iteration > 5) {
+      return null;
+    }
+    if (((_a = data.aliases) == null ? void 0 : _a[name2]) !== void 0) {
+      const item = (_b = data.aliases) == null ? void 0 : _b[name2];
+      const result2 = getIcon(item.parent, iteration + 1);
+      if (result2) {
+        return mergeIconData(result2, item);
+      }
+      return result2;
+    }
+    if (iteration === 0 && ((_c = data.chars) == null ? void 0 : _c[name2]) !== void 0) {
+      return getIcon((_d = data.chars) == null ? void 0 : _d[name2], iteration + 1);
+    }
+    return null;
+  }
+  const result = getIcon(name, 0);
+  if (result) {
+    for (const key in iconDefaults) {
+      if (result[key] === void 0 && data[key] !== void 0) {
+        result[key] = data[key];
+      }
+    }
+  }
+  return result && full ? fullIcon(result) : result;
+}
+var matchChar = /^[a-f0-9]+(-[a-f0-9]+)*$/;
+function validateIconProps(item, fix) {
+  for (const key in item) {
+    const attr = key;
+    const value = item[attr];
+    const type = typeof value;
+    if (type === "undefined") {
+      delete item[attr];
+      continue;
+    }
+    switch (key) {
+      case "body":
+      case "parent":
+        if (type !== "string") {
+          return key;
+        }
+        break;
+      case "hFlip":
+      case "vFlip":
+      case "hidden":
+        if (type !== "boolean") {
+          if (fix) {
+            delete item[attr];
+          } else {
+            return key;
+          }
+        }
+        break;
+      case "width":
+      case "height":
+      case "left":
+      case "top":
+      case "rotate":
+      case "inlineHeight":
+      case "inlineTop":
+      case "verticalAlign":
+        if (type !== "number") {
+          if (fix) {
+            delete item[attr];
+          } else {
+            return key;
+          }
+        }
+        break;
+      default:
+        if (type === "object") {
+          if (fix) {
+            delete item[attr];
+          } else {
+            return key;
+          }
+        }
+    }
+  }
+  return null;
+}
+function validateIconSet(obj, options2) {
+  const fix = !!(options2 == null ? void 0 : options2.fix);
+  if (typeof obj !== "object" || obj === null || typeof obj.icons !== "object" || !obj.icons) {
+    throw new Error("Bad icon set");
+  }
+  const data = obj;
+  if (typeof (options2 == null ? void 0 : options2.prefix) === "string") {
+    data.prefix = options2.prefix;
+  } else if (typeof data.prefix !== "string" || !data.prefix.match(matchName)) {
+    throw new Error("Invalid prefix");
+  }
+  if (typeof (options2 == null ? void 0 : options2.provider) === "string") {
+    data.provider = options2.provider;
+  } else if (data.provider !== void 0) {
+    const value = data.provider;
+    if (typeof value !== "string" || value !== "" && !value.match(matchName)) {
+      if (fix) {
+        delete data.provider;
+      } else {
+        throw new Error("Invalid provider");
+      }
+    }
+  }
+  const icons = data.icons;
+  Object.keys(icons).forEach((name) => {
+    if (!name.match(matchName)) {
+      if (fix) {
+        delete icons[name];
+        return;
+      }
+      throw new Error(`Invalid icon name: "${name}"`);
+    }
+    const item = icons[name];
+    if (typeof item !== "object" || item === null || typeof item.body !== "string") {
+      if (fix) {
+        delete icons[name];
+        return;
+      }
+      throw new Error(`Invalid icon: "${name}"`);
+    }
+    const key = typeof item.parent === "string" ? "parent" : validateIconProps(item, fix);
+    if (key !== null) {
+      if (fix) {
+        delete icons[name];
+        return;
+      }
+      throw new Error(`Invalid property "${key}" in icon "${name}"`);
+    }
+  });
+  if (!Object.keys(data.icons).length) {
+    throw new Error("Icon set is empty");
+  }
+  if (data.aliases !== void 0) {
+    if (typeof data.aliases !== "object" || data.aliases === null) {
+      if (fix) {
+        delete data.aliases;
+      } else {
+        throw new Error("Invalid aliases list");
+      }
+    }
+  }
+  if (typeof data.aliases === "object") {
+    let validateAlias = function(name, iteration) {
+      if (validatedAliases.has(name)) {
+        return !failedAliases.has(name);
+      }
+      const item = aliases[name];
+      if (iteration > 5 || typeof item !== "object" || item === null || typeof item.parent !== "string" || !name.match(matchName)) {
+        if (fix) {
+          delete aliases[name];
+          failedAliases.add(name);
+          return false;
+        }
+        throw new Error(`Invalid icon alias: "${name}"`);
+      }
+      const parent = item.parent;
+      if (data.icons[parent] === void 0) {
+        if (aliases[parent] === void 0 || !validateAlias(parent, iteration + 1)) {
+          if (fix) {
+            delete aliases[name];
+            failedAliases.add(name);
+            return false;
+          }
+          throw new Error(`Missing parent icon for alias "${name}`);
+        }
+      }
+      if (fix && item.body !== void 0) {
+        delete item.body;
+      }
+      const key = item.body !== void 0 ? "body" : validateIconProps(item, fix);
+      if (key !== null) {
+        if (fix) {
+          delete aliases[name];
+          failedAliases.add(name);
+          return false;
+        }
+        throw new Error(`Invalid property "${key}" in alias "${name}"`);
+      }
+      validatedAliases.add(name);
+      return true;
+    };
+    const aliases = data.aliases;
+    const validatedAliases = new Set();
+    const failedAliases = new Set();
+    Object.keys(aliases).forEach((name) => {
+      validateAlias(name, 0);
+    });
+    if (fix && !Object.keys(data.aliases).length) {
+      delete data.aliases;
+    }
+  }
+  Object.keys(iconDefaults).forEach((prop) => {
+    const expectedType = typeof iconDefaults[prop];
+    const actualType = typeof data[prop];
+    if (actualType !== "undefined" && actualType !== expectedType) {
+      throw new Error(`Invalid value type for "${prop}"`);
+    }
+  });
+  if (data.chars !== void 0) {
+    if (typeof data.chars !== "object" || data.chars === null) {
+      if (fix) {
+        delete data.chars;
+      } else {
+        throw new Error("Invalid characters map");
+      }
+    }
+  }
+  if (typeof data.chars === "object") {
+    const chars2 = data.chars;
+    Object.keys(chars2).forEach((char) => {
+      var _a;
+      if (!char.match(matchChar) || typeof chars2[char] !== "string") {
+        if (fix) {
+          delete chars2[char];
+          return;
+        }
+        throw new Error(`Invalid character "${char}"`);
+      }
+      const target = chars2[char];
+      if (data.icons[target] === void 0 && ((_a = data.aliases) == null ? void 0 : _a[target]) === void 0) {
+        if (fix) {
+          delete chars2[char];
+          return;
+        }
+        throw new Error(`Character "${char}" points to missing icon "${target}"`);
+      }
+    });
+    if (fix && !Object.keys(data.chars).length) {
+      delete data.chars;
+    }
+  }
+  return data;
+}
+function isVariation(item) {
+  for (const key in iconDefaults) {
+    if (item[key] !== void 0) {
+      return true;
+    }
+  }
+  return false;
+}
+function parseIconSet(data, callback, options2) {
+  options2 = options2 || {};
+  const names = [];
+  if (typeof data !== "object" || typeof data.icons !== "object") {
+    return names;
+  }
+  const validate = options2.validate;
+  if (validate !== false) {
+    try {
+      validateIconSet(data, typeof validate === "object" ? validate : { fix: true });
+    } catch (err) {
+      return names;
+    }
+  }
+  if (data.not_found instanceof Array) {
+    data.not_found.forEach((name) => {
+      callback(name, null);
+      names.push(name);
+    });
+  }
+  const icons = data.icons;
+  Object.keys(icons).forEach((name) => {
+    const iconData = getIconData$1(data, name, true);
+    if (iconData) {
+      callback(name, iconData);
+      names.push(name);
+    }
+  });
+  const parseAliases = options2.aliases || "all";
+  if (parseAliases !== "none" && typeof data.aliases === "object") {
+    const aliases = data.aliases;
+    Object.keys(aliases).forEach((name) => {
+      if (parseAliases === "variations" && isVariation(aliases[name])) {
+        return;
+      }
+      const iconData = getIconData$1(data, name, true);
+      if (iconData) {
+        callback(name, iconData);
+        names.push(name);
+      }
+    });
+  }
+  return names;
+}
+var storage$1 = Object.create(null);
+function newStorage(provider, prefix) {
+  return {
+    provider,
+    prefix,
+    icons: Object.create(null),
+    missing: Object.create(null)
+  };
+}
+function getStorage(provider, prefix) {
+  if (storage$1[provider] === void 0) {
+    storage$1[provider] = Object.create(null);
+  }
+  const providerStorage = storage$1[provider];
+  if (providerStorage[prefix] === void 0) {
+    providerStorage[prefix] = newStorage(provider, prefix);
+  }
+  return providerStorage[prefix];
+}
+function addIconSet(storage2, data) {
+  const t = Date.now();
+  return parseIconSet(data, (name, icon) => {
+    if (icon) {
+      storage2.icons[name] = icon;
+    } else {
+      storage2.missing[name] = t;
+    }
+  });
+}
+function addIconToStorage(storage2, name, icon) {
+  try {
+    if (typeof icon.body === "string") {
+      storage2.icons[name] = Object.freeze(fullIcon(icon));
+      return true;
+    }
+  } catch (err) {
+  }
+  return false;
+}
+function getIconFromStorage(storage2, name) {
+  const value = storage2.icons[name];
+  return value === void 0 ? null : value;
+}
+var simpleNames = false;
+function allowSimpleNames(allow) {
+  if (typeof allow === "boolean") {
+    simpleNames = allow;
+  }
+  return simpleNames;
+}
+function getIconData(name) {
+  const icon = typeof name === "string" ? stringToIcon(name, true, simpleNames) : name;
+  return icon ? getIconFromStorage(getStorage(icon.provider, icon.prefix), icon.name) : null;
+}
+function addIcon(name, data) {
+  const icon = stringToIcon(name, true, simpleNames);
+  if (!icon) {
+    return false;
+  }
+  const storage2 = getStorage(icon.provider, icon.prefix);
+  return addIconToStorage(storage2, icon.name, data);
+}
+function addCollection(data, provider) {
+  if (typeof data !== "object") {
+    return false;
+  }
+  if (typeof provider !== "string") {
+    provider = typeof data.provider === "string" ? data.provider : "";
+  }
+  if (simpleNames && provider === "" && (typeof data.prefix !== "string" || data.prefix === "")) {
+    let added = false;
+    parseIconSet(data, (name, icon) => {
+      if (icon && addIcon(name, icon)) {
+        added = true;
+      }
+    }, {
+      validate: {
+        fix: true,
+        prefix: ""
+      }
+    });
+    return added;
+  }
+  if (typeof data.prefix !== "string" || !validateIcon({
+    provider,
+    prefix: data.prefix,
+    name: "a"
+  })) {
+    return false;
+  }
+  const storage2 = getStorage(provider, data.prefix);
+  return !!addIconSet(storage2, data);
+}
+var defaults = Object.freeze({
+  inline: false,
+  width: null,
+  height: null,
+  hAlign: "center",
+  vAlign: "middle",
+  slice: false,
+  hFlip: false,
+  vFlip: false,
+  rotate: 0
+});
+function mergeCustomisations(defaults2, item) {
+  const result = {};
+  for (const key in defaults2) {
+    const attr = key;
+    result[attr] = defaults2[attr];
+    if (item[attr] === void 0) {
+      continue;
+    }
+    const value = item[attr];
+    switch (attr) {
+      case "inline":
+      case "slice":
+        if (typeof value === "boolean") {
+          result[attr] = value;
+        }
+        break;
+      case "hFlip":
+      case "vFlip":
+        if (value === true) {
+          result[attr] = !result[attr];
+        }
+        break;
+      case "hAlign":
+      case "vAlign":
+        if (typeof value === "string" && value !== "") {
+          result[attr] = value;
+        }
+        break;
+      case "width":
+      case "height":
+        if (typeof value === "string" && value !== "" || typeof value === "number" && value || value === null) {
+          result[attr] = value;
+        }
+        break;
+      case "rotate":
+        if (typeof value === "number") {
+          result[attr] += value;
+        }
+        break;
+    }
+  }
+  return result;
+}
+var unitsSplit = /(-?[0-9.]*[0-9]+[0-9.]*)/g;
+var unitsTest = /^-?[0-9.]*[0-9]+[0-9.]*$/g;
+function calculateSize(size, ratio, precision) {
+  if (ratio === 1) {
+    return size;
+  }
+  precision = precision === void 0 ? 100 : precision;
+  if (typeof size === "number") {
+    return Math.ceil(size * ratio * precision) / precision;
+  }
+  if (typeof size !== "string") {
+    return size;
+  }
+  const oldParts = size.split(unitsSplit);
+  if (oldParts === null || !oldParts.length) {
+    return size;
+  }
+  const newParts = [];
+  let code = oldParts.shift();
+  let isNumber = unitsTest.test(code);
+  while (true) {
+    if (isNumber) {
+      const num = parseFloat(code);
+      if (isNaN(num)) {
+        newParts.push(code);
+      } else {
+        newParts.push(Math.ceil(num * ratio * precision) / precision);
+      }
+    } else {
+      newParts.push(code);
+    }
+    code = oldParts.shift();
+    if (code === void 0) {
+      return newParts.join("");
+    }
+    isNumber = !isNumber;
+  }
+}
+function preserveAspectRatio(props) {
+  let result = "";
+  switch (props.hAlign) {
+    case "left":
+      result += "xMin";
+      break;
+    case "right":
+      result += "xMax";
+      break;
+    default:
+      result += "xMid";
+  }
+  switch (props.vAlign) {
+    case "top":
+      result += "YMin";
+      break;
+    case "bottom":
+      result += "YMax";
+      break;
+    default:
+      result += "YMid";
+  }
+  result += props.slice ? " slice" : " meet";
+  return result;
+}
+function iconToSVG(icon, customisations) {
+  const box = {
+    left: icon.left,
+    top: icon.top,
+    width: icon.width,
+    height: icon.height
+  };
+  let body = icon.body;
+  [icon, customisations].forEach((props) => {
+    const transformations = [];
+    const hFlip = props.hFlip;
+    const vFlip = props.vFlip;
+    let rotation = props.rotate;
+    if (hFlip) {
+      if (vFlip) {
+        rotation += 2;
+      } else {
+        transformations.push("translate(" + (box.width + box.left) + " " + (0 - box.top) + ")");
+        transformations.push("scale(-1 1)");
+        box.top = box.left = 0;
+      }
+    } else if (vFlip) {
+      transformations.push("translate(" + (0 - box.left) + " " + (box.height + box.top) + ")");
+      transformations.push("scale(1 -1)");
+      box.top = box.left = 0;
+    }
+    let tempValue;
+    if (rotation < 0) {
+      rotation -= Math.floor(rotation / 4) * 4;
+    }
+    rotation = rotation % 4;
+    switch (rotation) {
+      case 1:
+        tempValue = box.height / 2 + box.top;
+        transformations.unshift("rotate(90 " + tempValue + " " + tempValue + ")");
+        break;
+      case 2:
+        transformations.unshift("rotate(180 " + (box.width / 2 + box.left) + " " + (box.height / 2 + box.top) + ")");
+        break;
+      case 3:
+        tempValue = box.width / 2 + box.left;
+        transformations.unshift("rotate(-90 " + tempValue + " " + tempValue + ")");
+        break;
+    }
+    if (rotation % 2 === 1) {
+      if (box.left !== 0 || box.top !== 0) {
+        tempValue = box.left;
+        box.left = box.top;
+        box.top = tempValue;
+      }
+      if (box.width !== box.height) {
+        tempValue = box.width;
+        box.width = box.height;
+        box.height = tempValue;
+      }
+    }
+    if (transformations.length) {
+      body = '<g transform="' + transformations.join(" ") + '">' + body + "</g>";
+    }
+  });
+  let width, height;
+  if (customisations.width === null && customisations.height === null) {
+    height = "1em";
+    width = calculateSize(height, box.width / box.height);
+  } else if (customisations.width !== null && customisations.height !== null) {
+    width = customisations.width;
+    height = customisations.height;
+  } else if (customisations.height !== null) {
+    height = customisations.height;
+    width = calculateSize(height, box.width / box.height);
+  } else {
+    width = customisations.width;
+    height = calculateSize(width, box.height / box.width);
+  }
+  if (width === "auto") {
+    width = box.width;
+  }
+  if (height === "auto") {
+    height = box.height;
+  }
+  width = typeof width === "string" ? width : width + "";
+  height = typeof height === "string" ? height : height + "";
+  const result = {
+    attributes: {
+      width,
+      height,
+      preserveAspectRatio: preserveAspectRatio(customisations),
+      viewBox: box.left + " " + box.top + " " + box.width + " " + box.height
+    },
+    body
+  };
+  if (customisations.inline) {
+    result.inline = true;
+  }
+  return result;
+}
+var regex = /\sid="(\S+)"/g;
+var randomPrefix = "IconifyId-" + Date.now().toString(16) + "-" + (Math.random() * 16777216 | 0).toString(16) + "-";
+var counter = 0;
+function replaceIDs(body, prefix = randomPrefix) {
+  const ids = [];
+  let match;
+  while (match = regex.exec(body)) {
+    ids.push(match[1]);
+  }
+  if (!ids.length) {
+    return body;
+  }
+  ids.forEach((id) => {
+    const newID = typeof prefix === "function" ? prefix(id) : prefix + counter++;
+    const escapedID = id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    body = body.replace(new RegExp('([#;"])(' + escapedID + ')([")]|\\.[a-z])', "g"), "$1" + newID + "$3");
+  });
+  return body;
+}
+var storage = Object.create(null);
+function setAPIModule(provider, item) {
+  storage[provider] = item;
+}
+function getAPIModule(provider) {
+  return storage[provider] || storage[""];
+}
+function createAPIConfig(source) {
+  let resources;
+  if (typeof source.resources === "string") {
+    resources = [source.resources];
+  } else {
+    resources = source.resources;
+    if (!(resources instanceof Array) || !resources.length) {
+      return null;
+    }
+  }
+  const result = {
+    resources,
+    path: source.path === void 0 ? "/" : source.path,
+    maxURL: source.maxURL ? source.maxURL : 500,
+    rotate: source.rotate ? source.rotate : 750,
+    timeout: source.timeout ? source.timeout : 5e3,
+    random: source.random === true,
+    index: source.index ? source.index : 0,
+    dataAfterTimeout: source.dataAfterTimeout !== false
+  };
+  return result;
+}
+var configStorage = Object.create(null);
+var fallBackAPISources = [
+  "https://api.simplesvg.com",
+  "https://api.unisvg.com"
+];
+var fallBackAPI = [];
+while (fallBackAPISources.length > 0) {
+  if (fallBackAPISources.length === 1) {
+    fallBackAPI.push(fallBackAPISources.shift());
+  } else {
+    if (Math.random() > 0.5) {
+      fallBackAPI.push(fallBackAPISources.shift());
+    } else {
+      fallBackAPI.push(fallBackAPISources.pop());
+    }
+  }
+}
+configStorage[""] = createAPIConfig({
+  resources: ["https://api.iconify.design"].concat(fallBackAPI)
+});
+function addAPIProvider(provider, customConfig) {
+  const config2 = createAPIConfig(customConfig);
+  if (config2 === null) {
+    return false;
+  }
+  configStorage[provider] = config2;
+  return true;
+}
+function getAPIConfig(provider) {
+  return configStorage[provider];
+}
+var mergeParams = (base, params) => {
+  let result = base, hasParams = result.indexOf("?") !== -1;
+  function paramToString(value) {
+    switch (typeof value) {
+      case "boolean":
+        return value ? "true" : "false";
+      case "number":
+        return encodeURIComponent(value);
+      case "string":
+        return encodeURIComponent(value);
+      default:
+        throw new Error("Invalid parameter");
+    }
+  }
+  Object.keys(params).forEach((key) => {
+    let value;
+    try {
+      value = paramToString(params[key]);
+    } catch (err) {
+      return;
+    }
+    result += (hasParams ? "&" : "?") + encodeURIComponent(key) + "=" + value;
+    hasParams = true;
+  });
+  return result;
+};
+var maxLengthCache = Object.create(null);
+var pathCache = Object.create(null);
+var detectFetch = () => {
+  let callback;
+  try {
+    callback = fetch;
+    if (typeof callback === "function") {
+      return callback;
+    }
+  } catch (err) {
+  }
+  try {
+    const chunk = String.fromCharCode(114) + String.fromCharCode(101);
+    const req = global[chunk + "qui" + chunk];
+    callback = req("cross-fetch");
+    if (typeof callback === "function") {
+      return callback;
+    }
+  } catch (err) {
+  }
+  return null;
+};
+var fetchModule = detectFetch();
+function calculateMaxLength(provider, prefix) {
+  const config2 = getAPIConfig(provider);
+  if (!config2) {
+    return 0;
+  }
+  let result;
+  if (!config2.maxURL) {
+    result = 0;
+  } else {
+    let maxHostLength = 0;
+    config2.resources.forEach((item) => {
+      const host = item;
+      maxHostLength = Math.max(maxHostLength, host.length);
+    });
+    const url = mergeParams(prefix + ".json", {
+      icons: ""
+    });
+    result = config2.maxURL - maxHostLength - config2.path.length - url.length;
+  }
+  const cacheKey = provider + ":" + prefix;
+  pathCache[provider] = config2.path;
+  maxLengthCache[cacheKey] = result;
+  return result;
+}
+var prepare = (provider, prefix, icons) => {
+  const results = [];
+  let maxLength = maxLengthCache[prefix];
+  if (maxLength === void 0) {
+    maxLength = calculateMaxLength(provider, prefix);
+  }
+  const type = "icons";
+  let item = {
+    type,
+    provider,
+    prefix,
+    icons: []
+  };
+  let length = 0;
+  icons.forEach((name, index2) => {
+    length += name.length + 1;
+    if (length >= maxLength && index2 > 0) {
+      results.push(item);
+      item = {
+        type,
+        provider,
+        prefix,
+        icons: []
+      };
+      length = name.length;
+    }
+    item.icons.push(name);
+  });
+  results.push(item);
+  return results;
+};
+function getPath(provider) {
+  if (typeof provider === "string") {
+    if (pathCache[provider] === void 0) {
+      const config2 = getAPIConfig(provider);
+      if (!config2) {
+        return "/";
+      }
+      pathCache[provider] = config2.path;
+    }
+    return pathCache[provider];
+  }
+  return "/";
+}
+var send = (host, params, status) => {
+  if (!fetchModule) {
+    status.done(void 0, 424);
+    return;
+  }
+  let path = getPath(params.provider);
+  switch (params.type) {
+    case "icons": {
+      const prefix = params.prefix;
+      const icons = params.icons;
+      const iconsList = icons.join(",");
+      path += mergeParams(prefix + ".json", {
+        icons: iconsList
+      });
+      break;
+    }
+    case "custom": {
+      const uri = params.uri;
+      path += uri.slice(0, 1) === "/" ? uri.slice(1) : uri;
+      break;
+    }
+    default:
+      status.done(void 0, 400);
+      return;
+  }
+  let defaultError = 503;
+  fetchModule(host + path).then((response) => {
+    if (response.status !== 200) {
+      setTimeout(() => {
+        status.done(void 0, response.status);
+      });
+      return;
+    }
+    defaultError = 501;
+    return response.json();
+  }).then((data) => {
+    if (typeof data !== "object" || data === null) {
+      setTimeout(() => {
+        status.done(void 0, defaultError);
+      });
+      return;
+    }
+    setTimeout(() => {
+      status.done(data);
+    });
+  }).catch(() => {
+    status.done(void 0, defaultError);
+  });
+};
+var fetchAPIModule = {
+  prepare,
+  send
+};
+function sortIcons(icons) {
+  const result = {
+    loaded: [],
+    missing: [],
+    pending: []
+  };
+  const storage2 = Object.create(null);
+  icons.sort((a, b) => {
+    if (a.provider !== b.provider) {
+      return a.provider.localeCompare(b.provider);
+    }
+    if (a.prefix !== b.prefix) {
+      return a.prefix.localeCompare(b.prefix);
+    }
+    return a.name.localeCompare(b.name);
+  });
+  let lastIcon = {
+    provider: "",
+    prefix: "",
+    name: ""
+  };
+  icons.forEach((icon) => {
+    if (lastIcon.name === icon.name && lastIcon.prefix === icon.prefix && lastIcon.provider === icon.provider) {
+      return;
+    }
+    lastIcon = icon;
+    const provider = icon.provider;
+    const prefix = icon.prefix;
+    const name = icon.name;
+    if (storage2[provider] === void 0) {
+      storage2[provider] = Object.create(null);
+    }
+    const providerStorage = storage2[provider];
+    if (providerStorage[prefix] === void 0) {
+      providerStorage[prefix] = getStorage(provider, prefix);
+    }
+    const localStorage = providerStorage[prefix];
+    let list;
+    if (localStorage.icons[name] !== void 0) {
+      list = result.loaded;
+    } else if (prefix === "" || localStorage.missing[name] !== void 0) {
+      list = result.missing;
+    } else {
+      list = result.pending;
+    }
+    const item = {
+      provider,
+      prefix,
+      name
+    };
+    list.push(item);
+  });
+  return result;
+}
+var callbacks = Object.create(null);
+var pendingUpdates = Object.create(null);
+function removeCallback(sources, id) {
+  sources.forEach((source) => {
+    const provider = source.provider;
+    if (callbacks[provider] === void 0) {
+      return;
+    }
+    const providerCallbacks = callbacks[provider];
+    const prefix = source.prefix;
+    const items = providerCallbacks[prefix];
+    if (items) {
+      providerCallbacks[prefix] = items.filter((row) => row.id !== id);
+    }
+  });
+}
+function updateCallbacks(provider, prefix) {
+  if (pendingUpdates[provider] === void 0) {
+    pendingUpdates[provider] = Object.create(null);
+  }
+  const providerPendingUpdates = pendingUpdates[provider];
+  if (!providerPendingUpdates[prefix]) {
+    providerPendingUpdates[prefix] = true;
+    setTimeout(() => {
+      providerPendingUpdates[prefix] = false;
+      if (callbacks[provider] === void 0 || callbacks[provider][prefix] === void 0) {
+        return;
+      }
+      const items = callbacks[provider][prefix].slice(0);
+      if (!items.length) {
+        return;
+      }
+      const storage2 = getStorage(provider, prefix);
+      let hasPending = false;
+      items.forEach((item) => {
+        const icons = item.icons;
+        const oldLength = icons.pending.length;
+        icons.pending = icons.pending.filter((icon) => {
+          if (icon.prefix !== prefix) {
+            return true;
+          }
+          const name = icon.name;
+          if (storage2.icons[name] !== void 0) {
+            icons.loaded.push({
+              provider,
+              prefix,
+              name
+            });
+          } else if (storage2.missing[name] !== void 0) {
+            icons.missing.push({
+              provider,
+              prefix,
+              name
+            });
+          } else {
+            hasPending = true;
+            return true;
+          }
+          return false;
+        });
+        if (icons.pending.length !== oldLength) {
+          if (!hasPending) {
+            removeCallback([
+              {
+                provider,
+                prefix
+              }
+            ], item.id);
+          }
+          item.callback(icons.loaded.slice(0), icons.missing.slice(0), icons.pending.slice(0), item.abort);
+        }
+      });
+    });
+  }
+}
+var idCounter = 0;
+function storeCallback(callback, icons, pendingSources) {
+  const id = idCounter++;
+  const abort = removeCallback.bind(null, pendingSources, id);
+  if (!icons.pending.length) {
+    return abort;
+  }
+  const item = {
+    id,
+    icons,
+    callback,
+    abort
+  };
+  pendingSources.forEach((source) => {
+    const provider = source.provider;
+    const prefix = source.prefix;
+    if (callbacks[provider] === void 0) {
+      callbacks[provider] = Object.create(null);
+    }
+    const providerCallbacks = callbacks[provider];
+    if (providerCallbacks[prefix] === void 0) {
+      providerCallbacks[prefix] = [];
+    }
+    providerCallbacks[prefix].push(item);
+  });
+  return abort;
+}
+function listToIcons(list, validate = true, simpleNames2 = false) {
+  const result = [];
+  list.forEach((item) => {
+    const icon = typeof item === "string" ? stringToIcon(item, false, simpleNames2) : item;
+    if (!validate || validateIcon(icon, simpleNames2)) {
+      result.push({
+        provider: icon.provider,
+        prefix: icon.prefix,
+        name: icon.name
+      });
+    }
+  });
+  return result;
+}
+var defaultConfig = {
+  resources: [],
+  index: 0,
+  timeout: 2e3,
+  rotate: 750,
+  random: false,
+  dataAfterTimeout: false
+};
+function sendQuery(config2, payload, query, done, success) {
+  const resourcesCount = config2.resources.length;
+  const startIndex = config2.random ? Math.floor(Math.random() * resourcesCount) : config2.index;
+  let resources;
+  if (config2.random) {
+    let list = config2.resources.slice(0);
+    resources = [];
+    while (list.length > 1) {
+      const nextIndex = Math.floor(Math.random() * list.length);
+      resources.push(list[nextIndex]);
+      list = list.slice(0, nextIndex).concat(list.slice(nextIndex + 1));
+    }
+    resources = resources.concat(list);
+  } else {
+    resources = config2.resources.slice(startIndex).concat(config2.resources.slice(0, startIndex));
+  }
+  const startTime = Date.now();
+  let status = "pending";
+  let queriesSent = 0;
+  let lastError = void 0;
+  let timer = null;
+  let queue = [];
+  let doneCallbacks = [];
+  if (typeof done === "function") {
+    doneCallbacks.push(done);
+  }
+  function resetTimer() {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+  }
+  function abort() {
+    if (status === "pending") {
+      status = "aborted";
+    }
+    resetTimer();
+    queue.forEach((item) => {
+      if (item.abort) {
+        item.abort();
+      }
+      if (item.status === "pending") {
+        item.status = "aborted";
+      }
+    });
+    queue = [];
+  }
+  function subscribe2(callback, overwrite) {
+    if (overwrite) {
+      doneCallbacks = [];
+    }
+    if (typeof callback === "function") {
+      doneCallbacks.push(callback);
+    }
+  }
+  function getQueryStatus() {
+    return {
+      startTime,
+      payload,
+      status,
+      queriesSent,
+      queriesPending: queue.length,
+      subscribe: subscribe2,
+      abort
+    };
+  }
+  function failQuery() {
+    status = "failed";
+    doneCallbacks.forEach((callback) => {
+      callback(void 0, lastError);
+    });
+  }
+  function clearQueue() {
+    queue = queue.filter((item) => {
+      if (item.status === "pending") {
+        item.status = "aborted";
+      }
+      if (item.abort) {
+        item.abort();
+      }
+      return false;
+    });
+  }
+  function moduleResponse(item, data, error2) {
+    const isError = data === void 0;
+    queue = queue.filter((queued) => queued !== item);
+    switch (status) {
+      case "pending":
+        break;
+      case "failed":
+        if (isError || !config2.dataAfterTimeout) {
+          return;
+        }
+        break;
+      default:
+        return;
+    }
+    if (isError) {
+      if (error2 !== void 0) {
+        lastError = error2;
+      }
+      if (!queue.length) {
+        if (!resources.length) {
+          failQuery();
+        } else {
+          execNext();
+        }
+      }
+      return;
+    }
+    resetTimer();
+    clearQueue();
+    if (success && !config2.random) {
+      const index2 = config2.resources.indexOf(item.resource);
+      if (index2 !== -1 && index2 !== config2.index) {
+        success(index2);
+      }
+    }
+    status = "completed";
+    doneCallbacks.forEach((callback) => {
+      callback(data);
+    });
+  }
+  function execNext() {
+    if (status !== "pending") {
+      return;
+    }
+    resetTimer();
+    const resource = resources.shift();
+    if (resource === void 0) {
+      if (queue.length) {
+        const timeout2 = typeof config2.timeout === "function" ? config2.timeout(startTime) : config2.timeout;
+        if (timeout2) {
+          timer = setTimeout(() => {
+            resetTimer();
+            if (status === "pending") {
+              clearQueue();
+              failQuery();
+            }
+          }, timeout2);
+          return;
+        }
+      }
+      failQuery();
+      return;
+    }
+    const item = {
+      getQueryStatus,
+      status: "pending",
+      resource,
+      done: (data, error2) => {
+        moduleResponse(item, data, error2);
+      }
+    };
+    queue.push(item);
+    queriesSent++;
+    const timeout = typeof config2.rotate === "function" ? config2.rotate(queriesSent, startTime) : config2.rotate;
+    timer = setTimeout(execNext, timeout);
+    query(resource, payload, item);
+  }
+  setTimeout(execNext);
+  return getQueryStatus;
+}
+function setConfig(config2) {
+  if (typeof config2 !== "object" || typeof config2.resources !== "object" || !(config2.resources instanceof Array) || !config2.resources.length) {
+    throw new Error("Invalid Reduncancy configuration");
+  }
+  const newConfig = Object.create(null);
+  let key;
+  for (key in defaultConfig) {
+    if (config2[key] !== void 0) {
+      newConfig[key] = config2[key];
+    } else {
+      newConfig[key] = defaultConfig[key];
+    }
+  }
+  return newConfig;
+}
+function initRedundancy(cfg) {
+  const config2 = setConfig(cfg);
+  let queries = [];
+  function cleanup() {
+    queries = queries.filter((item) => item().status === "pending");
+  }
+  function query(payload, queryCallback, doneCallback) {
+    const query2 = sendQuery(config2, payload, queryCallback, (data, error2) => {
+      cleanup();
+      if (doneCallback) {
+        doneCallback(data, error2);
+      }
+    }, (newIndex) => {
+      config2.index = newIndex;
+    });
+    queries.push(query2);
+    return query2;
+  }
+  function find(callback) {
+    const result = queries.find((value) => {
+      return callback(value);
+    });
+    return result !== void 0 ? result : null;
+  }
+  const instance = {
+    query,
+    find,
+    setIndex: (index2) => {
+      config2.index = index2;
+    },
+    getIndex: () => config2.index,
+    cleanup
+  };
+  return instance;
+}
+function emptyCallback$1() {
+}
+var redundancyCache = Object.create(null);
+function getRedundancyCache(provider) {
+  if (redundancyCache[provider] === void 0) {
+    const config2 = getAPIConfig(provider);
+    if (!config2) {
+      return;
+    }
+    const redundancy = initRedundancy(config2);
+    const cachedReundancy = {
+      config: config2,
+      redundancy
+    };
+    redundancyCache[provider] = cachedReundancy;
+  }
+  return redundancyCache[provider];
+}
+function sendAPIQuery(target, query, callback) {
+  let redundancy;
+  let send2;
+  if (typeof target === "string") {
+    const api = getAPIModule(target);
+    if (!api) {
+      callback(void 0, 424);
+      return emptyCallback$1;
+    }
+    send2 = api.send;
+    const cached = getRedundancyCache(target);
+    if (cached) {
+      redundancy = cached.redundancy;
+    }
+  } else {
+    const config2 = createAPIConfig(target);
+    if (config2) {
+      redundancy = initRedundancy(config2);
+      const moduleKey = target.resources ? target.resources[0] : "";
+      const api = getAPIModule(moduleKey);
+      if (api) {
+        send2 = api.send;
+      }
+    }
+  }
+  if (!redundancy || !send2) {
+    callback(void 0, 424);
+    return emptyCallback$1;
+  }
+  return redundancy.query(query, send2, callback)().abort;
+}
+var cache = {};
+function emptyCallback() {
+}
+var pendingIcons = Object.create(null);
+var iconsToLoad = Object.create(null);
+var loaderFlags = Object.create(null);
+var queueFlags = Object.create(null);
+function loadedNewIcons(provider, prefix) {
+  if (loaderFlags[provider] === void 0) {
+    loaderFlags[provider] = Object.create(null);
+  }
+  const providerLoaderFlags = loaderFlags[provider];
+  if (!providerLoaderFlags[prefix]) {
+    providerLoaderFlags[prefix] = true;
+    setTimeout(() => {
+      providerLoaderFlags[prefix] = false;
+      updateCallbacks(provider, prefix);
+    });
+  }
+}
+var errorsCache = Object.create(null);
+function loadNewIcons(provider, prefix, icons) {
+  function err() {
+    const key = (provider === "" ? "" : "@" + provider + ":") + prefix;
+    const time = Math.floor(Date.now() / 6e4);
+    if (errorsCache[key] < time) {
+      errorsCache[key] = time;
+      console.error('Unable to retrieve icons for "' + key + '" because API is not configured properly.');
+    }
+  }
+  if (iconsToLoad[provider] === void 0) {
+    iconsToLoad[provider] = Object.create(null);
+  }
+  const providerIconsToLoad = iconsToLoad[provider];
+  if (queueFlags[provider] === void 0) {
+    queueFlags[provider] = Object.create(null);
+  }
+  const providerQueueFlags = queueFlags[provider];
+  if (pendingIcons[provider] === void 0) {
+    pendingIcons[provider] = Object.create(null);
+  }
+  const providerPendingIcons = pendingIcons[provider];
+  if (providerIconsToLoad[prefix] === void 0) {
+    providerIconsToLoad[prefix] = icons;
+  } else {
+    providerIconsToLoad[prefix] = providerIconsToLoad[prefix].concat(icons).sort();
+  }
+  if (!providerQueueFlags[prefix]) {
+    providerQueueFlags[prefix] = true;
+    setTimeout(() => {
+      providerQueueFlags[prefix] = false;
+      const icons2 = providerIconsToLoad[prefix];
+      delete providerIconsToLoad[prefix];
+      const api = getAPIModule(provider);
+      if (!api) {
+        err();
+        return;
+      }
+      const params = api.prepare(provider, prefix, icons2);
+      params.forEach((item) => {
+        sendAPIQuery(provider, item, (data, error2) => {
+          const storage2 = getStorage(provider, prefix);
+          if (typeof data !== "object") {
+            if (error2 !== 404) {
+              return;
+            }
+            const t = Date.now();
+            item.icons.forEach((name) => {
+              storage2.missing[name] = t;
+            });
+          } else {
+            try {
+              const parsed = addIconSet(storage2, data);
+              if (!parsed.length) {
+                return;
+              }
+              const pending = providerPendingIcons[prefix];
+              parsed.forEach((name) => {
+                delete pending[name];
+              });
+              if (cache.store) {
+                cache.store(provider, data);
+              }
+            } catch (err2) {
+              console.error(err2);
+            }
+          }
+          loadedNewIcons(provider, prefix);
+        });
+      });
+    });
+  }
+}
+var loadIcons = (icons, callback) => {
+  const cleanedIcons = listToIcons(icons, true, allowSimpleNames());
+  const sortedIcons = sortIcons(cleanedIcons);
+  if (!sortedIcons.pending.length) {
+    let callCallback = true;
+    if (callback) {
+      setTimeout(() => {
+        if (callCallback) {
+          callback(sortedIcons.loaded, sortedIcons.missing, sortedIcons.pending, emptyCallback);
+        }
+      });
+    }
+    return () => {
+      callCallback = false;
+    };
+  }
+  const newIcons = Object.create(null);
+  const sources = [];
+  let lastProvider, lastPrefix;
+  sortedIcons.pending.forEach((icon) => {
+    const provider = icon.provider;
+    const prefix = icon.prefix;
+    if (prefix === lastPrefix && provider === lastProvider) {
+      return;
+    }
+    lastProvider = provider;
+    lastPrefix = prefix;
+    sources.push({
+      provider,
+      prefix
+    });
+    if (pendingIcons[provider] === void 0) {
+      pendingIcons[provider] = Object.create(null);
+    }
+    const providerPendingIcons = pendingIcons[provider];
+    if (providerPendingIcons[prefix] === void 0) {
+      providerPendingIcons[prefix] = Object.create(null);
+    }
+    if (newIcons[provider] === void 0) {
+      newIcons[provider] = Object.create(null);
+    }
+    const providerNewIcons = newIcons[provider];
+    if (providerNewIcons[prefix] === void 0) {
+      providerNewIcons[prefix] = [];
+    }
+  });
+  const time = Date.now();
+  sortedIcons.pending.forEach((icon) => {
+    const provider = icon.provider;
+    const prefix = icon.prefix;
+    const name = icon.name;
+    const pendingQueue = pendingIcons[provider][prefix];
+    if (pendingQueue[name] === void 0) {
+      pendingQueue[name] = time;
+      newIcons[provider][prefix].push(name);
+    }
+  });
+  sources.forEach((source) => {
+    const provider = source.provider;
+    const prefix = source.prefix;
+    if (newIcons[provider][prefix].length) {
+      loadNewIcons(provider, prefix, newIcons[provider][prefix]);
+    }
+  });
+  return callback ? storeCallback(callback, sortedIcons, sources) : emptyCallback;
+};
+var cacheVersion = "iconify2";
+var cachePrefix = "iconify";
+var countKey = cachePrefix + "-count";
+var versionKey = cachePrefix + "-version";
+var hour = 36e5;
+var cacheExpiration = 168;
+var config = {
+  local: true,
+  session: true
+};
+var loaded = false;
+var count = {
+  local: 0,
+  session: 0
+};
+var emptyList = {
+  local: [],
+  session: []
+};
+var _window = typeof window === "undefined" ? {} : window;
+function getGlobal(key) {
+  const attr = key + "Storage";
+  try {
+    if (_window && _window[attr] && typeof _window[attr].length === "number") {
+      return _window[attr];
+    }
+  } catch (err) {
+  }
+  config[key] = false;
+  return null;
+}
+function setCount(storage2, key, value) {
+  try {
+    storage2.setItem(countKey, value + "");
+    count[key] = value;
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+function getCount(storage2) {
+  const count2 = storage2.getItem(countKey);
+  if (count2) {
+    const total = parseInt(count2);
+    return total ? total : 0;
+  }
+  return 0;
+}
+function initCache(storage2, key) {
+  try {
+    storage2.setItem(versionKey, cacheVersion);
+  } catch (err) {
+  }
+  setCount(storage2, key, 0);
+}
+function destroyCache(storage2) {
+  try {
+    const total = getCount(storage2);
+    for (let i = 0; i < total; i++) {
+      storage2.removeItem(cachePrefix + i);
+    }
+  } catch (err) {
+  }
+}
+var loadCache = () => {
+  if (loaded) {
+    return;
+  }
+  loaded = true;
+  const minTime = Math.floor(Date.now() / hour) - cacheExpiration;
+  function load2(key) {
+    const func = getGlobal(key);
+    if (!func) {
+      return;
+    }
+    const getItem = (index2) => {
+      const name = cachePrefix + index2;
+      const item = func.getItem(name);
+      if (typeof item !== "string") {
+        return false;
+      }
+      let valid = true;
+      try {
+        const data = JSON.parse(item);
+        if (typeof data !== "object" || typeof data.cached !== "number" || data.cached < minTime || typeof data.provider !== "string" || typeof data.data !== "object" || typeof data.data.prefix !== "string") {
+          valid = false;
+        } else {
+          const provider = data.provider;
+          const prefix = data.data.prefix;
+          const storage2 = getStorage(provider, prefix);
+          valid = addIconSet(storage2, data.data).length > 0;
+        }
+      } catch (err) {
+        valid = false;
+      }
+      if (!valid) {
+        func.removeItem(name);
+      }
+      return valid;
+    };
+    try {
+      const version = func.getItem(versionKey);
+      if (version !== cacheVersion) {
+        if (version) {
+          destroyCache(func);
+        }
+        initCache(func, key);
+        return;
+      }
+      let total = getCount(func);
+      for (let i = total - 1; i >= 0; i--) {
+        if (!getItem(i)) {
+          if (i === total - 1) {
+            total--;
+          } else {
+            emptyList[key].push(i);
+          }
+        }
+      }
+      setCount(func, key, total);
+    } catch (err) {
+    }
+  }
+  for (const key in config) {
+    load2(key);
+  }
+};
+var storeCache = (provider, data) => {
+  if (!loaded) {
+    loadCache();
+  }
+  function store(key) {
+    if (!config[key]) {
+      return false;
+    }
+    const func = getGlobal(key);
+    if (!func) {
+      return false;
+    }
+    let index2 = emptyList[key].shift();
+    if (index2 === void 0) {
+      index2 = count[key];
+      if (!setCount(func, key, index2 + 1)) {
+        return false;
+      }
+    }
+    try {
+      const item = {
+        cached: Math.floor(Date.now() / hour),
+        provider,
+        data
+      };
+      func.setItem(cachePrefix + index2, JSON.stringify(item));
+    } catch (err) {
+      return false;
+    }
+    return true;
+  }
+  if (!store("local")) {
+    store("session");
+  }
+};
+var separator = /[\s,]+/;
+function flipFromString(custom, flip) {
+  flip.split(separator).forEach((str) => {
+    const value = str.trim();
+    switch (value) {
+      case "horizontal":
+        custom.hFlip = true;
+        break;
+      case "vertical":
+        custom.vFlip = true;
+        break;
+    }
+  });
+}
+function alignmentFromString(custom, align) {
+  align.split(separator).forEach((str) => {
+    const value = str.trim();
+    switch (value) {
+      case "left":
+      case "center":
+      case "right":
+        custom.hAlign = value;
+        break;
+      case "top":
+      case "middle":
+      case "bottom":
+        custom.vAlign = value;
+        break;
+      case "slice":
+      case "crop":
+        custom.slice = true;
+        break;
+      case "meet":
+        custom.slice = false;
+    }
+  });
+}
+function rotateFromString(value, defaultValue = 0) {
+  const units = value.replace(/^-?[0-9.]*/, "");
+  function cleanup(value2) {
+    while (value2 < 0) {
+      value2 += 4;
+    }
+    return value2 % 4;
+  }
+  if (units === "") {
+    const num = parseInt(value);
+    return isNaN(num) ? 0 : cleanup(num);
+  } else if (units !== value) {
+    let split = 0;
+    switch (units) {
+      case "%":
+        split = 25;
+        break;
+      case "deg":
+        split = 90;
+    }
+    if (split) {
+      let num = parseFloat(value.slice(0, value.length - units.length));
+      if (isNaN(num)) {
+        return 0;
+      }
+      num = num / split;
+      return num % 1 === 0 ? cleanup(num) : 0;
+    }
+  }
+  return defaultValue;
+}
+var svgDefaults = {
+  "xmlns": "http://www.w3.org/2000/svg",
+  "xmlns:xlink": "http://www.w3.org/1999/xlink",
+  "aria-hidden": true,
+  "role": "img"
+};
+function render(icon, props) {
+  const customisations = mergeCustomisations(defaults, props);
+  const componentProps = { ...svgDefaults };
+  let style = typeof props.style === "string" ? props.style : "";
+  for (let key in props) {
+    const value = props[key];
+    if (value === void 0) {
+      continue;
+    }
+    switch (key) {
+      case "icon":
+      case "style":
+      case "onLoad":
+        break;
+      case "inline":
+      case "hFlip":
+      case "vFlip":
+        customisations[key] = value === true || value === "true" || value === 1;
+        break;
+      case "flip":
+        if (typeof value === "string") {
+          flipFromString(customisations, value);
+        }
+        break;
+      case "align":
+        if (typeof value === "string") {
+          alignmentFromString(customisations, value);
+        }
+        break;
+      case "color":
+        style = style + (style.length > 0 && style.trim().slice(-1) !== ";" ? ";" : "") + "color: " + value + "; ";
+        break;
+      case "rotate":
+        if (typeof value === "string") {
+          customisations[key] = rotateFromString(value);
+        } else if (typeof value === "number") {
+          customisations[key] = value;
+        }
+        break;
+      case "ariaHidden":
+      case "aria-hidden":
+        if (value !== true && value !== "true") {
+          delete componentProps["aria-hidden"];
+        }
+        break;
+      default:
+        if (key.slice(0, 3) === "on:") {
+          break;
+        }
+        if (defaults[key] === void 0) {
+          componentProps[key] = value;
+        }
+    }
+  }
+  const item = iconToSVG(icon, customisations);
+  for (let key in item.attributes) {
+    componentProps[key] = item.attributes[key];
+  }
+  if (item.inline) {
+    style = "vertical-align: -0.125em; " + style;
+  }
+  if (style !== "") {
+    componentProps.style = style;
+  }
+  let localCounter = 0;
+  const id = props.id;
+  return {
+    attributes: componentProps,
+    body: replaceIDs(item.body, id ? () => id + "-" + localCounter++ : "iconify-svelte-")
+  };
+}
+allowSimpleNames(true);
+setAPIModule("", fetchAPIModule);
+if (typeof document !== "undefined" && typeof window !== "undefined") {
+  cache.store = storeCache;
+  loadCache();
+  const _window2 = window;
+  if (_window2.IconifyPreload !== void 0) {
+    const preload = _window2.IconifyPreload;
+    const err = "Invalid IconifyPreload syntax.";
+    if (typeof preload === "object" && preload !== null) {
+      (preload instanceof Array ? preload : [preload]).forEach((item) => {
+        try {
+          if (typeof item !== "object" || item === null || item instanceof Array || typeof item.icons !== "object" || typeof item.prefix !== "string" || !addCollection(item)) {
+            console.error(err);
+          }
+        } catch (e) {
+          console.error(err);
+        }
+      });
+    }
+  }
+  if (_window2.IconifyProviders !== void 0) {
+    const providers = _window2.IconifyProviders;
+    if (typeof providers === "object" && providers !== null) {
+      for (let key in providers) {
+        const err = "IconifyProviders[" + key + "] is invalid.";
+        try {
+          const value = providers[key];
+          if (typeof value !== "object" || !value || value.resources === void 0) {
+            continue;
+          }
+          if (!addAPIProvider(key, value)) {
+            console.error(err);
+          }
+        } catch (e) {
+          console.error(err);
+        }
+      }
+    }
+  }
+}
+function checkIconState(icon, state, mounted, callback, onload) {
+  function abortLoading() {
+    if (state.loading) {
+      state.loading.abort();
+      state.loading = null;
+    }
+  }
+  if (typeof icon === "object" && icon !== null && typeof icon.body === "string") {
+    state.name = "";
+    abortLoading();
+    return { data: fullIcon(icon) };
+  }
+  let iconName;
+  if (typeof icon !== "string" || (iconName = stringToIcon(icon, false, true)) === null) {
+    abortLoading();
+    return null;
+  }
+  const data = getIconData(iconName);
+  if (data === null) {
+    if (mounted && (!state.loading || state.loading.name !== icon)) {
+      abortLoading();
+      state.name = "";
+      state.loading = {
+        name: icon,
+        abort: loadIcons([iconName], callback)
+      };
+    }
+    return null;
+  }
+  abortLoading();
+  if (state.name !== icon) {
+    state.name = icon;
+    if (onload && !state.destroyed) {
+      onload(icon);
+    }
+  }
+  const classes = ["iconify"];
+  if (iconName.prefix !== "") {
+    classes.push("iconify--" + iconName.prefix);
+  }
+  if (iconName.provider !== "") {
+    classes.push("iconify--" + iconName.provider);
+  }
+  return { data, classes };
+}
+function generateIcon(icon, props) {
+  return icon ? render(icon, props) : null;
+}
+var Icon = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  const state = {
+    name: "",
+    loading: null,
+    destroyed: false
+  };
+  let mounted = false;
+  let data;
+  const onLoad = (icon) => {
+    if (typeof $$props.onLoad === "function") {
+      $$props.onLoad(icon);
+    }
+    const dispatch = createEventDispatcher();
+    dispatch("load", { icon });
+  };
+  function loaded2() {
+  }
+  onMount(() => {
+    mounted = true;
+  });
+  onDestroy(() => {
+    state.destroyed = true;
+    if (state.loading) {
+      state.loading.abort();
+      state.loading = null;
+    }
+  });
+  {
+    {
+      const iconData = checkIconState($$props.icon, state, mounted, loaded2, onLoad);
+      data = iconData ? generateIcon(iconData.data, $$props) : null;
+      if (data && iconData.classes) {
+        data.attributes["class"] = (typeof $$props["class"] === "string" ? $$props["class"] + " " : "") + iconData.classes.join(" ");
+      }
+    }
+  }
+  return `${data !== null ? `<svg${spread([escape_object(data.attributes)])}><!-- HTML_TAG_START -->${data.body}<!-- HTML_TAG_END --></svg>` : ``}`;
+});
 var hydrate$a = false;
 var prerender$a = true;
 var About = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$b);
   return `${$$result.head += `${$$result.title = `<title>About \u2022 clp.is</title>`, ""}`, ""}
 
 
@@ -2934,20 +5074,8 @@ var About = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 
 <p class="${"walloftext"}">- Chris P${validate_component(Date_1, "Date").$$render($$result, { date: "07-29-21" }, {}, {})}</p>
 <br><br>
-<h3>show yourself!</h3>
-<div class="${"form svelte-1vc3au4"}"><form class="${"login svelte-1vc3au4"}"><span class="${"formtitle svelte-1vc3au4"}">Contact <span class="${"gray svelte-1vc3au4"}">me</span></span>
-
-    <label for="${"msg"}" class="${"svelte-1vc3au4"}">message</label><br>
-    <textarea name="${"msg"}" rows="${"8"}" class="${"svelte-1vc3au4"}"></textarea>
-
-
-    <br><br>
-    <label for="${"email"}" class="${"svelte-1vc3au4"}">email</label><br>
-    <input name="${"email"}" type="${"email"}" class="${"svelte-1vc3au4"}">
-
-<br>
-<br>
-    <button label="${"login"}" type="${"submit"}" class="${"svelte-1vc3au4"}">login</button></form></div>
+<h3>Miscellaneous</h3>
+<p>${validate_component(Icon, "Icon").$$render($$result, { icon: "mdi-light:home" }, {}, {})}Now Listening: <span>test</span></p>
 <br>
 <br>
 <h3>Pics</h3>
@@ -2955,21 +5083,21 @@ var About = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 <img src="${"me/stare.jpeg"}" height="${"275"}" width="${"275"}">
 <img src="${"me/cout.jpeg"}" height="${"275"}" width="${"275"}">`;
 });
-var index$9 = /* @__PURE__ */ Object.freeze({
+var index$e = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": About,
   hydrate: hydrate$a,
   prerender: prerender$a
 });
-var css$a = {
+var css$b = {
   code: "form{padding-left:3%;padding-right:1%;padding-top:2%;padding-bottom:2%;background-color:rgba(0,0,0,0.02);box-shadow:0px 0px 7px rgba(0,0,0,0.00);width:50%;display:block;position:relative;align-content:center;justify-content:center;align-items:center;box-shadow:0px 0px 5px rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.02);border-radius:6px;border-bottom:3px solid rgba(0,0,0,0.09);margin:auto}",
   map: `{"version":3,"file":"pics.svelte","sources":["pics.svelte"],"sourcesContent":["<script context=\\"module\\">\\nexport const hydrate = false;\\nexport const prerender = true;\\nimport Date from '$lib/date.svelte'\\n<\/script>\\n\\n<svelte:head>\\n\\t<title>about/pics \u2022 clp.is</title>\\n</svelte:head>\\n<style>\\n    :global(form) {\\n\\tpadding-left: 3%;\\n\\tpadding-right: 1%;\\n\\tpadding-top: 2%;\\n\\tpadding-bottom: 2%;\\n\\tbackground-color: rgba(0,0,0,0.02);\\n\\tbox-shadow: 0px 0px 7px rgba(0,0,0,0.00);\\n\\twidth: 50%;\\n\\tdisplay: block;\\n\\tposition:relative;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\talign-items: center;\\n\\tbox-shadow: 0px 0px 5px rgba(0,0,0,0.03);\\n\\tborder: 1px solid rgba(0,0,0,0.02);\\n\\tborder-radius: 6px;\\n\\tborder-bottom: 3px solid rgba(0,0,0,0.09);\\n\\tmargin: auto;\\n    }\\n    label::before {\\n\\t    content: \\"$   \\";\\n\\t    font-size: 0.8rem;\\n\\t    color: rgba(0,0,0,0.2);\\n\\t}\\n    input { \\n\\tpadding: 10px; \\n\\tmargin-top: 4px;\\n\\twidth: 80%;\\n\\tborder-radius:5px; \\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tbackground: rgba(0,0,0,0.05);\\n\\t}\\n    textarea { \\n\\tpadding: 10px; \\n\\tmargin-top: 4px;\\n\\tborder-radius:5px; \\n\\twidth: 80%;\\n\\tborder: 1px transparent; \\n\\tborder-top: 1px solid rgba(0,0,0,0.1);\\n\\tbackground: rgba(0,0,0,0.05);\\n\\t}\\n\\tlabel {\\n\\t\\tfont-size: 0.9rem;\\n\\t\\tpadding-left: 02px;\\n\\t\\tcolor: rgba(0,0,0,0.6);\\n\\t\\ttext-shadow: 0px 0px 4px rgba(0,0,0,0.05);\\n\\t    }\\n    button {\\n\\tborder: 2px solid transparent;\\n\\tborder-bottom: 2px solid rgba(0,0,0,0.1);\\n\\tborder-top: 1px solid rgba(0,0,0,0.025);\\n\\tborder-left: 1px solid rgba(0,0,0,0.025);\\n\\tborder-right: 1px solid rgba(0,0,0,0.025);\\n\\tcolor: rgba(0,0,0,0.6);\\n\\tbackground-color: rgba(255,255,255,1);\\n\\tpadding: 8px;\\n\\tborder-radius: 3px;\\n\\n\\t}\\n\\tinput:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t    }\\n\\tinput:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.1);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\ttextarea:active {\\n\\t\\tbackground-color: rgba(0,0,0,0.2);\\n\\t\\ttransform:scale(0.9);\\n\\t    }\\n\\ttextarea:focus {\\n\\t\\tbackground-color: rgba(0,0,0,0.12);\\n\\t\\tborder-top: 1px solid rgba(0,0,0,0.2);\\n\\t\\toutline:none;\\n\\t\\ttransform:scale(1.05);\\n\\t\\ttransition: all 0.1s ease-in-out;\\n\\t    }\\n\\tform button:hover {\\n\\t    background-color: rbga(0,0,0,0.25);\\n\\t    border-bottom: 2px solid rgba(0,0,0,0.25);\\n\\t    border-radius: 5px;\\n\\t    transform:scale(1.05);\\n\\t    transition:all 0.1s ease-in-out;\\n\\t}\\n\\tform button:active {\\n\\n\\t    }\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\n\\n\\t\\t}\\n\\t    .form {\\n\\t\\talign-content: center;\\n\\talign-content: center;\\n\\tjustify-content:center;\\n\\t}\\n\\n\\n\\t\\t.formtitle {\\n\\t\\t    font-family:monospace;\\n\\t\\t    padding-bottom: 12px;\\n\\t\\t    padding-left: 8px;\\n\\t\\t\\tdisplay:block;\\n\\t\\t    }\\n\\t\\t    .gray {\\n\\t\\t\\t    color: rgba(0,0,0,0.5);\\n\\t\\t\\t}\\n\\n/* .walloftext { width: 80%; margin: auto; display:block; } */\\n</style>\\n\\n<h1 id=\\"head\\">about / pics</h1>\\n"],"names":[],"mappings":"AAUY,IAAI,AAAE,CAAC,AAClB,YAAY,CAAE,EAAE,CAChB,aAAa,CAAE,EAAE,CACjB,WAAW,CAAE,EAAE,CACf,cAAc,CAAE,EAAE,CAClB,gBAAgB,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAClC,UAAU,CAAE,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACxC,KAAK,CAAE,GAAG,CACV,OAAO,CAAE,KAAK,CACd,SAAS,QAAQ,CACjB,aAAa,CAAE,MAAM,CACrB,gBAAgB,MAAM,CACtB,WAAW,CAAE,MAAM,CACnB,UAAU,CAAE,GAAG,CAAC,GAAG,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACxC,MAAM,CAAE,GAAG,CAAC,KAAK,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CAClC,aAAa,CAAE,GAAG,CAClB,aAAa,CAAE,GAAG,CAAC,KAAK,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,CACzC,MAAM,CAAE,IAAI,AACT,CAAC"}`
 };
 var hydrate$9 = false;
 var prerender$9 = true;
 var Pics = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  $$result.css.add(css$a);
+  $$result.css.add(css$b);
   return `${$$result.head += `${$$result.title = `<title>about/pics \u2022 clp.is</title>`, ""}`, ""}
 
 
@@ -2988,12 +5116,20 @@ var Links = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `${$$result.head += `${$$result.title = `<title>Links \u2022 clp.is</title>`, ""}`, ""}
 <h1 id="${"head"}">Links</h1>`;
 });
-var index$8 = /* @__PURE__ */ Object.freeze({
+var index$d = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": Links,
   hydrate: hydrate$8,
   prerender: prerender$8
+});
+var _error$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  return ``;
+});
+var __error$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": _error$1
 });
 var hydrate$7 = false;
 var prerender$7 = true;
@@ -3007,7 +5143,7 @@ var Posts = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 <h2>list</h2>
 <p>oof</p>`;
 });
-var index$7 = /* @__PURE__ */ Object.freeze({
+var index$c = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": Posts,
@@ -3030,10 +5166,18 @@ var _slug_ = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": U5Bslugu5D
 });
+var css$a = {
+  code: ".secondary{background-color:rbga(0,0,0,0.25)}.secondary:hover{background-color:rbga(0,0,0,0.35)}",
+  map: '{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<svelte:head>\\n\\t<title>Auth \u2022 clp.is</title>\\n</svelte:head>\\n<style>\\n:global(.secondary) {\\n    background-color: rbga(0,0,0,0.25);\\n\\n    }\\n:global(.secondary:hover) {\\n    background-color: rbga(0,0,0,0.35);\\n\\n    }\\n</style>\\n\\n<h1 id=\\"head\\">Authentication</h1>\\n<ul>\\n<li>Signup sends application to backend to go through verification.</li>\\n<li>Everything still under construction!</li>\\n\\n</ul>\\n<div class=\\"form\\">\\n<form class=\\"login\\">\\n    <span class=\\"formtitle\\">Log <span class=\\"gray\\">in</span> to clp.is</span>\\n\\n    <label for=\\"email\\">E-mail</label><br/>\\n    <input name=\\"email\\" placeholder=\\"E-mail\\"/>\\n\\n\\n    <br/><br/>\\n    <label for=\\"passwor\\">Password</label><br/>\\n    <input name=\\"password\\" type=\\"password\\" placeholder=\\"password\\"/>\\n\\n<br/>\\n<br/>\\n    <button label=\\"login\\">Login</button>\\n    <button class=\\"secondary\\" label=\\"Help\\">Help</button>\\n</form>\\n<form class=\\"sigunp\\">\\n    <span class=\\"formtitle\\">(Apply) to sign up <span class=\\"gray\\">up</span> to clp.is</span>\\n\\n    <label for=\\"email\\">E-mail</label><br/>\\n    <input name=\\"email\\" placeholder=\\"E-mail\\"/>\\n\\n\\n    <br/><br/>\\n    <label for=\\"password\\">Password</label><br/>\\n    <input name=\\"password\\" type=\\"password\\" placeholder=\\"Password\\"/>\\n\\n<br/>\\n<br/>\\n    <button label=\\"login\\">Next</button>\\n    <button class=\\"secondary\\" label=\\"Help\\">Help</button>\\n</form>\\n</div>\\n"],"names":[],"mappings":"AAIQ,UAAU,AAAE,CAAC,AACjB,gBAAgB,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAElC,CAAC,AACG,gBAAgB,AAAE,CAAC,AACvB,gBAAgB,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AAElC,CAAC"}'
+};
 var Auth = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  $$result.css.add(css$a);
   return `${$$result.head += `${$$result.title = `<title>Auth \u2022 clp.is</title>`, ""}`, ""}
 
 
+<h1 id="${"head"}">Authentication</h1>
+<ul><li>Signup sends application to backend to go through verification.</li>
+<li>Everything still under construction!</li></ul>
 <div class="${"form"}"><form class="${"login"}"><span class="${"formtitle"}">Log <span class="${"gray"}">in</span> to clp.is</span>
 
     <label for="${"email"}">E-mail</label><br>
@@ -3046,7 +5190,8 @@ var Auth = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 
 <br>
 <br>
-    <button label="${"login"}">Login</button></form>
+    <button label="${"login"}">Login</button>
+    <button class="${"secondary"}" label="${"Help"}">Help</button></form>
 <form class="${"sigunp"}"><span class="${"formtitle"}">(Apply) to sign up <span class="${"gray"}">up</span> to clp.is</span>
 
     <label for="${"email"}">E-mail</label><br>
@@ -3059,12 +5204,29 @@ var Auth = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 
 <br>
 <br>
-    <button label="${"login"}">Next</button></form></div>`;
+    <button label="${"login"}">Next</button>
+    <button class="${"secondary"}" label="${"Help"}">Help</button></form></div>`;
 });
-var index$6 = /* @__PURE__ */ Object.freeze({
+var index$b = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": Auth
+});
+var Signup = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  return ``;
+});
+var index$a = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": Signup
+});
+var Login$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  return ``;
+});
+var index$9 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": Login$1
 });
 var Login = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return ``;
@@ -3152,7 +5314,7 @@ var Etc = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 <ul><li><a class="${"link"}" href="${"https://last.fm/user/ooohm"}">last.fm</a> profile</li>
     <li><a class="${"link"}" href="${"https://github.com/clpi"}">github</a>dev profile</li></ul>`;
 });
-var index$5 = /* @__PURE__ */ Object.freeze({
+var index$8 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": Etc,
@@ -3173,7 +5335,7 @@ var Frontend = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 
 <p>${validate_component(Date_1, "Date").$$render($$result, { date: "08-11-21" }, {}, {})} fun fact this site was built in svelte, my previous webpage was built with next.js, the one before that was built with WebAssembly and Rust, and the one before that was built with Svelte (...and the one before that was built with React).</p>`;
 });
-var index$4 = /* @__PURE__ */ Object.freeze({
+var index$7 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": Frontend
@@ -3270,6 +5432,30 @@ var plangs = /* @__PURE__ */ Object.freeze({
   hydrate: hydrate$3,
   prerender: prerender$3
 });
+var Ling = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  return ``;
+});
+var index$6 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": Ling
+});
+var Russian = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  return ``;
+});
+var index$5 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": Russian
+});
+var Con = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  return ``;
+});
+var index$4 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": Con
+});
 var css$4 = {
   code: ".l.svelte-bth4dt{list-style:decimal}",
   map: '{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<style>\\n   .l {\\n    list-style: decimal;\\n}\\n</style>\\n<svelte:head>\\n\\t<title>Lab \u2022 clp.is</title>\\n</svelte:head>\\n<h1>lab</h1>\\n<ul class=\\"l\\">\\n\\t<li><a class=\\"link ext\\" href=\\"https://github.com/clpi/dotfiles\\">dotfiles</a>:  &nbsp;&nbsp;My dotfiles for nvim, alacritty, tmux, etc.</li>\\n</ul>\\n"],"names":[],"mappings":"AACG,EAAE,cAAC,CAAC,AACH,UAAU,CAAE,OAAO,AACvB,CAAC"}'
@@ -3284,6 +5470,14 @@ var index$3 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": Lab
+});
+var _error = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  return ``;
+});
+var __error = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": _error
 });
 var css$3 = {
   code: ".tag.svelte-oucym9{padding:3px;margin:3px;border-radius:3px;font-size:0.85rem;color:rgba(0,0,0,0.28);background-color:rgba(0,0,0,0.06)}.tag.svelte-oucym9:hover{background-color:rgba(0,0,0,0.10);transform:scale(1.1);transition:all 0.2s ease-in-out;color:rgba(0,0,0,0.38)}.lite.svelte-oucym9{color:rgba(0,0,0,0.5)}",
@@ -3421,7 +5615,7 @@ var entry_default = async (req, res) => {
     res.statusCode = err.status || 400;
     return res.end(err.reason || "Invalid request body");
   }
-  const rendered = await render({
+  const rendered = await render$1({
     method: req.method,
     headers: req.headers,
     path: pathname,
