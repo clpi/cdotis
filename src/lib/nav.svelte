@@ -195,10 +195,12 @@
 
 		</ul>
 			 </div>
+			 <!--
 		<div class="right">
 			<a class:active={ $page.path == "/lab" } class="nav" id="etc" href="/lab">Lab</a>
 			<a class:active={ $page.path == "/auth" } class="nav" id="etc" href="/auth">Auth</a>
 			<a class:active={ $page.path == "/auth" } class="nav" id="etc" href="https://api.clp.is/">API</a>
 
 		</div>
+		-->
 </nav>

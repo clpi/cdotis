@@ -16,6 +16,11 @@ const config = {
 	target: '#svelte',
 	adapter: vercel(),
 	vite: () => ({
+	    optimizeDeps: {
+		include: [
+		    "highlight.js/lib/core",
+		]
+	    },
 	    resolve: {
 		/* alias: {
 		    $stores: resolve(__dirname, './src/stores'),

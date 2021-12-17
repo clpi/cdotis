@@ -1,7 +1,5 @@
 <footer>
 	<div class="left">
-	<p class="foot">Last updated <span id="crea">July 29, 2021</span></p>
-	<p class="foot"><a href="mailto:clp@clp.is">Email</a> me</p>
 	</div>
 		<div class="right">
 			<a class="nav" id="gl" href="https://gitlab.com/clpi">
