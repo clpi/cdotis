@@ -1,4 +1,5 @@
-<script lang="ts">
+<script lang="ts" type="module">
+  import "../app.css";
 	import Nav from '../lib/nav.svelte';
 import Footer from '../lib/footer.svelte';
 	import { page, navigating } from '$app/stores';
@@ -8,11 +9,10 @@ import Footer from '../lib/footer.svelte';
 	$: section = $page.url.pathname.split('/')[1];
 </script>
 
-<style>
-    :global(li:not(.nav)) {
-	padding-left: 1%;
-	margin-bottom: 4px;
-
+<style >
+  :global(li:not(.nav)) {
+	  padding-left: 1%;
+	  margin-bottom: 4px;
 	}
 	:global(body) {
 		border: 2px ridge transparent;

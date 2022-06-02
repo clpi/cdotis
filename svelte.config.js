@@ -1,48 +1,81 @@
-import preprocess from 'svelte-preprocess';
-import mdsvex from 'mdsvex';
-import vercel from '@sveltejs/adapter-vercel'
-// import adapter from '@sveltejs/adapter-static'
-
+import adapter from '@sveltejs/adapter-vercel';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-    // Consult https://github.com/sveltejs/svelte-preprocess
-    // for more information about preprocessors
-    preprocess: preprocess(),
-    extensions: [
-	    '.svelte', '.svx'
-    ],
-    kit: {
-	// hydrate the <div id="svelte"> element in src/app.html
-	adapter: vercel(),
-	vite: () => ({
-	    optimizeDeps: {
-		include: [
-		    "highlight.js/lib/core",
-		]
-	    },
-	    resolve: {
-		/* alias: {
-		    $stores: resolve(__dirname, './src/stores'),
-		    $components: resolve(__dirname, './src/lib/shared/components'),
-		    $ui: resolve(__dirname, './src/lib/shared/ui'),
-		    $layouts: resolve(__dirname, './src/lib/layouts'),
-		    $shared: resolve(__dirname, './src/lib/shared'),
-		    $models: resolve(__dirname, './src/lib/models'),
-		    $data: resolve(__dirname, './src/lib/data'),
-		    $core: resolve(__dirname, './src/lib/core'),
-		    $utils: resolve(__dirname, './src/lib/utils'),
-		    $environment: resolve(__dirname, './src/environments'),
-		}, */
-	    },
-	    envPrefix: ['VITE_', 'SVELTEKIT_STARTER_'],
-	    // plugins: [imagetools({ force: true })],
-	}),
-     },
+  // options passed to svelte.compile (https://svelte.dev/docs#compile-time-svelte-compile)
+  compilerOptions: {},
+ 
+  // an array of file extensions that should be treated as Svelte components
+  extensions: ['.svelte'],
+ 
+  kit: {
+    adapter: adapter(),
+    alias: {},
+    appDir: '_app',
+    browser: {
+      hydrate: true,
+      router: true
+    },
+    csp: {
+      mode: 'auto',
+      directives: {
+        'default-src': undefined
+        // ...
+      }
+    },
+    endpointExtensions: ['.js', '.ts'],
+    files: {
+      assets: 'static',
+      hooks: 'src/hooks',
+      lib: 'src/lib',
+      params: 'src/params',
+      routes: 'src/routes',
+      serviceWorker: 'src/service-worker',
+      template: 'src/app.html'
+    },
+    floc: false,
+    inlineStyleThreshold: 0,
+    methodOverride: {
+      parameter: '_method',
+      allowed: []
+    },
+    outDir: '.svelte-kit',
+    package: {
+      dir: 'package',
+      emitTypes: true,
+      // excludes all .d.ts and files starting with _ as the name
+      exports: (filepath) => !/^_|\/_|\.d\.ts$/.test(filepath),
+      files: () => true
+    },
+    paths: {
+      assets: '',
+      base: ''
+    },
+    prerender: {
+      concurrency: 1,
+      crawl: true,
+      default: false,
+      enabled: true,
+      entries: ['*'],
+      onError: 'fail'
+    },
+    routes: (filepath) => !/(?:(?:^_|\/_)|(?:^\.|\/\.)(?!well-known))/.test(filepath),
+    serviceWorker: {
+      register: true,
+      files: (filepath) => !/\.DS_Store/.test(filepath)
+    },
+    trailingSlash: 'never',
+    version: {
+      name: Date.now().toString(),
+      pollInterval: 0
+    },
+    vite: () => ({})
+  },
+ 
+  // SvelteKit uses vite-plugin-svelte. Its options can be provided directly here.
+  // See the available options at https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md
+ 
+  // options passed to svelte.preprocess (https://svelte.dev/docs#compile-time-svelte-preprocess)
+  preprocess: null
 };
-
+ 
 export default config;
-		/* adapter: adapter({
-			pages: 'build',
-			assets: 'build',
-			fallback: null
-		}) */
