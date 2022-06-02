@@ -5,7 +5,7 @@ import Footer from '../lib/footer.svelte';
 	import GoogleAnalytics from '$lib/google.svelte';
 
 
-	$: section = $page.path.split('/')[1];
+	$: section = $page.url.pathname.split('/')[1];
 </script>
 
 <style>

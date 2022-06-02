@@ -186,12 +186,12 @@
 			 <div class="tabl">
 		<ul class="navbar">
 
-			<li><a class:active={ $page.path == "/" } class="nav" sveltekit:prefetch href="/">
+			<li><a class:active={ $page.url.pathname == "/" } class="nav" sveltekit:prefetch href="/">
 			Home</a></li>
-			<li><a class:active={ $page.path == "/about" } class="nav" sveltekit:prefetch href="/about">About</a></li>
-			<li><a class:active={ $page.path == "/posts" } class="nav" sveltekit:prefetch href="/posts">Posts</a></li>
-			<li><a class:active={ $page.path == "/p" } class="nav" sveltekit:prefetch href="/p">Projects</a></li>
-			<li><a class:active={ $page.path == "/etc" } class="nav" sveltekit:prefetch href="/etc">Etc</a></li>
+			<li><a class:active={ $page.url.pathname == "/about" } class="nav" sveltekit:prefetch href="/about">About</a></li>
+			<li><a class:active={ $page.url.pathname == "/posts" } class="nav" sveltekit:prefetch href="/posts">Posts</a></li>
+			<li><a class:active={ $page.url.pathname == "/p" } class="nav" sveltekit:prefetch href="/p">Projects</a></li>
+			<li><a class:active={ $page.url.pathname == "/etc" } class="nav" sveltekit:prefetch href="/etc">Etc</a></li>
 
 		</ul>
 			 </div>

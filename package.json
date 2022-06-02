@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@iconify/svelte": "^2.1.0",
+    "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@sveltejs/adapter-static": "next",
     "@sveltejs/adapter-vercel": "next",
     "@sveltejs/kit": "next",
